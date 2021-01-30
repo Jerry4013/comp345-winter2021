@@ -1,15 +1,13 @@
 //
-// Created by Liu He on 2020-09-30.
-// assignment 1
+// Created by Liu He on 2020-11-22.
+//
+
 
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
 #include <vector>
-#include "card.h"
-
-
-
+#include "Cards.h"
 
 using namespace std;
 
@@ -27,7 +25,7 @@ Card::Card(const Card &c) {
 }
 
 void Card::play(Hand &player, Deck &deck) {
-    if(*getCardType()<0 || *getCardType()>3){
+    if(*getCardType()<0 || *getCardType()>4){
         cout<<"invalid card!"<<endl;
     }
     else{
@@ -35,7 +33,30 @@ void Card::play(Hand &player, Deck &deck) {
         for(int i=0; i<player.getHandVector()->size(); i++){
             if(*getCardType()==*(player.getHandVector()->at(i).getCardType())){
                 count++;
+                switch (*getCardType()) {
+                    case bomb:{
+                        cout<<"play bomb"<<endl;
+                        break;
+                    }
+                    case reinforcement:{
+                        cout<<"play reinforcement"<<endl;
+                        break;
+                    }
+                    case blockade:{
+                        cout<<"play blockade"<<endl;
+                        break;
+                    }
 
+                    case airlift:{
+                        cout<<"play airlift"<<endl;
+                        break;
+                    }
+                    case diplomacy:{
+                        cout<<"play diplomacy"<<endl;
+                        break;
+                    }
+
+                }
                 player.getHandVector()->erase(player.getHandVector()->begin()+i);
                 deck.getDeckVector()->push_back(Card(*getCardType()));
                 break;
@@ -46,59 +67,38 @@ void Card::play(Hand &player, Deck &deck) {
 
     }
 }
-//void Card::play(Player &player, Deck &deck) {
-//    if(*getCardType()<0 || *getCardType()>4){
-//        cout<<"invalid card!"<<endl;
-//    }
-//    else{
-//        int count=0;
-//        for(int i=0; i<player.getHand.getHandVector()->size(); i++){
-//            if(*getCardType()==*(player.getHand.getHandVector()->at(i).getCardType())){
-//                count++;
-//               int k;
-//               switch (*getCardType()) {
-//                   case 0:{
-//                       k=3;
-//                        break;
-//                    }
-//                    case 1:{
-//                    k=7;
-//                    break;
-//                    }
-//                    case 2:{
-//                        k=4;
-//                        break;
-//                    }
-//                    case 3:{
-//                        k=5;
-//                        break;
-//                    }
-//                    case 4:{
-//                        k=8;
-//                        break;
-//                    }
-//
-//                }
-//                player.issueOrder(k);
-//                player.getHand.getHandVector()->erase(player.getHandVector()->begin()+i);
-//                deck.getDeckVector()->push_back(Card(*getCardType()));
-//                break;
-//            }
-//        }
-//        if(count==0)
-//            cout<<"not found in player's hand!"<<endl;
-//
-//    }
-//
-//}
+
 
 Card::~Card() {
     delete t;
-    t = NULL;
+    t = nullptr;
 }
 
-std::ostream &operator<<(ostream &output, const Card &c) {
-    output <<"Card type: "<< *(c.t);
+ostream &operator<<(ostream &output, const Card &c) {
+    switch (*(c.t)) {
+        case bomb:{
+            output<<"bomb"<<endl;
+            break;
+        }
+        case reinforcement:{
+            output<<"reinforcement"<<endl;
+            break;
+        }
+        case blockade:{
+            output<<"blockade"<<endl;
+            break;
+        }
+
+        case airlift:{
+            output<<"airlift"<<endl;
+            break;
+        }
+        case diplomacy:{
+            output<<"diplomacy"<<endl;
+            break;
+        }
+
+    }
     return output;
 }
 Card& Card::operator=(const Card &obj) {
@@ -114,14 +114,17 @@ CardType* Card::getCardType() {
 Deck::Deck() {
     deckVector = new std::vector<Card> ();
     deckVector->push_back(Card(bomb));
+    deckVector->push_back(Card(reinforcement));
     deckVector->push_back(Card(blockade));
     deckVector->push_back(Card(airlift));
     deckVector->push_back(Card(diplomacy));
 }
 
 Deck::Deck(int num) {
+    deckVector = new std::vector<Card> ();
     for(int i=0; i<num; i++){
         deckVector->push_back(Card(bomb));
+        deckVector->push_back(Card(reinforcement));
         deckVector->push_back(Card(blockade));
         deckVector->push_back(Card(airlift));
         deckVector->push_back(Card(diplomacy));
@@ -131,7 +134,7 @@ Deck::Deck(int num) {
 
 Deck::~Deck() {
     delete deckVector;
-    deckVector = NULL;
+    deckVector = nullptr;
 }
 
 Deck::Deck(const Deck& obj) {
@@ -144,7 +147,7 @@ Deck& Deck::operator=(const Deck &obj) {
     return *this;
 }
 
-std::ostream &operator<<(ostream &output, const Deck &D) {
+ostream &operator<<(ostream &output, const Deck &D) {
     for(int i=0; i<D.deckVector->size(); i++){
         output << *(D.deckVector->at(i).getCardType())<<" ";
     }
@@ -189,7 +192,7 @@ Hand::Hand() {
 
 Hand::~Hand() {
     delete handVector;
-    handVector = NULL;
+    handVector = nullptr;
 }
 
 Hand::Hand(const Hand& obj) {

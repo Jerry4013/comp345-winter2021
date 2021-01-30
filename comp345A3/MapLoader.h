@@ -8,10 +8,13 @@ using namespace std;
 
 extern string ContinentNameFromMap[];
 extern int ContinentBonusFromMap[];
+
 extern int ContriesNumberFromMap[];
-extern string ContriesBelongsToContinentsFromMap[];
+extern string ContriesNameFromMap[];
 extern int ContriesNumberBelongsToContinents[];
+
 extern int ConnectionBufferFromMap[100][100];
+
 
 class MapLoader
 {
@@ -34,7 +37,25 @@ public:
     int NumberOfWhiteSpace;
     int ArmyWorth;
     string continentName;
-
-
-
 };
+
+class ConquestFileReader {
+public:
+    ConquestFileReader();
+    ConquestFileReader(string);
+    ~ConquestFileReader();
+    void conquestLoadMap(string);
+    string getInputConquestFileName();
+    void setInputConquestFileName(string);
+    string inputConquestFileName;
+};
+
+class ConquestFileReaderAdapter : public MapLoader {
+public:
+    ConquestFileReaderAdapter();
+    ConquestFileReaderAdapter(const ConquestFileReaderAdapter*);
+    ConquestFileReaderAdapter(string, int);
+    ~ConquestFileReaderAdapter();
+    ConquestFileReader conquestFileReader;
+};
+

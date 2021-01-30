@@ -1,16 +1,16 @@
 //
-// Created by Liu He on 2020-09-30.
-// assignment 1
+// Created by Liu He on 2020-11-22.
+//
 
-//#include "Player.h"
 #ifndef CARDS_H
 #define CARDS_H
 #include <vector>
+using namespace std;
 class Deck;
 class Hand;
 //use enum to set card type
 enum CardType{
-    bomb, blockade, airlift, diplomacy
+    bomb, reinforcement, blockade, airlift, diplomacy
 };
 
 class Card{
@@ -27,7 +27,7 @@ public:
     //destructor
     ~Card();
     //stream insertion operator
-    friend std::ostream& operator<<(std::ostream &output, const Card &c);
+    friend ostream& operator<<(ostream &output, const Card &c);
     //assignment operator
     Card& operator = (const Card& obj);
     //get method
@@ -51,7 +51,7 @@ public:
     //assignment operator
     Hand& operator= (const Hand& obj);
     //stream insertion operator
-    friend std::ostream& operator<<(std::ostream &output, const Hand &H);
+    friend ostream& operator<<(ostream &output, const Hand &H);
     //get method
     std::vector<Card>* getHandVector();
 
@@ -88,4 +88,4 @@ private:
 
 
 
-#endif //CARDS_H
+#endif //COMP345A3_CARDS_H
