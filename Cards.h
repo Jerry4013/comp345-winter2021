@@ -19,7 +19,7 @@ using namespace std;
 enum CardType{
     night, cursed, arcane, ancient, dire, forest,noble,emptyKind
 };
-
+class Deck;
 class Card{
 public:
     //constructor with parameter
@@ -62,30 +62,34 @@ private:
 
 };
 
+class P{
+public:
+    void Pay(){
+
+    }
+};
+
+class Hand {
+public:
+    //default constructor
+    Hand(Deck* deck);
+    //destructor
+    ~Hand();
+    //copy constructor
+    Hand(const Hand& obj);
+    //assignment operator
+    Hand& operator= (const Hand& obj);
+    //stream insertion operator
+    friend ostream& operator<<(ostream& output, const Hand& hand);
+    //get method
+    std::vector<Card>* getHandVector();
+    //exchange method
+    Card exchange(int card_number, P p, Deck* deck);
 
 
-//class Hand {
-//public:
-//    //default constructor
-//    Hand();
-//    //destructor
-//    ~Hand();
-//    //copy constructor
-//    Hand(const Hand& obj);
-//    //assignment operator
-//    Hand& operator= (const Hand& obj);
-//    //stream insertion operator
-//    friend ostream& operator<<(ostream& output, const Hand& hand);
-//    //get method
-//    std::vector<Card>* getHandVector();
-//    //exchange method
-//    Card exchange(Hand& playerHand, int card_position);
-//
-//
-//private:
-//    std::vector<Card>* handVector;
-//
-//};
+private:
+    std::vector<Card>* handVector;
+};
 
 class Deck{
 public:

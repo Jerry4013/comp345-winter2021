@@ -8,6 +8,7 @@
 #include <cstdlib>      // std::rand, std::srand
 #include <random>
 #include <iterator>
+#include <map>
 #include "Cards.h"
 
 
@@ -236,11 +237,62 @@ Card Deck::draw() {
         return card;
     }
     else{
-        cout<<"no more card in the Deck!"<<endl;
+        //cout<<"no more card in the Deck!"<<endl;
         Card lastcard(emptyKind,"NoMoreCards",0,0,0,0,0,0,0,0,0,0, false, false, false, false, false, false, false,
                       false, false);
         return lastcard;
     }
 }
 
+
+Hand::Hand(Deck* deck) {
+    handVector = new std::vector<Card>();
+    //draw 6 cards in the begining of the game
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+}
+
+Hand::~Hand() {
+    delete handVector;
+    handVector = nullptr;
+}
+
+Hand::Hand(const Hand& hand) {
+    this->handVector = new std::vector<Card>(*(hand.handVector));
+}
+
+Hand& Hand::operator=(const Hand& hand) {
+    this->handVector = new std::vector<Card>(*(hand.handVector));
+    return *this;
+}
+
+std::ostream &operator<<(ostream &output, const Hand& hand) {
+    map<int, int> moneyMap{ {0,0},{1,1},{2,1},{3,2},{4,2},{5,3} };
+    for(int i=0; i<hand.handVector->size(); i++){
+        output << "Card "<<i+1<<" this card takes "<<moneyMap[i]<<" coins "<<endl;
+        output << hand.handVector->at(i)<< endl;
+    }
+    return output;
+}
+
+std::vector<Card>* Hand::getHandVector() {
+    return handVector;
+}
+
+Card Hand::exchange( int card_number, P p, Deck *deck) {
+    for(int i=0; i<handVector->size(); i++){
+        if (card_number-1==i){
+            Card card=handVector->at(i);
+            handVector->erase (handVector->begin()+i);
+            //draw a new card from deck
+            handVector->emplace_back(deck->draw());
+            p.Pay();
+            return card;
+        }
+    }
+}
 

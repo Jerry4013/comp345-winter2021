@@ -7,21 +7,35 @@
 using namespace std;
 
 int main(){
-    cout<<"original cards:"<<endl;
-    Deck d(4);
-    cout<<d<<endl;
-    cout<<"draw one card, the card is: "<<endl;
-    cout<<d.draw()<<endl;
-    cout<<"the rest cards in the deck"<<endl;
-    cout<<d<<endl;
-    cout<<"draw one card, the card is: "<<endl;
-    cout<<d.draw()<<endl;
-    cout<<"the rest cards in the deck"<<endl;
-    cout<<d<<endl;
-    cout<<"draw one card, the card is: "<<endl;
-    cout<<d.draw()<<endl;
-//    cout<<d.draw()<<endl;
+    //deck demo
+//    cout<<"original cards:"<<endl;
+//    Deck d(4);
 //    cout<<d<<endl;
+//    cout<<"draw one card, the card is: "<<endl;
+//    cout<<d.draw()<<endl;
+//    cout<<"the rest cards in the deck"<<endl;
+//    cout<<d<<endl;
+//    cout<<"draw one card, the card is: "<<endl;
+//    cout<<d.draw()<<endl;
+//    cout<<"the rest cards in the deck"<<endl;
+//    cout<<d<<endl;
+//    cout<<"draw one card, the card is: "<<endl;
+//    cout<<d.draw()<<endl;
 
+//hand demo
+    Deck* deck =new Deck(3);
+    Hand* hand=new Hand(deck);
+    cout<<*hand<<endl;
+    P p;
+    Card c=hand->exchange(2,p,deck);
+    cout<<"picked card: "<<endl;
+    cout<<c<<endl;
 
+    cout<<"rest of hand:"<<endl;
+    cout<<*hand<<endl;
+
+    delete hand;
+    hand= nullptr;
+    delete deck;
+    deck= nullptr;
 }
