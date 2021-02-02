@@ -3,10 +3,25 @@
 //
 
 #include <iostream>
-
+#include "Cards.h"
 using namespace std;
 
 int main(){
-    cout<<"123";
+    cout<<"original cards:"<<endl;
+    Deck d(4);
+    cout<<d<<endl;
+    cout<<"draw one card, the card is: "<<endl;
+    cout<<d.draw()<<endl;
+    cout<<"the rest cards in the deck"<<endl;
+    cout<<d<<endl;
+    cout<<"draw one card, the card is: "<<endl;
+    cout<<d.draw()<<endl;
+    cout<<"the rest cards in the deck"<<endl;
+    cout<<d<<endl;
+    cout<<"draw one card, the card is: "<<endl;
+    cout<<d.draw()<<endl;
+//    cout<<d.draw()<<endl;
+//    cout<<d<<endl;
+
 
 }
