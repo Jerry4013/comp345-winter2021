@@ -27,6 +27,7 @@ int main(){
     Hand* hand=new Hand(deck);
     cout<<*hand<<endl;
     P p;
+
     try{
         //Card c=hand->exchange(2,p,deck);
         Card * c=hand->exchange(2,p,deck);
@@ -38,13 +39,15 @@ int main(){
     }
     
     
-
+    
     cout<<"rest of hand:"<<endl;
     cout<<*hand<<endl;
+    
 
     delete hand;
     hand= nullptr;
     delete deck;
     deck= nullptr;
-    //delete c;
+    delete c;
+    c=nullptr;
 }

@@ -82,13 +82,13 @@ public:
     //stream insertion operator
     friend ostream& operator<<(ostream& output, const Hand& hand);
     //get method
-    std::vector<Card>* getHandVector();
+    std::vector<Card*>* getHandVector();
     //exchange method
     // exchange(int card_number, P p, Deck* deck);
     Card * exchange(int card_number, P p, Deck* deck);
 
 private:
-    std::vector<Card>* handVector;
+    std::vector<Card*>* handVector;
 };
 
 class Deck{
@@ -108,7 +108,8 @@ public:
     //get method
     std::vector<Card>* getDeckVector();
     //draw method
-    Card draw();
+    //Card draw();
+    Card * draw();
 
 
 private:
