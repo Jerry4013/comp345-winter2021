@@ -288,7 +288,7 @@ Hand::Hand() {
 
 Hand::Hand(Deck* deck) {
     handVector = new std::vector<Card>();
-    //draw 6 cards in the begining of the game
+    //draw 6 cards in the beginning of the game
     handVector->emplace_back(*deck->draw());
     handVector->emplace_back(*deck->draw());
     handVector->emplace_back(*deck->draw());
