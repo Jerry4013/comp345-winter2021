@@ -84,8 +84,8 @@ public:
     //get method
     std::vector<Card>* getHandVector();
     //exchange method
-    Card exchange(int card_number, P p, Deck* deck);
-
+    // exchange(int card_number, P p, Deck* deck);
+    Card * exchange(int card_number, P p, Deck* deck);
 
 private:
     std::vector<Card>* handVector;

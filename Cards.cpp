@@ -283,6 +283,25 @@ std::vector<Card>* Hand::getHandVector() {
     return handVector;
 }
 
+//return pointer Card
+
+
+Card * Hand::exchange( int card_number, P p, Deck *deck) {
+    for(int i=0; i<handVector->size(); i++){
+        if (card_number-1==i){
+            Card * card= new Card(handVector->at(i));
+            handVector->erase (handVector->begin()+i);
+            //draw a new card from deck
+            handVector->emplace_back(deck->draw());
+            p.Pay();
+            return card;
+        }
+    }
+
+    return nullptr;
+}
+
+/*
 Card Hand::exchange( int card_number, P p, Deck *deck) {
     for(int i=0; i<handVector->size(); i++){
         if (card_number-1==i){
@@ -294,5 +313,6 @@ Card Hand::exchange( int card_number, P p, Deck *deck) {
             return card;
         }
     }
+    throw 1;
 }
-
+*/
