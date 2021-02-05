@@ -33,6 +33,8 @@ int main(){
         Card * c=hand->exchange(2,p,deck);
         cout<<"picked card: "<<endl;
         cout<<*c<<endl;
+        delete c;
+        c=nullptr;
     }
     catch(int e){
         cout << "Error!"<<endl;
@@ -48,6 +50,5 @@ int main(){
     hand= nullptr;
     delete deck;
     deck= nullptr;
-    delete c;
-    c=nullptr;
+    
 }
