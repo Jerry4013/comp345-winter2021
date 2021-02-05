@@ -22,11 +22,16 @@ enum CardType{
 class Deck;
 class Card{
 public:
+
+    Card();
     //constructor with parameter
     Card(CardType t,std::string name,int number_of_army,int number_of_movement,int buildCity,int elixers,int
     kill_army,int fly_ability,int victory_point,int build_ability,int move_ability,int immune_to_attack,bool
     one_vp_for_night,bool one_vp_for_cursed,bool one_vp_for_arcane,bool one_vp_for_ancient,bool one_vp_for_dire,bool
-    one_vp_for_forest,bool one_vp_3_coins,bool one_vp_for_fly,bool OR_CARD);
+    one_vp_for_forest,bool one_vp_3_coins,bool one_vp_for_fly,bool OR_CARD,int money);
+    //constructor
+
+
     //copy constructor
     Card(const Card &c);
     //stream insertion operator "to string"
@@ -59,7 +64,7 @@ private:
     bool one_vp_3_coins;
     bool one_vp_for_fly;
     bool OR_CARD;
-
+    int money;
 };
 
 class P{
@@ -72,7 +77,8 @@ public:
 class Hand {
 public:
     //default constructor
-    Hand(Deck* deck);
+    Hand();
+    explicit Hand(Deck* deck);
     //destructor
     ~Hand();
     //copy constructor
@@ -82,13 +88,13 @@ public:
     //stream insertion operator
     friend ostream& operator<<(ostream& output, const Hand& hand);
     //get method
-    std::vector<Card*>* getHandVector();
+    std::vector<Card>* getHandVector();
     //exchange method
-    // exchange(int card_number, P p, Deck* deck);
-    Card * exchange(int card_number, P p, Deck* deck);
+    Card* exchange(int card_number, P p, Deck* deck);
+
 
 private:
-    std::vector<Card*>* handVector;
+    std::vector<Card>* handVector;
 };
 
 class Deck{
@@ -108,8 +114,7 @@ public:
     //get method
     std::vector<Card>* getDeckVector();
     //draw method
-    //Card draw();
-    Card * draw();
+    Card* draw();
 
 
 private:

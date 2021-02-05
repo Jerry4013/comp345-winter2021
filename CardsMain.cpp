@@ -27,28 +27,18 @@ int main(){
     Hand* hand=new Hand(deck);
     cout<<*hand<<endl;
     P p;
+    int n=0;
+    cout<<"please chose the card you want to pick:";
+    cin>>n;
+    Card* c=hand->exchange(n,p,deck);
+    cout<<"picked card: "<<n<<endl;
+    cout<<*c<<endl;
 
-    try{
-        //Card c=hand->exchange(2,p,deck);
-        Card * c=hand->exchange(2,p,deck);
-        cout<<"picked card: "<<endl;
-        cout<<*c<<endl;
-        delete c;
-        c=nullptr;
-    }
-    catch(int e){
-        cout << "Error!"<<endl;
-    }
-    
-    
-    
     cout<<"rest of hand:"<<endl;
     cout<<*hand<<endl;
-    
 
     delete hand;
     hand= nullptr;
     delete deck;
     deck= nullptr;
-    
 }
