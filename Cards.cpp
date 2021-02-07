@@ -56,6 +56,7 @@ Card::Card(const Card& card){
 //to string method
 std::ostream& operator<<(std::ostream& output, const Card& card) {
     output<<"card name: "+card.name<<endl;
+    output<<"Action: "<<endl;
     if (card.number_of_army>0){
         output<<"can build army: "<<card.number_of_army<<endl;
     }
@@ -65,12 +66,15 @@ std::ostream& operator<<(std::ostream& output, const Card& card) {
     if (card.buildCity>0){
         output<<"build one city"<<endl;
     }
-    if (card.elixers>0){
-        output<<"elixers"<<card.elixers<<endl;
-    }
     if (card.kill_army>0){
         output<<"can kill army: "<<card.kill_army<<endl;
     }
+
+    output<<"Goods: "<<endl;
+    if (card.elixers>0){
+        output<<"elixers"<<card.elixers<<endl;
+    }
+
     if (card.fly_ability>0){
         output<<"wings"<<endl;
     }
