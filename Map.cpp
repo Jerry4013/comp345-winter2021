@@ -16,24 +16,29 @@ int ContinentMatrix[10][10];
 Territory::Territory(){
     this->TerritoryNumber = 0;
     this->TerritoryName = "None";
-    this->NumberOfTroops = 0;
     this->ContinentName = "None";
+    for(int i = 0;i<4;i++){
+        PlayerArmyArray[i]=0;
+    }
+
 };
 Territory::~Territory(){};
-Territory:: Territory(std::string TerritoryName,int TerritoryNumber,int NumberOfTroops,std::string Continent){
+Territory:: Territory(std::string TerritoryName,int TerritoryNumber,std::string Continent){
     this->TerritoryNumber = TerritoryNumber;
     this->TerritoryName = TerritoryName;
-    this->NumberOfTroops = NumberOfTroops;
     this->ContinentName = Continent;
 };
 //getter
 int Territory::GetTerritoryNumber(){return this->TerritoryNumber;};
 string Territory::GetTerritoryName(){return this->TerritoryName;};
-int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
+//int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
 //string Territory::GetPlayerName(){return this->OwnerName;};
+int Territory::GetNumTroops(int PlayerNumber){ return this->PlayerArmyArray[PlayerNumber-1];}
+
+
 string Territory::GetContinentName(){return this->ContinentName;};
 //setter
-void Territory::SetNumTroops(int NumOfTroops){this->NumberOfTroops = NumOfTroops;};
+void Territory::SetNumTroops(int PlayerNum,int NumOfTroops){this->PlayerArmyArray[PlayerNum-1] = NumOfTroops;};
 
 
 //add delete edges

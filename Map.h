@@ -19,19 +19,19 @@ class Territory {
 private:
     std::string TerritoryName;
     int TerritoryNumber;
-    int NumberOfTroops;
     std::string ContinentName;
+    int PlayerArmyArray[3];
 //    Player* player;
 public:
     Territory();
     ~Territory();
-    Territory(std::string TerritoryName,int TerritoryNumber,int NumberOfTroops,std::string Continent);
+    Territory(std::string TerritoryName,int TerritoryNumber,std::string Continent);
     std::string GetTerritoryName();
     std::string GetPlayerName();
     std::string GetContinentName();
     int GetTerritoryNumber();
-    int GetNumTroops();
-    void SetNumTroops(int num);
+    int GetNumTroops(int PlayerNumber);
+    void SetNumTroops(int PlayerNum,int num);
 };
 
 class HelperFunctionMap{
@@ -86,3 +86,4 @@ public:
     bool validateContinent();
 
 };
+
