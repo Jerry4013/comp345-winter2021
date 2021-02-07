@@ -182,6 +182,10 @@ Deck::Deck() {
                                   false, false, false, true,0));
     deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, false, false, false,
                                   false, false, false, false,0));
+    deckVector->emplace_back(Card(arcane,"Arcane Sphinx",3,4,0,0,0,1,0,0,0,0, false, false, false, false, false,
+                                  false, false, false, true,0));
+    deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, false, false, false,
+                                  false, false, false, false,0));
 
 
     // using built-in random generator:
