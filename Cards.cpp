@@ -197,7 +197,7 @@ Deck::Deck(int number_of_player) {
         cout<<"Two players deck:"<<endl;
         deckVector->emplace_back(Card(arcane,"Arcane Sphinx",3,4,0,0,0,1,0,0,0,0, false, false, false, false, false,
                                       false, false, false, true,0));
-        deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, false, false, false,
+        deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, true, false, false,
                                       false, false, false, false,0));
         deckVector->emplace_back(Card(noble,"Noble Unicorn",1,4,0,0,0,0,0,0,1,0, false, false, false, false, false,
                                       false, false, false, false,0));
@@ -217,7 +217,7 @@ Deck::Deck(int number_of_player) {
         cout<<"Three players deck:"<<endl;
         deckVector->emplace_back(Card(arcane,"Arcane Sphinx",3,4,0,0,0,1,0,0,0,0, false, false, false, false, false,
                                       false, false, false, true,0));
-        deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, false, false, false,
+        deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, true, false, false,
                                       false, false, false, false,0));
         deckVector->emplace_back(Card(noble,"Noble Unicorn",1,4,0,0,0,0,0,0,1,0, false, false, false, false, false,
                                       false, false, false, false,0));
@@ -229,7 +229,7 @@ Deck::Deck(int number_of_player) {
         cout<<"Four players deck:"<<endl;
         deckVector->emplace_back(Card(arcane,"Arcane Sphinx",3,4,0,0,0,1,0,0,0,0, false, false, false, false, false,
                                       false, false, false, true,0));
-        deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, false, false, false,
+        deckVector->emplace_back(Card(arcane,"Arcane Temple",0,3,0,0,0,0,0,0,0,0, false, false, true, false, false,
                                       false, false, false, false,0));
 
     }
