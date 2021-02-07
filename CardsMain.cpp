@@ -23,12 +23,12 @@ int main(){
 //    cout<<d.draw()<<endl;
 
 //hand demo
-    Deck* deck =new Deck(3);
+    Deck* deck =new Deck(4);
     Hand* hand=new Hand(deck);
     cout<<*hand<<endl;
     P p;
     int n=0;
-    cout<<"please chose the card you want to pick:";
+    cout<<"please chose the card you want to pick: ";
     cin>>n;
     Card* c=hand->exchange(n,p,deck);
     cout<<"picked card: "<<n<<endl;
