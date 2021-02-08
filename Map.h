@@ -7,7 +7,8 @@
 #include <vector>
 #include <list>
 #include <queue>
-
+#include "map"
+using namespace std;
 
 extern int RegionMatrix[10][10];
 extern int ContinentMatrix[10][10];
@@ -21,7 +22,8 @@ private:
     int TerritoryNumber;
     std::string ContinentName;
     int PlayerArmyArray[3];
-//    Player* player;
+    std::map<string,int> territorystats;
+    //    Player* player;
 public:
     Territory();
     ~Territory();
@@ -30,8 +32,8 @@ public:
     std::string GetPlayerName();
     std::string GetContinentName();
     int GetTerritoryNumber();
-    int GetNumTroops(int PlayerNumber);
-    void SetNumTroops(int PlayerNum,int num);
+    int GetNumTroops(string PlayerNumber);
+    void SetNumTroops(string PlayerNum,int num);
 };
 
 class HelperFunctionMap{

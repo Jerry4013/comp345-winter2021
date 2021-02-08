@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/luojiayan/Desktop/GitHub 2/comp345-winter2021/Map.h
+string
+-
+vector
+-
+list
+-
+queue
+-
+map
+/Users/luojiayan/Desktop/GitHub 2/comp345-winter2021/map
+
+/Users/luojiayan/Desktop/GitHub 2/comp345-winter2021/MapDriver.cpp
+Map.h
+/Users/luojiayan/Desktop/GitHub 2/comp345-winter2021/Map.h
+iostream
+/Users/luojiayan/Desktop/GitHub 2/comp345-winter2021/iostream
+

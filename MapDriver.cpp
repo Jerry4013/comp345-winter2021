@@ -36,12 +36,17 @@ int main() {
     Territory T5 = Territory("Territory5",5,"continent4");
     Territory T6 = Territory("Territory6",6,"continent5");
 
-    T1.GetNumTroops(1);
-    T2.GetNumTroops(2);
-    T3.GetNumTroops(3);
-    T4.GetNumTroops(1);
-    T5.GetNumTroops(2);
-    T6.GetNumTroops(3);
+    T1.SetNumTroops("player1",1);
+    T2.SetNumTroops("player2",2);
+    T3.SetNumTroops("player3",3);
+    T4.SetNumTroops("player4",4);
+
+    T1.GetNumTroops("player1");
+    T2.GetNumTroops("player2");
+    T3.GetNumTroops("player3");
+    T4.GetNumTroops("player4");
+    T5.GetNumTroops("player1");
+    T6.GetNumTroops("player2");
 
     continent1.AddTerritory(&T1);
     continent1.AddTerritory(&T2);

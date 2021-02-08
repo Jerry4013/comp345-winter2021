@@ -27,18 +27,25 @@ Territory:: Territory(std::string TerritoryName,int TerritoryNumber,std::string 
     this->TerritoryNumber = TerritoryNumber;
     this->TerritoryName = TerritoryName;
     this->ContinentName = Continent;
+    this->territorystats = {
+            { "player1", 0 },
+            { "player2", 0 },
+            { "player3", 0 },
+            { "player4", 0 }};
 };
 //getter
 int Territory::GetTerritoryNumber(){return this->TerritoryNumber;};
 string Territory::GetTerritoryName(){return this->TerritoryName;};
 //int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
 //string Territory::GetPlayerName(){return this->OwnerName;};
-int Territory::GetNumTroops(int PlayerNumber){ return this->PlayerArmyArray[PlayerNumber-1];}
-
-
+int Territory::GetNumTroops(string PlayerNumber){
+    cout<<PlayerNumber<<" has "<<this->territorystats[PlayerNumber]<<" at territory "<<this->TerritoryNumber <<endl;return this->territorystats[PlayerNumber];
+}
 string Territory::GetContinentName(){return this->ContinentName;};
 //setter
-void Territory::SetNumTroops(int PlayerNum,int NumOfTroops){this->PlayerArmyArray[PlayerNum-1] = NumOfTroops;};
+void Territory::SetNumTroops(string PlayerNum,int NumOfTroops){
+    this->territorystats[PlayerNum] = NumOfTroops;
+};
 
 
 //add delete edges
