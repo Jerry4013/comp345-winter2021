@@ -1,0 +1,30 @@
+numberofcontinents=6
+numberofregions=18
+//id, name
+[continents]
+1 volcano1
+2 volcano2
+3 redforest
+4 forest
+5 mountain1
+6 mountain2
+//id, name, continent_id
+[regions]
+1 volcano1_upper1 1 2||
+2 volcano1_upper2 1 1||5
+3 volcano2_upper 2 0 4,5||
+4 volcano2_middle1 2 3,5||9
+5 volcano2_middle2 2 3,4,6||2
+6 volcano2_bottom1 2 5,7||
+7 volcano2_bottom2 2 6||11
+8 redforest_upper 3 9||
+9 redforest_middle 3 8,10||4
+10 redforest_bottom 3 ||16
+11 forest_upper1 4 12,13||7
+12 forest_upper2 4 11,13,14||
+13 forest_middle 4 11,12,14||16
+14 forest_bottom1 4 12,13,15||
+15 forest_bottom2 4 14||
+16 mountain1_upper 5 13,17||10
+17 mountain1_middle 5 16||18
+18 mountain2 6 1 ||17
