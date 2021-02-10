@@ -15,8 +15,9 @@ public:
     Map * getMapptr();
     friend ostream& operator<<(ostream& output, const MapLoader& mapLoader);
 private:
-
+    void makingconnection();
     Map * GameMap;
-
+    vector<Continent> Continents_vector;
+    vector<Territory> Territory_vector;
 };
 
