@@ -16,24 +16,36 @@ int ContinentMatrix[10][10];
 Territory::Territory(){
     this->TerritoryNumber = 0;
     this->TerritoryName = "None";
-    this->NumberOfTroops = 0;
     this->ContinentName = "None";
+    for(int i = 0;i<4;i++){
+        PlayerArmyArray[i]=0;
+    }
+
 };
 Territory::~Territory(){};
-Territory:: Territory(std::string TerritoryName,int TerritoryNumber,int NumberOfTroops,std::string Continent){
+Territory:: Territory(std::string TerritoryName,int TerritoryNumber,std::string Continent){
     this->TerritoryNumber = TerritoryNumber;
     this->TerritoryName = TerritoryName;
-    this->NumberOfTroops = NumberOfTroops;
     this->ContinentName = Continent;
+    this->territorystats = {
+            { "player1", 0 },
+            { "player2", 0 },
+            { "player3", 0 },
+            { "player4", 0 }};
 };
 //getter
 int Territory::GetTerritoryNumber(){return this->TerritoryNumber;};
 string Territory::GetTerritoryName(){return this->TerritoryName;};
-int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
+//int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
 //string Territory::GetPlayerName(){return this->OwnerName;};
+int Territory::GetNumTroops(string PlayerNumber){
+    cout<<PlayerNumber<<" has "<<this->territorystats[PlayerNumber]<<" at territory "<<this->TerritoryNumber <<endl;return this->territorystats[PlayerNumber];
+}
 string Territory::GetContinentName(){return this->ContinentName;};
 //setter
-void Territory::SetNumTroops(int NumOfTroops){this->NumberOfTroops = NumOfTroops;};
+void Territory::SetNumTroops(string PlayerNum,int NumOfTroops){
+    this->territorystats[PlayerNum] = NumOfTroops;
+};
 
 
 //add delete edges
@@ -41,6 +53,19 @@ void HelperFunctionMap::AddEdgesCountry(int TerritoryOne,int TerritoryTwo){
     TerritoryMatrix[TerritoryOne][TerritoryTwo]=1;
     TerritoryMatrix[TerritoryTwo][TerritoryOne]=1;
 };
+
+void HelperFunctionMap::AddEdgesCountry_ljy(Territory* t1,Territory* t2){
+    //if regions come from same continent
+   if(t1->GetContinentName().compare(t2->GetContinentName())==0){
+       TerritoryMatrix[t1->GetTerritoryNumber()][t2->GetTerritoryNumber()]=1;
+       TerritoryMatrix[t2->GetTerritoryNumber()][t1->GetTerritoryNumber()]=1;
+   }
+   else{
+       TerritoryMatrix[t1->GetTerritoryNumber()][t2->GetTerritoryNumber()]=3;
+       TerritoryMatrix[t2->GetTerritoryNumber()][t1->GetTerritoryNumber()]=3;
+   }
+};
+
 void HelperFunctionMap::DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo){
     TerritoryMatrix[TerritoryOne][TerritoryTwo]=0;
     TerritoryMatrix[TerritoryTwo][TerritoryOne]=0;
@@ -171,16 +196,16 @@ void Map::CreateCountryMatrix(){
 bool Map::CheckTerritoryBelongToOneContinent(Map* map){
     int error = 0;
     for(int i = 0; i<map->ReturnContient().size();i++){
-       for(int j = 0; j<map->ReturnContient()[i]->ReturnTerritory().size();j++) {
-           if (!map->ReturnContient()[i]->ReturnTerritory()[j]->GetContinentName().empty()){
-               cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " only belongs to  "
-               << map->ReturnContient()[i]->GetContinentName()<<endl;
-           }
-           else{
-               error++;
-               cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " does not belong to any continent "<<endl;
-           }
-       }
+        for(int j = 0; j<map->ReturnContient()[i]->ReturnTerritory().size();j++) {
+            if (!map->ReturnContient()[i]->ReturnTerritory()[j]->GetContinentName().empty()){
+                cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " only belongs to  "
+                     << map->ReturnContient()[i]->GetContinentName()<<endl;
+            }
+            else{
+                error++;
+                cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " does not belong to any continent "<<endl;
+            }
+        }
     }
     if(error ==0){return true;}
     else {return false;}
@@ -260,9 +285,3 @@ void Map::Validate(Map* map){
         cout << "The Continent graph is not connected graph"<<endl;
 
 };
-
-
-
-
-
-

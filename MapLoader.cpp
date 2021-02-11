@@ -1,5 +1,5 @@
 //
-// Created by lllll on 2021-02-05.
+// Created by Jingyi on 2021-02-05.
 //
 
 #include "MapLoader.h"
@@ -13,61 +13,37 @@ MapLoader ::MapLoader() {
     this->GameMap= nullptr;
 }
 
-MapLoader ::MapLoader(string filename) {
-    string line;
-    int numberofcontinents = -1,numberofregions=-1;
-    string shape;
-    ifstream mapfile (filename);
-    string map_order_buffer;
-    vector<string> regions_buffer,continent_buffer,map_buffer;
-    bool continents=false,regions=false,map=false,map_order=false;
-    if (mapfile.is_open())
-    {
-        while ( getline (mapfile,line) )
-        {
-            if(numberofcontinents==-1){
-                int found = line.find("numberofcontinents=");
-                //cout << line.substr(19, line.size())<<endl;
-                if (found != string::npos)
-                    numberofcontinents=stoi(line.substr(19, line.size()),nullptr,0);
-            }
-            else if(numberofregions==-1){
-                int found = line.find("numberofregions=");
-                //cout << found <<endl;
-                if (found != string::npos)
-                    numberofregions=stoi(line.substr(16, line.size()),nullptr,0);
-            }
-            else if(shape.empty()){
-                int found = line.find("shape=");
-                //cout << found <<endl;
-                if (found != string::npos)
-                    shape=line.substr(6,line.size());
-            }
+MapLoader::MapLoader(const MapLoader &ml): file(ml.file) {
+    this->GameMap=ml.GameMap;
+}
 
+MapLoader ::MapLoader(string filename): file(filename) {
+    this->GameMap = new Map("Game 1");
+    string line;
+    ifstream map_file (filename);
+    vector<string> regions_buffer,continent_buffer,map_buffer;
+    bool continents=false,regions=false,map=false;
+
+    //read map file
+    if (map_file.is_open())
+    {
+        while ( getline (map_file,line) )
+        {
             if(line.find("[continents]")!=string::npos){
                 //Look for the contents, should be continents or regions
                 continents=true;
                 regions=false;
                 map=false;
-                map_order=false;
             }
             else if(line.find("[regions]")!=string::npos){
                 continents=false;
                 regions=true;
                 map=false;
-                map_order=false;
             }
             else if(line.find("[map]")!=string::npos){
                 continents=false;
                 regions=false;
                 map=true;
-                map_order=false;
-            }
-            else if(line.find("[map_order]")!=string::npos){
-                continents=false;
-                regions=false;
-                map=false;
-                map_order=true;
             }
             else if(line.find("//")==string::npos){
                 if(continents){
@@ -79,61 +55,83 @@ MapLoader ::MapLoader(string filename) {
                 else if(map){
                     map_buffer.push_back(line);
                 }
-                else if(map_order){
-                    map_order_buffer+=line;
-                }
             }
 
 
         }
-        mapfile.close();
+        map_file.close();
     }
     else
-        throw 20;
+        throw 25; //if the program cannot open the file throw error code 25;
 
-    /*
-    cout<< "continents:"<<numberofcontinents<<endl;
-    cout<< "regions:"<<numberofregions<<endl;
-    cout << "shape:"<<shape<<endl;
-    cout << "maps:"<<map_buffer<<endl;
-    cout << "map order:"<<map_order_buffer<<endl;
-    cout<<continent_buffer<<endl;
-    cout<<regions_buffer<<endl;
-     */
 
     string delimiter = " ";
     size_t pos = 0;
     string token;
     string temp;
+    HelperFunctionMap helper;
+    //GameMap->CreateCountryMatrix();
+    GameMap->CreateContinentMatrix();
+    int id;
+    int column=0;
+  /*
     for(int i=0;i<map_buffer.size();i++){
         temp=map_buffer.at(i);
+
         while ((pos = temp.find(delimiter)) != std::string::npos) {
             token = temp.substr(0, pos);
             std::cout << token << std::endl;
             temp.erase(0, pos + delimiter.length());
         }
+
         cout<<temp<<endl;
     }
+    */
     cout <<endl;
     for(int i=0;i<continent_buffer.size();i++){
         temp=continent_buffer.at(i);
         while ((pos = temp.find(delimiter)) != std::string::npos) {
             token = temp.substr(0, pos);
-            std::cout << token << std::endl;
+            if(column==0){
+                id = stoi(token, nullptr,10);
+            }
+            else if(column==1){
+                GameMap->AddContinent(new Continent(token,id));
+            }
             temp.erase(0, pos + delimiter.length());
+            column++;
         }
-        cout<<temp<<endl<<endl;
+        column=0;
     }
+
     cout <<endl;
+    column=0;
+    string region_name,continent_name;
+    int continent_id;
     for(int i=0;i<regions_buffer.size();i++){
         temp=regions_buffer.at(i);
         while ((pos = temp.find(delimiter)) != std::string::npos) {
             token = temp.substr(0, pos);
-            std::cout << token << std::endl;
+            if(column==0) {
+                id = stoi(token, nullptr, 10);
+            }
+            else if(column==1){
+                region_name=token;
+            }
+            else if(column==2){
+                continent_id=stoi(token, nullptr,10);
+                for(int i =0;i<this->GameMap->ReturnContient().size();i++){
+                    if (this->GameMap->ReturnContient().at(i)->GetContinentNum()==continent_id)
+                        this->GameMap->ReturnContient().at(i)->AddTerritory(new Territory(region_name,id,this->GameMap->ReturnContient().at(i)->GetContinentName()));
+                }
+            }
             temp.erase(0, pos + delimiter.length());
+            column++;
         }
-        cout<<temp<<endl<<endl;
+        column=0;
+        //cout<<temp<<endl<<endl;
     }
+
 }
 
 std::ostream& operator<<(ostream& output, MapLoader mapLoader) {
@@ -141,6 +139,6 @@ std::ostream& operator<<(ostream& output, MapLoader mapLoader) {
     return output;
 }
 
-Map * MapLoader::getMapptr() {
+Map * MapLoader::getGameMap() {
     return this->GameMap;
 }

@@ -1,40 +1,33 @@
-numberofcontinents=6
-numberofregions=18
-shape=L
-//
 [map]
-1 volcano
-2 redforest
-3 village
-4 mountain
-//
-[map_order]
-4,2,1,3
-//id, name
+0 volcano
+1 redforest
+2 village
+3 mountain
+//id, name, map_id
 [continents]
-1 volcano1 1
-2 volcano2 1
-3 redforest 2
-4 village 3
-5 mountain1 4
-6 mountain2 4
-//id, name, continent_id, connection_region||connection_continent
+0 volcano1 0
+1 volcano2 0
+2 redforest 1
+3 village 2
+4 mountain1 3
+5 mountain2 3
+//id, name, continent_id, connection
 [regions]
-1 volcano1_upper1 1 2 north-out
-2 volcano1_upper2 1 1,5 south-in
-3 volcano2_upper 2 0 4,5
-4 volcano2_middle1 2 3,5 east-out
-5 volcano2_middle2 2 3,4,6 north-in
-6 volcano2_bottom1 2 5,7 west-out
-7 volcano2_bottom2 2 6 south-out
-8 redforest_upper 3 9 north-out
-9 redforest_middle 3 8,10 west-out
-10 redforest_bottom 3 east-out,south-out
-11 village_upper1 4 12,13 north-out
-12 village_upper2 4 11,13,14
-13 village_middle 4 11,12,14 east-out
-14 village_bottom1 4 12,13,15 west-out
-15 village_bottom2 4 14 south-out
-16 mountain1_upper 5 13,17 north-out,west-out
-17 mountain1_middle 5 16,18 south-in,south-out
-18 mountain2 6 1 17 north-in
+0 volcano1_upper1 0 1 0-north-out
+1 volcano1_upper2 0 0,4
+2 volcano2_upper 1 3,4
+3 volcano2_middle1 1 2,4 0-east-out
+4 volcano2_middle2 1 2,3,5
+5 volcano2_bottom1 1 4,6 0-west-out
+6 volcano2_bottom2 1 5 0-south-out
+7 redforest_upper 2 8 1-north-out
+8 redforest_middle 2 7,9 1-west-out
+9 redforest_bottom 2 8 1-east-out,1-south-out
+10 village_upper1 3 11,12 2-north-out
+11 village_upper2 3 10,12,13
+12 village_middle 3 10,11,13 2-east-out
+13 village_bottom1 3 11,12,14 2-west-out
+14 village_bottom2 3 13 2-south-out
+15 mountain1_upper 4 16 3-north-out,3-west-out
+16 mountain1_middle 4 15,17 3-east-out,3-south-out
+17 mountain2 5 16

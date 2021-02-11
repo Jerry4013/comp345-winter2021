@@ -6,7 +6,7 @@
 using namespace std;
 #include "iostream"
 int main() {
-    Map testmap = Map("test");
+    Map testmap = Map("test"); //ptr
     HelperFunctionMap helper;
     testmap.CreateCountryMatrix();
     testmap.CreateContinentMatrix();
@@ -29,19 +29,24 @@ int main() {
     helper.AddEdgesContinents(1,3);
     helper.PrintContinentMatrix();
 
-    Territory T1 = Territory("Territory1",1,0,"continent1");
-    Territory T2 = Territory("Territory2",2,1,"continent1");
-    Territory T3 = Territory("Territory3",3,2,"continent2");
-    Territory T4 = Territory("Territory4",4,3,"continent3");
-    Territory T5 = Territory("Territory5",5,4,"continent4");
-    Territory T6 = Territory("Territory6",6,5,"continent5");
+    Territory T1 = Territory("Territory1",1,"continent1");
+    Territory T2 = Territory("Territory2",2,"continent1");
+    Territory T3 = Territory("Territory3",3,"continent2");
+    Territory T4 = Territory("Territory4",4,"continent3");
+    Territory T5 = Territory("Territory5",5,"continent4");
+    Territory T6 = Territory("Territory6",6,"continent5");
 
-    T1.GetNumTroops();
-    T2.GetNumTroops();
-    T3.GetNumTroops();
-    T4.GetNumTroops();
-    T5.GetNumTroops();
-    T6.GetNumTroops();
+    T1.SetNumTroops("player1",1);
+    T2.SetNumTroops("player2",2);
+    T3.SetNumTroops("player3",3);
+    T4.SetNumTroops("player4",4);
+
+    T1.GetNumTroops("player1");
+    T2.GetNumTroops("player2");
+    T3.GetNumTroops("player3");
+    T4.GetNumTroops("player4");
+    T5.GetNumTroops("player1");
+    T6.GetNumTroops("player2");
 
     continent1.AddTerritory(&T1);
     continent1.AddTerritory(&T2);

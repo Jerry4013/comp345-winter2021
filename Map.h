@@ -7,36 +7,42 @@
 #include <vector>
 #include <list>
 #include <queue>
+#include "map"
+#include <unordered_map>
+#include <memory>
+using namespace std;
 
-
-extern int RegionMatrix[10][10];
+//extern int RegionMatrix[10][10];
 extern int ContinentMatrix[10][10];
 
-
+//Every continent should have 1 matrix
 
 
 class Territory {
 private:
     std::string TerritoryName;
     int TerritoryNumber;
-    int NumberOfTroops;
     std::string ContinentName;
-//    Player* player;
+    int PlayerArmyArray[3];
+    std::map<string,int> territorystats;
+    //    Player* player;
 public:
     Territory();
     ~Territory();
-    Territory(std::string TerritoryName,int TerritoryNumber,int NumberOfTroops,std::string Continent);
+    Territory(std::string TerritoryName,int TerritoryNumber,std::string Continent);
     std::string GetTerritoryName();
     std::string GetPlayerName();
     std::string GetContinentName();
     int GetTerritoryNumber();
-    int GetNumTroops();
-    void SetNumTroops(int num);
+    int GetNumTroops(string PlayerNumber);
+    void SetNumTroops(string PlayerNum,int num);
 };
 
 class HelperFunctionMap{
 public:
     void AddEdgesCountry(int TerritoryOne,int TerritoryTwo);
+    void AddEdgesCountry_ljy(Territory* t1,Territory* t2);
+
     void DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo);
 
     void AddEdgesContinents(int ContinentOne,int ContinentTwo);
@@ -50,6 +56,7 @@ private:
     std::string Continetname;
     std::vector<Territory*> territories;
     int ContinentNum;
+    int RegionMatrix[10][10];
 public:
     ~Continent();
     Continent(std::string name,int ContinentNum);
@@ -84,5 +91,4 @@ public:
     bool CheckTerritoryBelongToOneContinent(Map* map);
     bool validateTerritory();
     bool validateContinent();
-
 };

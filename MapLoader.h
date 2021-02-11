@@ -9,15 +9,17 @@
 using namespace std;
 
 class MapLoader {
+
 public:
     MapLoader();
     MapLoader(string);
-    Map * getMapptr();
+    MapLoader(const MapLoader &ml);
     friend ostream& operator<<(ostream& output, const MapLoader& mapLoader);
+    Map * getGameMap();
 private:
-    void makingconnection();
+    string file;
     Map * GameMap;
-    vector<Continent> Continents_vector;
-    vector<Territory> Territory_vector;
+    void makingconnection();
+
 };
 
