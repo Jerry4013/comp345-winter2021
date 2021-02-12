@@ -934,7 +934,12 @@ std::vector<Card*> *Hand::getHandVector() {
 Card *Hand::exchange(int card_number, P p, Deck *deck) {
     for (int i = 0; i < handVector->size(); i++) {
         if (card_number - 1 == i) {
-            Card *card = new Card(*handVector->at(i));
+            Card* card = new Card(*handVector->at(i));
+
+            //std::cout << **(handVector->begin() + i)<<endl;
+            //delete the ptr , avoid memory leak
+            delete *(handVector->begin() + i);
+            *(handVector->begin() + i)= nullptr;
             handVector->erase(handVector->begin() + i);
             //draw a new card from deck
             handVector->emplace_back(deck->draw());
