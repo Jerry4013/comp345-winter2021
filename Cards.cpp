@@ -397,95 +397,94 @@ void Card::setMoney(int money) {
 
 Deck::Deck() {
     cout << "default 2 players deck:" << endl;
-    deckVector = new std::vector<Card>();
+    deckVector = new std::vector<Card*>();
     //27 for two players:
     //ancient
-    deckVector->emplace_back(
-            Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
+    deckVector->emplace_back(new Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
                  false, false, false, false, false, false, 0));
     deckVector->emplace_back(
-            Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
+            new Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
                  false, false, false, false, false, false, 0));
     deckVector->emplace_back(
-            Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+            new Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                  false,
                  false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
     //cursed
-    deckVector->emplace_back(Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, true, 0));
-    deckVector->emplace_back(Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, true, false, false, false, 0));
     //dire
-    deckVector->emplace_back(Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
+    deckVector->emplace_back(new Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, true, false, false, false, false, 0));
     //forest
-    deckVector->emplace_back(Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, true, 0));
-    deckVector->emplace_back(Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
     //empty kind
-    deckVector->emplace_back(Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
+    deckVector->emplace_back(new Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   true, false, false, false, false, true, 0));
-    deckVector->emplace_back(Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   true,
                                   false, false, false, false, false, false, 0));
     //Night
-    deckVector->emplace_back(Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
+    deckVector->emplace_back(new Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
     //noble
-    deckVector->emplace_back(Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, true, false, 0));
-    deckVector->emplace_back(Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
-    deckVector->emplace_back(Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+    deckVector->emplace_back(new Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                                   false,
                                   false, false, false, false, false, false, 0));
 
@@ -495,102 +494,102 @@ Deck::Deck() {
     std::shuffle(deckVector->begin(), deckVector->end(), g);
 }
 Deck::Deck(int number_of_player) {
-    deckVector = new std::vector<Card>();
+    deckVector = new std::vector<Card*>();
     if (number_of_player == 2) {
         cout << "Two players deck:" << endl;
         //27 for two players:
         //ancient
         deckVector->emplace_back(
-                Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
+                new Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+                new Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         //cursed
         deckVector->emplace_back(
-                Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+                new Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, true, 0));
         deckVector->emplace_back(
-                Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+                new Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, true, false, false, false, 0));
         //dire
-        deckVector->emplace_back(Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, true, false, false, false, false, 0));
         //forest
-        deckVector->emplace_back(Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, true, 0));
-        deckVector->emplace_back(Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         //empty kind
-        deckVector->emplace_back(Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       true, false, false, false, false, true, 0));
-        deckVector->emplace_back(Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       true,
                                       false, false, false, false, false, false, 0));
         //Night
-        deckVector->emplace_back(Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         //noble
-        deckVector->emplace_back(Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, true, false, 0));
-        deckVector->emplace_back(Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
     }
@@ -599,117 +598,117 @@ Deck::Deck(int number_of_player) {
         //27 for two players:
         //ancient
         deckVector->emplace_back(
-                Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
+                new Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+                new Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         //cursed
         deckVector->emplace_back(
-                Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+                new Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, true, 0));
         deckVector->emplace_back(
-                Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+                new Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, true, false, false, false, 0));
         //dire
-        deckVector->emplace_back(Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, true, false, false, false, false, 0));
         //forest
-        deckVector->emplace_back(Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, true, 0));
-        deckVector->emplace_back(Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         //empty kind
-        deckVector->emplace_back(Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       true, false, false, false, false, true, 0));
-        deckVector->emplace_back(Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       true,
                                       false, false, false, false, false, false, 0));
         //Night
-        deckVector->emplace_back(Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         //noble
-        deckVector->emplace_back(Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, true, false, 0));
-        deckVector->emplace_back(Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         //5 more for three players
         deckVector->emplace_back(
-                Card(arcane, "Arcane Sphinx", 3, 4, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(arcane, "Arcane Sphinx", 3, 4, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, true, 0));
 
         deckVector->emplace_back(
-                Card(arcane, "Arcane Manticore", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false, false,
+                new Card(arcane, "Arcane Manticore", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false, false,
                      false, false, false, false, false, false, 0));
 
         deckVector->emplace_back(
-                Card(arcane, "Arcane Temple", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, true, false, false,
+                new Card(arcane, "Arcane Temple", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, true, false, false,
                      false, false, false, false, false, false, 0));
 
         deckVector->emplace_back(
-                Card(mountain, "Mountain Dwarf", 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(mountain, "Mountain Dwarf", 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, true, false, false, 0));
 
         deckVector->emplace_back(
-                Card(mountain, "Mountain Treasury", 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(mountain, "Mountain Treasury", 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 1));
 
@@ -720,121 +719,121 @@ Deck::Deck(int number_of_player) {
         //27 for two players:
         //ancient
         deckVector->emplace_back(
-                Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
+                new Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+                new Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         //cursed
         deckVector->emplace_back(
-                Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+                new Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, true, 0));
         deckVector->emplace_back(
-                Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+                new Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, true, false, false, false, 0));
         //dire
-        deckVector->emplace_back(Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, true, false, false, false, false, 0));
         //forest
-        deckVector->emplace_back(Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, true, 0));
-        deckVector->emplace_back(Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 0));
         //empty kind
-        deckVector->emplace_back(Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       true, false, false, false, false, true, 0));
-        deckVector->emplace_back(Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       true,
                                       false, false, false, false, false, false, 0));
         //Night
-        deckVector->emplace_back(Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
+        deckVector->emplace_back(new Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         //noble
-        deckVector->emplace_back(Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, true, false, 0));
-        deckVector->emplace_back(Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
-        deckVector->emplace_back(Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
+        deckVector->emplace_back(new Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
                                       false,
                                       false, false, false, false, false, false, 0));
         //5 more for three players
         deckVector->emplace_back(
-                Card(arcane, "Arcane Sphinx", 3, 4, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(arcane, "Arcane Sphinx", 3, 4, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, true, 0));
         deckVector->emplace_back(
-                Card(arcane, "Arcane Manticore", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false, false,
+                new Card(arcane, "Arcane Manticore", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(arcane, "Arcane Temple", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, true, false, false,
+                new Card(arcane, "Arcane Temple", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, true, false, false,
                      false, false, false, false, false, false, 0));
         deckVector->emplace_back(
-                Card(mountain, "Mountain Dwarf", 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(mountain, "Mountain Dwarf", 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, true, false, false, 0));
         deckVector->emplace_back(
-                Card(mountain, "Mountain Treasury", 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
+                new Card(mountain, "Mountain Treasury", 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 1));
         //2 more for 4 players:
         deckVector->emplace_back(
-                Card(emptyKind, "Castle 1", 3, 0, 1, 1, 0, 0, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(emptyKind, "Castle 1", 3, 0, 1, 1, 0, 0, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, true, 0));
         deckVector->emplace_back(
-                Card(emptyKind, "Castle 2", 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, false, false, false, false, false,
+                new Card(emptyKind, "Castle 2", 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, false, 0));
     }
     // using built-in random generator:
@@ -849,29 +848,29 @@ Deck::~Deck() {
 }
 
 Deck::Deck(const Deck &deck) {
-    this->deckVector = new vector<Card>(*(deck.deckVector));
+    this->deckVector = new vector<Card*>(*(deck.deckVector));
 }
 
 Deck &Deck::operator=(const Deck &deck) {
-    this->deckVector = new std::vector<Card>(*(deck.deckVector));
+    this->deckVector = new std::vector<Card*>(*(deck.deckVector));
     return *this;
 }
 
 
 std::ostream &operator<<(std::ostream &output, const Deck &deck) {
     for (int i = 0; i < deck.deckVector->size(); i++) {
-        output << deck.deckVector->at(i) << endl;
+        output << *deck.deckVector->at(i) << endl;
     }
     return output;
 }
 
-std::vector<Card> *Deck::getDeckVector() {
+std::vector<Card*> *Deck::getDeckVector() {
     return deckVector;
 }
 
 Card *Deck::draw() {
     if (!(getDeckVector()->empty())) {
-        Card *card = new Card(getDeckVector()->back());
+        Card* card = new Card(*getDeckVector()->back());
         getDeckVector()->pop_back();
         return card;
     } else {
@@ -885,19 +884,19 @@ Card *Deck::draw() {
 }
 
 Hand::Hand() {
-    handVector = new std::vector<Card>();
+    handVector = new std::vector<Card*>();
 }
 
 
 Hand::Hand(Deck *deck) {
-    handVector = new std::vector<Card>();
+    handVector = new std::vector<Card*>();
     //draw 6 cards in the beginning of the game
-    handVector->emplace_back(*deck->draw());
-    handVector->emplace_back(*deck->draw());
-    handVector->emplace_back(*deck->draw());
-    handVector->emplace_back(*deck->draw());
-    handVector->emplace_back(*deck->draw());
-    handVector->emplace_back(*deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
+    handVector->emplace_back(deck->draw());
 }
 
 Hand::~Hand() {
@@ -906,11 +905,11 @@ Hand::~Hand() {
 }
 
 Hand::Hand(const Hand &hand) {
-    this->handVector = new std::vector<Card>(*(hand.handVector));
+    this->handVector = new std::vector<Card*>(*(hand.handVector));
 }
 
 Hand &Hand::operator=(const Hand &hand) {
-    this->handVector = new std::vector<Card>(*(hand.handVector));
+    this->handVector = new std::vector<Card*>(*(hand.handVector));
     return *this;
 }
 
@@ -923,22 +922,22 @@ std::ostream &operator<<(std::ostream &output, const Hand &hand) {
                            {5, 3}};
     for (int i = 0; i < hand.handVector->size(); i++) {
         output << "Card " << i + 1 << " this card takes " << moneyMap[i] << " coins " << endl;
-        output << hand.handVector->at(i) << endl;
+        output << *hand.handVector->at(i) << endl;
     }
     return output;
 }
 
-std::vector<Card> *Hand::getHandVector() {
+std::vector<Card*> *Hand::getHandVector() {
     return handVector;
 }
 
 Card *Hand::exchange(int card_number, P p, Deck *deck) {
     for (int i = 0; i < handVector->size(); i++) {
         if (card_number - 1 == i) {
-            Card *card = new Card(handVector->at(i));
+            Card *card = new Card(*handVector->at(i));
             handVector->erase(handVector->begin() + i);
             //draw a new card from deck
-            handVector->emplace_back(*deck->draw());
+            handVector->emplace_back(deck->draw());
             p.Pay();
             return card;
         }
