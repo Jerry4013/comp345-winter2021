@@ -843,6 +843,10 @@ Deck::Deck(int number_of_player) {
 }
 
 Deck::~Deck() {
+    for (unsigned i=0; i<deckVector->size(); i++) {
+        delete deckVector->at(i);
+        deckVector->at(i) = nullptr;
+    }
     delete deckVector;
     deckVector = nullptr;
 }
@@ -900,6 +904,10 @@ Hand::Hand(Deck *deck) {
 }
 
 Hand::~Hand() {
+    for (unsigned i=0; i<handVector->size(); i++) {
+        delete handVector->at(i);
+        handVector->at(i) = nullptr;
+    }
     delete handVector;
     handVector = nullptr;
 }
