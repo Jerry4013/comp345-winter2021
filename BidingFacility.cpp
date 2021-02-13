@@ -1,49 +1,71 @@
 #include "BidingFacility.h"
-#include "iostream"
+#include <iostream>
 #include <iomanip>
-using namespace std;
+#include <vector>
 
+using namespace std;
 
 
 class BidingFacility {
 public:
     void start();
-    void getBids();
     void getResultLog();
-private:
-    string players[3]  = {"Ngyuan", "Noah", "Chen"};
-    string resultLog;
     void initialize();
-
     void initialize(string *_players, int _size);
+private:
+    string resultLog;
+    bool ifInitialized = false;
+    vector<string> players;
 };
 
+void BidingFacility::initialize() {
+    cout << "\nBidingFacility::initialize()" << endl;
+    // TO-DO: GET PLAYER LIST FROM GAME OBJECT
+}
+
 void BidingFacility::initialize(string _players[], int _size) {
-    cout << "BidingFacility::initialize()" << endl;
+    cout << "\nBidingFacility::initialize()" << endl;
+
+    if(_size <= 0) {
+        cout << "Initialize failed"; return;
+    }
+
+    ifInitialized = true;
+
+    cout << "Number of player: " << to_string(_size) << endl;
+    for (int i = 0; i < _size; i++){
+        cout << "[" << i << "] " << _players[i] << endl;
+        players.push_back(_players[i]);
+    }
 }
 
 void BidingFacility::start() {
-    cout << "BidingFacility::start()" << endl;
+    cout << "\nBidingFacility::start()" << endl;
 
-    int playerNumber = 3;
-    cout << "Number of player: " << playerNumber << "\n" << endl;
-
-    const int n = playerNumber;
-    int bid[playerNumber];
-
-    for (int i = 0; i < playerNumber; i++){
-        bid[i] = 0;
-        cout << "[" << i << "] " << players[i] <<", with bid: " << bid[i] << endl;
+    if(!ifInitialized){
+        cout << "BidingFacility hasn't been initialized yet"; return;
     }
 
-    int tempBid;
+    string str = "";
+    int playerNumber = players.size();
+//    int playerNumber = 3;
+    int bids[playerNumber];
 
+    cout << "Number of player: " << playerNumber << "\n" << endl;
+
+    // Initialize bid[]
     for (int i = 0; i < playerNumber; i++){
-        cout << "\n[" << i << "] " << players[i] <<"'s turn" << endl;
+        bids[i] = 0;
+        cout << "[" << i << "] " << players[i] <<", with bid: " << bids[i] << endl;
+    }
 
-        cout << "Place your bid!" << endl;
+    // INPUT BID
+    int tempBid;
+    for (int i = 0; i < playerNumber; i++){
+        cout << "\n[" << i << "] " << players[i] <<"'s turn, place your bid" << endl;
         cout << "Your bid: ";
         cin >> tempBid;
+
         while(cin.fail() || tempBid < 0){
             cout << "Wrong number input, try again: ";
             std::cin.clear();
@@ -51,91 +73,100 @@ void BidingFacility::start() {
             cin >> tempBid;
         }
         cout << "Bid is hidden near the game board" << endl;
-        bid[i] = tempBid;
+        bids[i] = tempBid;
     }
+
+    cout << "\n\nBID REVEAL\n==========\n";
+    for (int i = 0; i < playerNumber; i++){
+        str = "[" + to_string(i) + "] " + players[i] + "'s bid: " +  to_string(bids[i]) + "\n";
+        cout << str;
+
+    }
+
+    cout << "\nCALCULATING..." << endl;
+
+    bool ifZero = true;
+    bool ifTie = false;
 
     // CHECKING ALL ZERO
-    bool ifBidsNotZero = false;
-
     for (int i = 0; i < playerNumber; i++){
-        tempBid = bid[i];
-        if(!ifBidsNotZero) if(tempBid != 0) ifBidsNotZero = true;
+        if(ifZero) if(bids[i] != 0) ifZero = false;
     }
 
-    if(!ifBidsNotZero){
-        cout << "ALL BIDS ARE ZERO" << endl;
-        cout << "END" << endl;
-        return;
-    }
+    if(ifZero) resultLog += "ALL BIDS ARE ZERO, the player with an alphabetical last name order wins\n";
 
-    // SORTING
+    // SELECTION SORT
     for (int i = 0; i < playerNumber; i++){
-        int currentMaxBid = bid[i];
+
+        int currentMaxBid = bids[i];
         string currentMaxPlayer = players[i];
         int currentMaxIndex = i;
 
+//        cout << ">> " << i << "\ncurrentMaxBid\t\t" << currentMaxBid << "\ncurrentMaxPlayer\t" << currentMaxPlayer << endl;
+
         for (int j = i + 1; j < playerNumber; j++){
-            if (currentMaxBid < bid[j]){
-                currentMaxBid = bid[j];
+//            cout << "|-Comparing with\n|-players[j]\t\t" << players[j] << "\n|-bid[j]\t\t" << bids[j] << endl;
+            if (currentMaxBid < bids[j]){
+                currentMaxBid = bids[j];
                 currentMaxPlayer = players[j];
                 currentMaxIndex = j;
+            } else if (currentMaxBid == bids[j]){
+//                cout << "TIE on " << players[j] << " with " << currentMaxPlayer << endl;
+                if(!ifZero && !ifTie){
+                    resultLog += "TIE IN BIDS, player with an alphabetical last name order wins the bid\n";
+                    ifTie = true;
+                }
+                if(currentMaxPlayer > players[j]){
+                    currentMaxBid = bids[j];
+                    currentMaxPlayer = players[j];
+                    currentMaxIndex = j;
+                }
             }
         }
 
         if (currentMaxIndex != i){
-            bid[currentMaxIndex] = bid[i];
+            bids[currentMaxIndex] = bids[i];
             players[currentMaxIndex] = players[i];
-            bid[i] = currentMaxBid;
+            bids[i] = currentMaxBid;
             players[i] = currentMaxPlayer;
         }
     }
 
-    for (int i = 0; i < playerNumber; i++){
-        cout << "[" << i << "] " << players[i] << "'s bid: " << bid[i] << endl;
+
+
+    // RESULT
+
+    for(int i = 0; i < players.size(); i++){
+        resultLog +=  to_string(i+1) + "- " + players[i] + ":" + to_string(bids[i]) + "\n";
     }
 
-    string tempS = "";
-
-    cout << "\nBID REVEAL\n=========================\n";
-    for (int i = 0; i < playerNumber; i++){
-        cout << "[" << i << "] " << players[i] << "'s bid: " << bid[i] << endl;
-        resultLog +=  "[" + to_string(i) + "] " + players[i] + "'s bid: " +  to_string(bid[i]) + "\n";
+    if(!ifZero) {
+        resultLog += players[0] + " win the bid with " + to_string(bids[0]) + ".\n";
+    } else {
+        resultLog += players[0] + " win the bid.\n";
+        resultLog += "The players will play in the order above.\n";
     }
 
-    resultLog += players[0] + " win the bid with " + to_string(bid[0]) + ".\n";
-    cout << players[0] << " win the bid with " << bid[0] << "." << endl;
 
-//    cout << resultLog;
+
 }
-
-//int BidingFacility::getPlayerNumber(string arr[]) {
-////    cout << "BidingFacility::getPlayerNumber()" << "\n";
-//    return sizeof(arr) / sizeof(*arr);
-//}
 
 void BidingFacility::getResultLog(){
-    cout << "BidingFacility::getResultLog()" << "\n";
-    cout << resultLog + "\n";
+    cout << "\nBidingFacility::getResultLog()" << endl;
+    if(!ifInitialized) cout << "BidingFacility hasn't been initialized yet" << endl;
+    else cout << resultLog << endl;
 }
-
-void BidingFacility::getBids(){
-    //    cout << "BidingFacility::getBids()" << "\n";
-}
-
-
 
 int main(){
 
-    cout << "Testing Driver >> Biding Facility\n";
+    cout << "\nTesting Driver >> Biding Facility" << endl;
 
-    string players[3]  = {"Ngyuan", "Noah", "Chen"};
+    // {"Ngyuan", "Noah", "Chen"}
+    string players[4]  = {"Jack","Tim", "July", "Thierry"};
     int size = sizeof(players)/sizeof(players[0]);
-    cout << size << endl;
-
-
 
     BidingFacility bf;
-//    bf.initialize(players, size);
+    bf.initialize(players, size);
     bf.start();
     bf.getResultLog();
 
