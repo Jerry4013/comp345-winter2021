@@ -153,7 +153,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
         GameMap->AddContinent(new Continent(vector_temp[1],continentid));
 
         //Third entry is map board id
-        mapid=stoi(token, nullptr,10);
+        mapid=stoi(vector_temp[2], nullptr,10);
         if(mapid<-1 || mapid>=number_of_mapboard)
             throw std::string("map board id is invalid");
         map_continent_hashmap.insert(make_pair(continentid,mapid));

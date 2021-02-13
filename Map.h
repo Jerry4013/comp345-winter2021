@@ -14,13 +14,13 @@ using namespace std;
 
 extern int ContinentMatrix[10][10];
 //extern int RegionMatrix[10][10];
-//Each continent should have a Territory matrix
 
 
 class Territory {
 private:
     std::string TerritoryName;
     int TerritoryNumber;
+    //TODO::
     int ContinentNumber;
     int PlayerArmyArray[3];
     std::map<string,int> territorystats;
@@ -39,11 +39,11 @@ public:
 
 class HelperFunctionMap{
 public:
-    void AddEdgesCountry(int TerritoryOne,int TerritoryTwo);
     //TODO::Made change
     void AddEdgesCountry(Territory *,Territory *);
     void DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo);
 
+    //TODO::Delete addedgescontinents
     void AddEdgesContinents(int ContinentOne,int ContinentTwo);
     void DeleteEdgesContinents(int ContinentOne,int ContinentTwo);
     void PrintTerritoryMatrix();
@@ -55,8 +55,6 @@ private:
     std::string Continetname;
     std::vector<Territory*> territories;
     int ContinentNum;
-    //TODO::Made change
-    int RegionMatrix[10][10];
 public:
     ~Continent();
     Continent(std::string name,int ContinentNum);
@@ -85,6 +83,7 @@ public:
     void CreateCountryMatrix();
 
     std::vector<Continent*> ReturnContient();
+
     std::unordered_map<int,Continent*> ReturnContinentHashMap();
     void AddContinent(Continent* continent);
 

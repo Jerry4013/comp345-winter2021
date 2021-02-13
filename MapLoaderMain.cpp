@@ -12,15 +12,15 @@ int main(){
     cout << a.empty()<<endl;
     MapLoader * mapLoader,*mapLoader_invalid;
     try {
+        cout << "Loading valid map"<<endl;
         mapLoader = new MapLoader("..\\GAME1.map");
         cout << mapLoader <<endl;
-        cout << mapLoader->getGameMap()->validateTerritory() <<endl;
-        cout << mapLoader->getGameMap()->validateTerritory()<<endl;
         HelperFunctionMap helper;
         helper.PrintContinentMatrix();
         helper.PrintTerritoryMatrix();
         mapLoader->getGameMap()->Validate(mapLoader->getGameMap());
-
+        cout<<endl;
+        cout <<"Loading invalid map"<<endl;
         mapLoader_invalid = new MapLoader("..\\GAME1_invalid.map");
         cout << mapLoader_invalid <<endl;
     }

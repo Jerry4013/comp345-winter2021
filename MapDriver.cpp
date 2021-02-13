@@ -5,6 +5,7 @@
 #include "Map.h"
 using namespace std;
 #include "iostream"
+/*
 int main() {
     Map testmap = Map("test");
     HelperFunctionMap helper;
@@ -22,14 +23,13 @@ int main() {
     testmap.AddContinent(&continent4);
     testmap.AddContinent(&continent5);
 
-    /*
+
     helper.AddEdgesContinents(1,2);
     helper.AddEdgesContinents(2,3);
     helper.AddEdgesContinents(3,4);
     helper.AddEdgesContinents(4,1);
     helper.AddEdgesContinents(1,3);
     helper.PrintContinentMatrix();
-     */
 
     Territory *T0 = new Territory("Territory1",0,0);
     Territory *T1 = new Territory("Territory2",1,0);
@@ -70,3 +70,4 @@ int main() {
 
 
 }
+*/
