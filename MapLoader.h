@@ -11,16 +11,21 @@ using namespace std;
 class MapLoader {
 
 public:
-    MapLoader();
     MapLoader(string);
     MapLoader(const MapLoader &ml);
-    friend ostream& operator<<(ostream& output, const MapLoader& mapLoader);
+    friend ostream& operator<<(ostream& output, MapLoader * mapLoader);
     Map * getGameMap();
     string getFile();
+    bool getLshape();
+    int getNumberofmapboard();
+    int getNumberofregions();
+    int getNumberofcontinents();
 private:
     string file;
+    bool lshape;
     Map * GameMap;
-    void makingconnection();
+    int number_of_mapboard,number_of_regions,number_of_continents;
+    void split(string,const string&, vector<string>&);
 
 };
 

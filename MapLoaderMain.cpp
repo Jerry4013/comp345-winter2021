@@ -10,15 +10,26 @@ using std::cout,std::endl;
 int main(){
     string a="";
     cout << a.empty()<<endl;
+    MapLoader * mapLoader,*mapLoader_invalid;
     try {
-        MapLoader * mapLoader = new MapLoader("..\\GAME1.map");
+        mapLoader = new MapLoader("..\\GAME1.map");
+        cout << mapLoader <<endl;
+        cout << mapLoader->getGameMap()->validateTerritory() <<endl;
+        cout << mapLoader->getGameMap()->validateTerritory()<<endl;
+        HelperFunctionMap helper;
+        helper.PrintContinentMatrix();
+        helper.PrintTerritoryMatrix();
+        mapLoader->getGameMap()->Validate(mapLoader->getGameMap());
+
+        mapLoader_invalid = new MapLoader("..\\GAME1_invalid.map");
+        cout << mapLoader_invalid <<endl;
     }
     catch (const std::string e) {
         cout << e<<endl;
     }
-
-    //cout << *mapLoader << endl;
-
+    mapLoader= nullptr;
+    mapLoader_invalid= nullptr;
+    delete mapLoader,mapLoader_invalid;
 
     return 0;
 };
