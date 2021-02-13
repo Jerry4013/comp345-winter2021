@@ -4,35 +4,35 @@ numberofregions=18
 //shape=rect
 shape=L
 [map]
-0 volcano
-1 redforest
-2 village
-3 mountain
+1 volcano
+2 redforest
+3 village
+4 mountain
 //id, name, map_id
 [continents]
-0 volcano1 0
-1 volcano2 0
-2 redforest 1
-3 village 2
-4 mountain1 3
-5 mountain2 3
+1 volcano1 1
+2 volcano2 1
+3 redforest 2
+4 village 3
+5 mountain1 4
+6 mountain2 4
 //id, name, continent_id, connection
 [regions]
-0 volcano1_upper1 0 1 0-out
-1 volcano1_upper2 0 0,4
-2 volcano2_upper 1 3,4
-3 volcano2_middle1 1 2,4 0-out
-4 volcano2_middle2 1 2,3,5
-5 volcano2_bottom1 1 4,6 0-out
-6 volcano2_bottom2 1 5 0-out
-7 redforest_upper 2 8 1-out
-8 redforest_middle 2 7,9 1-out
-9 redforest_bottom 2 8 1-out,1-out
-10 village_upper1 3 11,12 2-out
-11 village_upper2 3 10,12,13
-12 village_middle 3 10,11,13 2-out
-13 village_bottom1 3 11,12,14 2-out
-14 village_bottom2 3 13 2-out
-15 mountain1_upper 4 16 3-out,3-out
-16 mountain1_middle 4 15,17 3-out,3-out
-17 mountain2 5 16
+1 volcano1_upper1 1 2 1
+2 volcano1_upper2 1 1,5
+3 volcano2_upper 2 4,5
+4 volcano2_middle1 2 3,5 1
+5 volcano2_middle2 2 3,4,6
+6 volcano2_bottom1 2 5,7 1
+7 volcano2_bottom2 2 6 1
+8 redforest_upper 3 9 2
+9 redforest_middle 3 8,10 2
+10 redforest_bottom 3 9 2,2
+11 village_upper1 4 12,13 3
+12 village_upper2 4 11,13,14
+13 village_middle 4 11,12,14 3
+14 village_bottom1 4 12,13,15 3
+15 village_bottom2 4 14 3
+16 mountain1_upper 5 17 4,4
+17 mountain1_middle 5 16,18 4,4
+18 mountain2 6 15

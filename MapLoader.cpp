@@ -115,29 +115,25 @@ MapLoader ::MapLoader(string filename): file(filename) {
     string token;
     string temp;
     HelperFunctionMap helper;
-    //GameMap->CreateCountryMatrix(number_of_regions);
-    //GameMap->CreateContinentMatrix(number_of_continents);
+    GameMap->CreateCountryMatrix();
+    GameMap->CreateContinentMatrix();
     int mapid,continentid,regionid;
     int column=0;
-
-    //hashing map board name
-    std::unordered_map<int,string> map_hashmap;
 
     //Use to store split input line
     vector<string> vector_temp;
 
+    //processing [map] data
+    //First split the data into mapid,mapname. Then use these two map to create an hashmap
     for(int i=0;i<map_buffer.size();i++){
         temp=map_buffer.at(i);
         this->split(temp,deliminater,vector_temp);
         mapid = stoi(vector_temp[0], nullptr,10);
-        if(mapid<-1 || mapid>=number_of_mapboard)
+        if(mapid<0 || mapid>number_of_mapboard)
             throw std::string("map board id is invalid");
-        map_hashmap.insert(std::make_pair(mapid,vector_temp[1]));
         vector_temp.clear();
     }
 
-    //continentid,mapid
-    std::unordered_map<int,int> map_continent_hashmap;
     for(int i=0;i<continent_buffer.size();i++){
         temp=continent_buffer.at(i);
 
@@ -146,121 +142,88 @@ MapLoader ::MapLoader(string filename): file(filename) {
 
         //First entry is continent id
         continentid = stoi(vector_temp[0], nullptr,10);
-        if(continentid<-1 || continentid>=number_of_continents)
+        if(continentid<0 || continentid>number_of_continents)
             throw std::string("continent id is invalid");
 
         //Second entry is continent name
-        GameMap->AddContinent(new Continent(vector_temp[1],continentid));
+        this->GameMap->AddContinent(new Continent(vector_temp[1],continentid));
 
         //Third entry is map board id
         mapid=stoi(vector_temp[2], nullptr,10);
-        if(mapid<-1 || mapid>=number_of_mapboard)
+        if(mapid<0 || mapid>number_of_mapboard)
             throw std::string("map board id is invalid");
-        map_continent_hashmap.insert(make_pair(continentid,mapid));
         vector_temp.clear();
     }
 
-    string region_name,continent_name;
-    string delimiter_comma=",",temp_edge;
-    int connected_regionid;
+    string continent_name;
+    string deliminater_comma=",",temp_edge;
     std::unordered_map<int,Territory*> Territory_buffer;
     std::unordered_map<int,vector<int>> connection_vector_hashmap;
     std::vector<pair<int,int>> out_nodes;
+    vector<int> mapoutnodes;
 
     for(int i=0;i<regions_buffer.size();i++){
         temp=regions_buffer.at(i);
-        while ((pos = temp.find(deliminater)) != std::string::npos) {
-            token = temp.substr(0, pos);
-            if(column==0) {
-                regionid = stoi(token, nullptr, 10);
-                if(regionid<-1 || regionid>=number_of_regions)
-                    throw std::string("Territory/region id is invalid");
-                connection_vector_hashmap.insert(std::make_pair(regionid,vector<int>()));
-            }
-            else if(column==1){
-                region_name=token;
-            }
-            else if(column==2){
-                continentid=stoi(token, nullptr,10);
-                if(continentid<-1 || continentid>=number_of_continents)
-                    throw std::string("Continent id is invalid");
-            }
-            else if(column==3){
-                while ((pos = token.find(delimiter_comma)) != std::string::npos) {
-                    temp_edge=token.substr(0, pos);
-                    connected_regionid=stoi(temp_edge, nullptr,10);
-                    if(connected_regionid<=-1||connected_regionid>=number_of_regions)
-                        throw std::string("Connected Territory id is invalid");
-                    connection_vector_hashmap[regionid].push_back(connected_regionid);
-                    token.erase(0,pos+delimiter_comma.length());
-                }
-                connected_regionid=stoi(token, nullptr,0);
-                if(connected_regionid<=-1||connected_regionid>=number_of_regions)
-                    throw std::string("Connected Territory id is invalid");
-                connection_vector_hashmap[regionid].push_back(connected_regionid);
-                //cout << "last connected id:"<<token<<endl;
-                //helper.AddEdgesCountry();
-            }
-            else if(column==4){
-                Territory_buffer.insert(std::make_pair(regionid,new Territory(region_name,regionid,continentid)));
-            }
-            column++;
-            temp.erase(0, pos + deliminater.length());
-        }
-        if(column==2)
+        this->split(temp,deliminater,vector_temp);
+        if(vector_temp.size()<4)
             throw std::string("Missing information in [regions]");
-        else if(column==3){
-            while ((pos = token.find(delimiter_comma)) != std::string::npos) {
-                temp_edge=token.substr(0, pos);
-                connected_regionid=stoi(temp_edge, nullptr,10);
-                if(connected_regionid<=-1||connected_regionid>=number_of_regions)
-                    throw std::string("Connected Territory id is invalid");
-                connection_vector_hashmap[regionid].push_back(connected_regionid);
-                token.erase(0,pos+delimiter_comma.length());
+
+        //First entry, regionid
+        regionid = stoi(vector_temp[0], nullptr, 10);
+        if(regionid<0 || regionid>number_of_regions)
+            throw std::string("Territory/region id is invalid");
+        connection_vector_hashmap.insert(std::make_pair(regionid,vector<int>()));
+
+        //Second entry, region name
+        //Thrid entry, continentid
+        continentid=stoi(vector_temp[2], nullptr,10);
+        if(continentid<0 || continentid>number_of_continents)
+            throw std::string("Continent id is invalid");
+
+        Territory_buffer.insert(make_pair(regionid,new Territory(vector_temp[1],regionid,continentid)));
+
+        //Fourth entry, connected node
+        this->split(vector_temp[3],deliminater_comma,connection_vector_hashmap[regionid]);
+
+        //Fifth entry, if out nodes
+        if(vector_temp.size()==5){
+            this->split(vector_temp[4],deliminater_comma,mapoutnodes);
+            for(int i:mapoutnodes){
+                out_nodes.push_back(make_pair(regionid,i));
             }
-            connected_regionid=stoi(token, nullptr,0);
-            if(connected_regionid<=-1||connected_regionid>=number_of_regions)
-                throw std::string("Connected Territory id is invalid");
-            connection_vector_hashmap[regionid].push_back(connected_regionid);
-            Territory_buffer.insert(std::make_pair(regionid,new Territory(region_name,regionid,continentid)));
+            mapoutnodes.clear();
         }
-        else{
-            while ((pos = temp.find("-out")) != std::string::npos) {
-                mapid=stoi(temp.substr(pos-1,pos), nullptr,10);
-                if(mapid<=-1||mapid>=this->number_of_mapboard)
-                    throw std::string("Map board id is invalid");
-                out_nodes.push_back(std::make_pair(mapid,regionid));
-                temp.erase(0,pos+delimiter_comma.length());
-            }
-
-        }
-
-
-        column=0;
+        vector_temp.clear();
     }
 
-    for(int index=0;index<number_of_regions;index++){
-        this->GameMap->ReturnContinentHashMap()[Territory_buffer[index]->GetContinentNumber()]->AddTerritory(Territory_buffer[index]);
+    for(int index=1;index<=number_of_regions;index++){
+        continentid=Territory_buffer[index]->GetContinentNumber();
+        this->GameMap->ReturnContinentHashMap()[continentid]->AddTerritory(Territory_buffer[index]);
         for(int regionid = 0;regionid<connection_vector_hashmap[index].size();regionid++){
-            //each region connected to node index
             helper.AddEdgesCountry(Territory_buffer[index],Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
         }
     }
 
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_int_distribution<int> dist_map(0,3);
+    connection_vector_hashmap.clear();
 
+    std::random_device rd;
+    std::seed_seq seed{rd(),rd(),rd(),rd(),rd(),rd(),rd(),rd()};
+    std::mt19937 mt(seed);
+
+    std::uniform_int_distribution<int> dist_map(1,number_of_mapboard);
     std::vector<int> maporder;
     std::vector<int>::iterator it;
+
     for(int i = 0,temp;i<number_of_mapboard;i++){
         temp=dist_map(mt);
         it = find (maporder.begin(), maporder.end(), temp);
         if(it != maporder.end()){
             i--;
         }
-        else
+        else{
             maporder.push_back(temp);
+            this->mapboard_order+=to_string(temp);
+        }
     }
 
     std::uniform_int_distribution<int> dist_out(0,out_nodes.size()-1);
@@ -269,22 +232,22 @@ MapLoader ::MapLoader(string filename): file(filename) {
         map1=maporder.at(i);
         map2=maporder.at(i+1);
         for(int j = 0;j<out_nodes.size();j++){
-            if(out_nodes.at(i).first==map1){
-                temp=out_nodes.at(i).second;
-                out_nodes.erase(out_nodes.begin()+i);
+            if(out_nodes.at(j).second==map1){
+                //region id
+                temp=out_nodes.at(j).first;
+                out_nodes.erase(out_nodes.begin()+j);
                 break;
             }
         }
-        while(!find){
-            temp2=dist_out(mt);
-            if(out_nodes.at(temp2).first==map2){
-                helper.AddEdgesCountry(Territory_buffer[temp],Territory_buffer[temp2]);
+        while(true){
+            temp2=dist_out(mt)%out_nodes.size();
+            if(out_nodes.at(temp2).second==map2){
+                helper.AddEdgesCountry(Territory_buffer[temp],Territory_buffer[out_nodes.at(temp2).first]);
                 out_nodes.erase(out_nodes.begin()+temp2);
                 break;
             }
         }
     }
-
 
 
 }
@@ -302,9 +265,11 @@ std::ostream& operator<<(ostream& output, MapLoader * mapLoader) {
     output << "The map has " << mapLoader->getNumberofmapboard() <<" map boards"<<endl;
     output << "The number of continents: "<<mapLoader->getNumberofcontinents()<<endl;
     output << "The number of territory: "<<mapLoader->getNumberofregions()<<endl;
+    output << "The map board order: "<<mapLoader->mapboard_order<<endl;
     return output;
 }
 
+//Split into string vector
 void MapLoader::split( string input, const string& deliminater, vector<string>& result) {
     int pos;
     string token;
@@ -315,16 +280,22 @@ void MapLoader::split( string input, const string& deliminater, vector<string>& 
     }
     result.push_back(input);
 }
-
-string MapLoader::getFile() {return this->file;}
-
-Map * MapLoader::getGameMap() {
-    return this->GameMap;
+//Split into int vector
+void MapLoader::split( string input, const string& deliminater, vector<int>& result) {
+    int pos;
+    string token;
+    while ((pos = input.find(deliminater)) != std::string::npos) {
+        token = input.substr(0, pos);
+        result.push_back(stoi(token, nullptr,10));
+        input.erase(0, pos + deliminater.length());
+    }
+    if(!input.empty())
+        result.push_back(stoi(input, nullptr,10));
 }
-
+string MapLoader::getFile() {return this->file;}
+Map * MapLoader::getGameMap() {return this->GameMap;}
 int MapLoader::getNumberofmapboard(){return this->number_of_mapboard;}
 int MapLoader::getNumberofcontinents() {return this->number_of_continents;}
 int MapLoader::getNumberofregions() {return this->number_of_regions;}
-
 bool MapLoader::getLshape(){return this->lshape;}
 

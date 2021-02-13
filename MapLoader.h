@@ -24,8 +24,9 @@ private:
     string file;
     bool lshape;
     Map * GameMap;
+    string mapboard_order;
     int number_of_mapboard,number_of_regions,number_of_continents;
     void split(string,const string&, vector<string>&);
-
+    void split(string,const string&, vector<int>&);
 };
 

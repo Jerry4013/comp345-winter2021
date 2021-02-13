@@ -12,7 +12,7 @@
 
 using namespace std;
 
-extern int ContinentMatrix[10][10];
+extern int ContinentMatrix[6][6];
 //extern int RegionMatrix[10][10];
 
 
