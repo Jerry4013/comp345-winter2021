@@ -12,36 +12,36 @@ class Player
 public:
     Player();
     Player(const string& name, int biding, int coins,
-           vector<Territory> *territories, vector<Card> *cards);
+           vector<Territory*>& territories, vector<Card*>& cards);
     ~Player();
-    void PayCoin(const int costOfCard);
-    void PlaceNewArmies(const int numberOfNewArmies, Territory* territory);
-    void MoveArmies(const int numberOfArmies, Territory* from, Territory* to);
-    void MoveOverLand(const int numberOfArmies, Territory* from, Territory* to);
-    void BuildCity(Territory* territory);
-    void DestroyArmy(const int numberOfArmies, Player* player, Territory* territory);
+    void PayCoin(int costOfCard);
+    void PlaceNewArmies(int numberOfNewArmies, Territory& territory);
+    void MoveArmies(int numberOfArmies, Territory& from, Territory& to);
+    void MoveOverLand(int numberOfArmies, Territory& from, Territory& to);
+    void BuildCity(Territory& territory);
+    void DestroyArmy(int numberOfArmies, Player& player, Territory& territory);
 
     // Getters and Setters
     string getName() const;
     void setName(const string& name);
     int getBiding() const;
-    void setBiding(const int biding);
+    void setBiding(int biding);
     int getCoins() const;
-    void setCoins(const int coins);
+    void setCoins(int coins);
     int getScore() const;
-    void setScore(const int score);
+    void setScore(int score);
     int getRemainingCity() const;
-    void setRemainingCity(const int city);
+    void setRemainingCity(int city);
     int getRemainingCubes() const;
-    void setRemainingCubes(const int cubes);
+    void setRemainingCubes(int cubes);
     int getNumberOfOwnedTerritories() const;
-    void setNumberOfOwnedTerritories(const int ownedTerritories);
+    void setNumberOfOwnedTerritories(int ownedTerritories);
     int getNumberOfOwnedContinents() const;
-    void setNumberOfOwnedContinents(const int ownedContinents);
-    vector<Territory>* getTerritories() const;
-    void setTerritories(vector<Territory>& territories);
-    vector<Card>* getCards() const;
-    void setCards(vector<Card>& cards);
+    void setNumberOfOwnedContinents(int ownedContinents);
+    vector<Territory*>* getTerritories() const;
+    void setTerritories(vector<Territory*>& territories);
+    vector<Card*>* getCards() const;
+    void setCards(vector<Card*>& cards);
 
 private:
     string name;
@@ -52,8 +52,8 @@ private:
     int remainingCubes;             // 一共18个军队，还有多少军队可以用
     int numberOfOwnedTerritories;   // 有多少地区是我占领的，能给我加分
     int numberOfOwnedContinents;    // 有多少大陆是我占领的，能给我加分
-    vector<Territory> *territories; // 该玩家有兵或有城堡的区域
-    vector<Card> *cards;            // 该玩家手上所有的卡牌
+    vector<Territory*> territories; // 该玩家有兵或有城堡的区域
+    vector<Card*> cards;            // 该玩家手上所有的卡牌
 };
 
 #endif //A1_PLAYER_H
