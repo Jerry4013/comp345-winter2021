@@ -868,7 +868,7 @@ std::ostream &operator<<(std::ostream &output, const Deck &deck) {
     return output;
 }
 
-std::vector<Card*> *Deck::getDeckVector() {
+std::vector<Card*>* Deck::getDeckVector() {
     return deckVector;
 }
 
