@@ -16,6 +16,7 @@ public:
     MapLoader(const MapLoader &ml);
     friend ostream& operator<<(ostream& output, const MapLoader& mapLoader);
     Map * getGameMap();
+    string getFile();
 private:
     string file;
     Map * GameMap;

@@ -14,19 +14,20 @@ int ContinentMatrix[10][10];
 
 
 Territory::Territory(){
-    this->TerritoryNumber = 0;
+    this->TerritoryNumber = -1;
+    this->ContinentNumber = -1;
     this->TerritoryName = "None";
-    this->ContinentName = "None";
     for(int i = 0;i<4;i++){
         PlayerArmyArray[i]=0;
     }
 
 };
+
 Territory::~Territory(){};
-Territory:: Territory(std::string TerritoryName,int TerritoryNumber,std::string Continent){
+Territory:: Territory(std::string TerritoryName,int TerritoryNumber,int ContinentNumber){
     this->TerritoryNumber = TerritoryNumber;
     this->TerritoryName = TerritoryName;
-    this->ContinentName = Continent;
+    this->ContinentNumber = ContinentNumber;
     this->territorystats = {
             { "player1", 0 },
             { "player2", 0 },
@@ -34,36 +35,37 @@ Territory:: Territory(std::string TerritoryName,int TerritoryNumber,std::string 
             { "player4", 0 }};
 };
 //getter
-int Territory::GetTerritoryNumber(){return this->TerritoryNumber;};
+int Territory::GetTerritoryNumber(){return this->TerritoryNumber;}
+
+//TODO::Made change
+int Territory::GetContinentNumber() {return this->ContinentNumber;}
 string Territory::GetTerritoryName(){return this->TerritoryName;};
 //int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
 //string Territory::GetPlayerName(){return this->OwnerName;};
 int Territory::GetNumTroops(string PlayerNumber){
     cout<<PlayerNumber<<" has "<<this->territorystats[PlayerNumber]<<" at territory "<<this->TerritoryNumber <<endl;return this->territorystats[PlayerNumber];
 }
-string Territory::GetContinentName(){return this->ContinentName;};
+
 //setter
 void Territory::SetNumTroops(string PlayerNum,int NumOfTroops){
     this->territorystats[PlayerNum] = NumOfTroops;
 };
 
+//TODO::Made change
+void HelperFunctionMap::AddEdgesCountry(Territory *t1,Territory *t2){
+    int TerritoryOne=t1->GetTerritoryNumber();
+    int TerritoryTwo=t2->GetTerritoryNumber();
+    if(t1->GetContinentNumber()==t2->GetContinentNumber()){
+        TerritoryMatrix[TerritoryOne][TerritoryTwo]=1;
+        TerritoryMatrix[TerritoryTwo][TerritoryOne]=1;
+    }
+    else{
+        TerritoryMatrix[TerritoryOne][TerritoryTwo]=3;
+        TerritoryMatrix[TerritoryTwo][TerritoryOne]=3;
+        ContinentMatrix[t1->GetContinentNumber()][t2->GetContinentNumber()]=t1->GetTerritoryNumber();
+        ContinentMatrix[t2->GetContinentNumber()][t1->GetContinentNumber()]=t2->GetTerritoryNumber();
+    }
 
-//add delete edges
-void HelperFunctionMap::AddEdgesCountry(int TerritoryOne,int TerritoryTwo){
-    TerritoryMatrix[TerritoryOne][TerritoryTwo]=1;
-    TerritoryMatrix[TerritoryTwo][TerritoryOne]=1;
-};
-
-void HelperFunctionMap::AddEdgesCountry_ljy(Territory* t1,Territory* t2){
-    //if regions come from same continent
-   if(t1->GetContinentName().compare(t2->GetContinentName())==0){
-       TerritoryMatrix[t1->GetTerritoryNumber()][t2->GetTerritoryNumber()]=1;
-       TerritoryMatrix[t2->GetTerritoryNumber()][t1->GetTerritoryNumber()]=1;
-   }
-   else{
-       TerritoryMatrix[t1->GetTerritoryNumber()][t2->GetTerritoryNumber()]=3;
-       TerritoryMatrix[t2->GetTerritoryNumber()][t1->GetTerritoryNumber()]=3;
-   }
 };
 
 void HelperFunctionMap::DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo){
@@ -73,8 +75,8 @@ void HelperFunctionMap::DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo){
 
 //add delete edges
 void HelperFunctionMap::AddEdgesContinents(int ContinentOne,int ContinentTwo){
-    ContinentMatrix[ContinentOne][ContinentTwo]=1;
-    ContinentMatrix[ContinentTwo][ContinentOne]=1;
+    ContinentMatrix[ContinentOne][ContinentTwo]=3;
+    ContinentMatrix[ContinentTwo][ContinentOne]=3;
 
 };
 void HelperFunctionMap::DeleteEdgesContinents(int ContinentOne,int ContinentTwo){
@@ -159,8 +161,11 @@ Map::Map(std::string mapname){
     this->continents = std::vector<Continent*>();
 }
 Map::~Map() {}
+
+//TODO::Made change
 void Map::AddContinent(Continent* continent) {
     this->continents.push_back(continent);
+    this->continent_hashmap.insert(std::make_pair(continent->GetContinentNum(),continent));
 }
 std::string Map::GetMapName() {
 //    std::cout << "The map name is:  "<<this->MapName<<"\n";
@@ -173,6 +178,11 @@ std::vector<Continent*> Map::ReturnContient(){
     }
 //    cout<< "\n";
     return this->continents;
+}
+
+//TODO::Made change
+std::unordered_map<int,Continent*> Map::ReturnContinentHashMap() {
+    return this->continent_hashmap;
 }
 
 
@@ -196,16 +206,16 @@ void Map::CreateCountryMatrix(){
 bool Map::CheckTerritoryBelongToOneContinent(Map* map){
     int error = 0;
     for(int i = 0; i<map->ReturnContient().size();i++){
-        for(int j = 0; j<map->ReturnContient()[i]->ReturnTerritory().size();j++) {
-            if (!map->ReturnContient()[i]->ReturnTerritory()[j]->GetContinentName().empty()){
-                cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " only belongs to  "
-                     << map->ReturnContient()[i]->GetContinentName()<<endl;
-            }
-            else{
-                error++;
-                cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " does not belong to any continent "<<endl;
-            }
-        }
+       for(int j = 0; j<map->ReturnContient()[i]->ReturnTerritory().size();j++) {
+           if (map->ReturnContient()[i]->ReturnTerritory()[j]->GetContinentNumber()!=-1){
+               cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " only belongs to  "
+               << map->ReturnContient()[i]->GetContinentName()<<endl;
+           }
+           else{
+               error++;
+               cout << map->ReturnContient()[i]->ReturnTerritory()[j]->GetTerritoryName() << " does not belong to any continent "<<endl;
+           }
+       }
     }
     if(error ==0){return true;}
     else {return false;}
@@ -248,6 +258,7 @@ bool Map::validateTerritory(){
     return true;
 
 };
+
 bool Map::validateContinent(){
     bool *vis = new bool[NODE];
     //for all vertex u as start point, check whether all nodes are visible or not
@@ -285,3 +296,9 @@ void Map::Validate(Map* map){
         cout << "The Continent graph is not connected graph"<<endl;
 
 };
+
+
+
+
+
+

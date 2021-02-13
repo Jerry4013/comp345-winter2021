@@ -8,7 +8,17 @@
 using std::cout,std::endl;
 
 int main(){
-    MapLoader * mapLoader = new MapLoader("..\\GAME1.map");
+    string a="";
+    cout << a.empty()<<endl;
+    try {
+        MapLoader * mapLoader = new MapLoader("..\\GAME1.map");
+    }
+    catch (const std::string e) {
+        cout << e<<endl;
+    }
+
     //cout << *mapLoader << endl;
+
+
     return 0;
 };

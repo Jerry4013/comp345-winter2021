@@ -9,31 +9,30 @@
 #include <queue>
 #include "map"
 #include <unordered_map>
-#include <memory>
+
 using namespace std;
 
-//extern int RegionMatrix[10][10];
 extern int ContinentMatrix[10][10];
-
-//Every continent should have 1 matrix
+//extern int RegionMatrix[10][10];
+//Each continent should have a Territory matrix
 
 
 class Territory {
 private:
     std::string TerritoryName;
     int TerritoryNumber;
-    std::string ContinentName;
+    int ContinentNumber;
     int PlayerArmyArray[3];
     std::map<string,int> territorystats;
     //    Player* player;
 public:
     Territory();
     ~Territory();
-    Territory(std::string TerritoryName,int TerritoryNumber,std::string Continent);
+    Territory(std::string TerritoryName,int TerritoryNumber,int ContinentNumber);
     std::string GetTerritoryName();
     std::string GetPlayerName();
-    std::string GetContinentName();
     int GetTerritoryNumber();
+    int GetContinentNumber();
     int GetNumTroops(string PlayerNumber);
     void SetNumTroops(string PlayerNum,int num);
 };
@@ -41,8 +40,8 @@ public:
 class HelperFunctionMap{
 public:
     void AddEdgesCountry(int TerritoryOne,int TerritoryTwo);
-    void AddEdgesCountry_ljy(Territory* t1,Territory* t2);
-
+    //TODO::Made change
+    void AddEdgesCountry(Territory *,Territory *);
     void DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo);
 
     void AddEdgesContinents(int ContinentOne,int ContinentTwo);
@@ -56,6 +55,7 @@ private:
     std::string Continetname;
     std::vector<Territory*> territories;
     int ContinentNum;
+    //TODO::Made change
     int RegionMatrix[10][10];
 public:
     ~Continent();
@@ -73,6 +73,9 @@ class Map {
 private:
     std::string MapName;
     std::vector<Continent*> continents;
+    //consider using hashmap
+    //TODO::Made change
+    std::unordered_map<int,Continent*> continent_hashmap;
 public:
     Map(std::string mapname);
     ~Map();
@@ -82,6 +85,7 @@ public:
     void CreateCountryMatrix();
 
     std::vector<Continent*> ReturnContient();
+    std::unordered_map<int,Continent*> ReturnContinentHashMap();
     void AddContinent(Continent* continent);
 
     void traverseTerritory(int u, bool visited[]);
@@ -91,4 +95,6 @@ public:
     bool CheckTerritoryBelongToOneContinent(Map* map);
     bool validateTerritory();
     bool validateContinent();
+
 };
+
