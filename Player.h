@@ -2,13 +2,12 @@
 #define A1_PLAYER_H
 #include <vector>
 #include <string>
-#include 'Territory.h'
-#include 'Biding.h'
-#include 'Cards.h'
-#include "Hand.h"
+#include "Map.h"
+#include "Cards.h"
+#include "Map.h"
+#include "Cards.h"
 
-class Player
-{
+class Player {
 public:
     Player();
     Player(const string& name, int biding, int coins,
@@ -23,7 +22,7 @@ public:
 
     // Getters and Setters
     string getName() const;
-    void setName(const string& name);
+    void setName(const string& newName);
     int getBiding() const;
     void setBiding(int biding);
     int getCoins() const;
@@ -38,7 +37,7 @@ public:
     void setNumberOfOwnedTerritories(int ownedTerritories);
     int getNumberOfOwnedContinents() const;
     void setNumberOfOwnedContinents(int ownedContinents);
-    vector<Territory*>* getTerritories() const;
+    vector<Territory *> getTerritories() const;
     void setTerritories(vector<Territory*>& territories);
     vector<Card*>* getCards() const;
     void setCards(vector<Card*>& cards);
