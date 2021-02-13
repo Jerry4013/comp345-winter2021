@@ -874,7 +874,7 @@ std::vector<Card*> *Deck::getDeckVector() {
 
 Card *Deck::draw() {
     if (!(getDeckVector()->empty())) {
-        Card* card = new Card(*getDeckVector()->back());
+        Card* card = getDeckVector()->back();
         getDeckVector()->pop_back();
         return card;
     } else {
