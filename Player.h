@@ -1,5 +1,4 @@
-#ifndef A1_PLAYER_H
-#define A1_PLAYER_H
+#pragma once
 #include <vector>
 #include <string>
 #include "Map.h"
@@ -10,8 +9,7 @@
 class Player {
 public:
     Player();
-    Player(const string& name, int biding, int coins,
-           vector<Territory*>& territories, vector<Card*>& cards);
+    Player(const string& name, int biding, int coins, vector<Territory*>& territories);
     ~Player();
     void PayCoin(int costOfCard);
     void PlaceNewArmies(int numberOfNewArmies, Territory& territory);
@@ -39,7 +37,7 @@ public:
     void setNumberOfOwnedContinents(int ownedContinents);
     vector<Territory *> getTerritories() const;
     void setTerritories(vector<Territory*>& territories);
-    vector<Card*>* getCards() const;
+    vector<Card*> getCards() const;
     void setCards(vector<Card*>& cards);
 
 private:
@@ -55,4 +53,3 @@ private:
     vector<Card*> cards;            // 该玩家手上所有的卡牌
 };
 
-#endif //A1_PLAYER_H
