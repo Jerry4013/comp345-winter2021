@@ -3,14 +3,17 @@
 #include <string>
 #include "Map.h"
 #include "Cards.h"
-#include "Map.h"
-#include "Cards.h"
 
 class Player {
 public:
     Player();
     Player(const string& name, int biding, int coins, vector<Territory*>& territories);
+    Player(const Player&);
+    Player& operator=(const Player& secondPlayer);
+    friend ostream& operator<<(ostream& out, const Player& player);
+    string toString() const;
     ~Player();
+
     void PayCoin(int costOfCard);
     void PlaceNewArmies(int numberOfNewArmies, Territory& territory);
     void MoveArmies(int numberOfArmies, Territory& from, Territory& to);
