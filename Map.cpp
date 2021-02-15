@@ -28,7 +28,12 @@ Territory:: Territory(std::string TerritoryName,int TerritoryNumber,int Continen
     this->TerritoryNumber = TerritoryNumber;
     this->TerritoryName = TerritoryName;
     this->ContinentNumber = ContinentNumber;
-    this->territorystats = {
+    this->territoryArmies = {
+            { "player1", 0 },
+            { "player2", 0 },
+            { "player3", 0 },
+            { "player4", 0 }};
+    this->territoryCities = {
             { "player1", 0 },
             { "player2", 0 },
             { "player3", 0 },
@@ -43,13 +48,56 @@ string Territory::GetTerritoryName(){return this->TerritoryName;};
 //int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
 //string Territory::GetPlayerName(){return this->OwnerName;};
 int Territory::GetNumTroops(string PlayerNumber){
-    cout<<PlayerNumber<<" has "<<this->territorystats[PlayerNumber]<<" at territory "<<this->TerritoryNumber <<endl;return this->territorystats[PlayerNumber];
+    cout<<PlayerNumber<<" has "<<this->territoryArmies[PlayerNumber]<<" armies at territory "<<this->TerritoryNumber <<endl;
+    return this->territoryArmies[PlayerNumber];
 }
 
 //setter
 void Territory::SetNumTroops(string PlayerNum,int NumOfTroops){
     this->territorystats[PlayerNum] = NumOfTroops;
 };
+
+
+int Territory::getCities(const string& playerName) {
+    cout<<playerName<<" has "<<this->territoryCities[playerName]<<" cities at territory "<<this->TerritoryNumber <<endl;
+    return this->territoryCities[playerName];
+}
+
+void Territory::setCities(const string& playerName, int number) {
+    this->territoryArmies[playerName] = number;
+}
+
+
+string Territory::toString() const {
+    stringstream ss;
+    ss << "Territory{ TerritoryName=" << TerritoryName << "; ";
+    ss << "TerritoryNumber=" << TerritoryNumber << "; ";
+    ss << "ContinentNumber=" << ContinentNumber << "; ";
+    ss << "territoryArmies={";
+    for (const auto &[k, v] : territoryArmies) {
+        ss << "Armies[" << k << "] = " << v << " " << endl;
+    }
+    for (const auto &[k, v] : territoryCities) {
+        ss << "Cities[" << k << "] = " << v << " " << endl;
+    }
+    return ss.str();
+}
+
+ostream &operator<<(ostream &out, const Territory &territory) {
+    out << "Territory{ TerritoryName=" << territory.TerritoryName << "; ";
+    out << "TerritoryNumber=" << territory.TerritoryNumber << "; ";
+    out << "ContinentNumber=" << territory.ContinentNumber << "; ";
+    out << "territoryArmies={";
+    for (const auto &[k, v] : territory.territoryArmies) {
+        out << "Armies[" << k << "] = " << v << "; ";
+    }
+    out << "};  territoryCities={";
+    for (const auto &[k, v] : territory.territoryCities) {
+        out << "Cities[" << k << "] = " << v << "; ";
+    }
+    out << "}";
+    return out;
+}
 
 //TODO::Made change
 void HelperFunctionMap::AddEdgesCountry(Territory *t1,Territory *t2){

@@ -23,18 +23,22 @@ private:
     //TODO::
     int ContinentNumber;
     int PlayerArmyArray[3];
-    std::map<string,int> territorystats;
-    //    Player* player;
+    std::map<string,int> territoryArmies;
+    std::map<string,int> territoryCities;
 public:
     Territory();
     ~Territory();
     Territory(std::string TerritoryName,int TerritoryNumber,int ContinentNumber);
+    friend ostream& operator<<(ostream& out, const Territory& territory);
     std::string GetTerritoryName();
     std::string GetPlayerName();
     int GetTerritoryNumber();
     int GetContinentNumber();
     int GetNumTroops(string PlayerNumber);
     void SetNumTroops(string PlayerNum,int num);
+    int getCities(const string& playerName);
+    void setCities(const string& playerName, int number);
+    string toString() const;
 };
 
 class HelperFunctionMap{
