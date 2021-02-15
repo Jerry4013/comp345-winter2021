@@ -81,7 +81,8 @@ void Player::MoveArmies(int numberOfArmies, Territory &from, Territory &to) {
 }
 
 void Player::BuildCity(Territory &territory) {
-
+    int currCity = territory.getCities(this->name);
+    territory.setCities(this->name, currCity + 1);
 }
 
 void Player::DestroyArmy(int numberOfArmies, Player &player, Territory &territory) {
@@ -122,14 +123,14 @@ string Player::toString() const {
     ss << "numberOfOwnedContinents=" << numberOfOwnedContinents << "; ";
     ss << "territories=[";
     for (int i = 0; i < territories.size(); i++) {
-        ss << territories[i];
+        ss << *territories[i];
         if (i < territories.size() - 1) {
             ss << ", ";
         }
     }
     ss << "]; cards=[";
     for (int i = 0; i < cards.size(); i++) {
-        ss << cards[i];
+        ss << *cards[i];
         if (i < cards.size() - 1) {
             ss << ", ";
         }
@@ -149,14 +150,14 @@ ostream &operator<<(ostream &out, const Player &player) {
     out << "numberOfOwnedContinents=" << player.numberOfOwnedContinents << "; ";
     out << "territories=[";
     for (int i = 0; i < player.territories.size(); i++) {
-        out << player.territories[i];
+        out << *player.territories[i];
         if (i < player.territories.size() - 1) {
             out << ", ";
         }
     }
     out << "]; cards=[";
     for (int i = 0; i < player.cards.size(); i++) {
-        out << player.cards[i];
+        out << *player.cards[i];
         if (i < player.cards.size() - 1) {
             out << ", ";
         }
