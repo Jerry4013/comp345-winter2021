@@ -5,18 +5,13 @@
 
 using namespace std;
 
+BidingFacility::BidingFacility() {
+    cout << "\nBidingFacility::BidingFacility()" << endl;
+    // TO-DO: GET PLAYER LIST FROM GAME OBJECT
 
-class BidingFacility {
-public:
-    void start();
-    void getResultLog();
-    void initialize();
-    void initialize(string *_players, int _size);
-private:
-    string resultLog;
-    bool ifInitialized = false;
-    vector<string> players;
-};
+//    this->initialize();
+}
+
 
 void BidingFacility::initialize() {
     cout << "\nBidingFacility::initialize()" << endl;
@@ -26,12 +21,15 @@ void BidingFacility::initialize() {
 void BidingFacility::initialize(string _players[], int _size) {
     cout << "\nBidingFacility::initialize()" << endl;
 
+    // Invalid array size
     if(_size <= 0) {
-        cout << "Initialize failed"; return;
+        cout << "Initialize failed";
+        return;
     }
 
     ifInitialized = true;
 
+    // Show detail
     cout << "Number of player: " << to_string(_size) << endl;
     for (int i = 0; i < _size; i++){
         cout << "[" << i << "] " << _players[i] << endl;
@@ -42,6 +40,7 @@ void BidingFacility::initialize(string _players[], int _size) {
 void BidingFacility::start() {
     cout << "\nBidingFacility::start()" << endl;
 
+    // Return for not initialized error
     if(!ifInitialized){
         cout << "BidingFacility hasn't been initialized yet"; return;
     }
@@ -66,12 +65,14 @@ void BidingFacility::start() {
         cout << "Your bid: ";
         cin >> tempBid;
 
+        // Invalid input
         while(cin.fail() || tempBid < 0){
             cout << "Wrong number input, try again: ";
             std::cin.clear();
             std::cin.ignore(256,'\n');
             cin >> tempBid;
         }
+
         cout << "Bid is hidden near the game board" << endl;
         bids[i] = tempBid;
     }
@@ -147,8 +148,6 @@ void BidingFacility::start() {
         resultLog += "The players will play in the order above.\n";
     }
 
-
-
 }
 
 void BidingFacility::getResultLog(){
@@ -161,8 +160,8 @@ int main(){
 
     cout << "\nTesting Driver >> Biding Facility" << endl;
 
-    // {"Ngyuan", "Noah", "Chen"}
-    string players[4]  = {"Jack","Tim", "July", "Thierry"};
+    // {"Jack","Tim", "July", "Thierry"} {"Ngyuan", "Noah", "Chen"}
+    string players[3]  = {"Ngyuan", "Noah", "Chen"};
     int size = sizeof(players)/sizeof(players[0]);
 
     BidingFacility bf;

@@ -2,8 +2,27 @@
 // Created by Ming on 2/7/2021.
 //
 
-#ifndef COMP354_WINTER2021_BIDINGFACILITY_H
-#define COMP354_WINTER2021_BIDINGFACILITY_H
+#pragma once
 
+#include "BidingFacility.h"
+#include <iostream>
+#include <iomanip>
+#include <vector>
 
-#endif //COMP354_WINTER2021_BIDINGFACILITY_H
+using namespace std;
+
+class BidingFacility {
+public:
+    BidingFacility();
+
+    BidingFacility(string pString[4], int i);
+
+    void start();
+    void getResultLog();
+    void initialize();
+    void initialize(string *_players, int _size);
+private:
+    string resultLog;
+    bool ifInitialized = false;
+    vector<string> players;
+};
