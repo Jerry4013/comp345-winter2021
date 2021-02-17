@@ -5,7 +5,7 @@
 #include "Map.h"
 using namespace std;
 #include "iostream"
-/*
+
 int main() {
     Map testmap = Map("test");
     HelperFunctionMap helper;
@@ -70,4 +70,3 @@ int main() {
 
 
 }
-*/
