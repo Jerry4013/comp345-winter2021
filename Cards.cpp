@@ -868,13 +868,13 @@ std::ostream &operator<<(std::ostream &output, const Deck &deck) {
     return output;
 }
 
-std::vector<Card*> *Deck::getDeckVector() {
+std::vector<Card*>* Deck::getDeckVector() {
     return deckVector;
 }
 
 Card *Deck::draw() {
     if (!(getDeckVector()->empty())) {
-        Card* card = new Card(*getDeckVector()->back());
+        Card* card = getDeckVector()->back();
         getDeckVector()->pop_back();
         return card;
     } else {

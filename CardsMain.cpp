@@ -9,18 +9,18 @@ using namespace std;
 int main(){
     //deck demo
 //    cout<<"original cards:"<<endl;
-//    Deck d(4);
+//    Deck d(2);
 //    cout<<d<<endl;
 //    cout<<"draw one card, the card is: "<<endl;
-//    cout<<d.draw()<<endl;
+//    cout<<*d.draw()<<endl;
 //    cout<<"the rest cards in the deck"<<endl;
 //    cout<<d<<endl;
 //    cout<<"draw one card, the card is: "<<endl;
-//    cout<<d.draw()<<endl;
+//    cout<<*d.draw()<<endl;
 //    cout<<"the rest cards in the deck"<<endl;
 //    cout<<d<<endl;
 //    cout<<"draw one card, the card is: "<<endl;
-//    cout<<d.draw()<<endl;
+//    cout<<*d.draw()<<endl;
 
 //hand demo
     Deck* deck =new Deck(4);
@@ -37,8 +37,5 @@ int main(){
     cout<<"rest of hand:"<<endl;
     cout<<*hand<<endl;
 
-    delete hand;
-    hand= nullptr;
-    delete deck;
-    deck= nullptr;
+
 }
