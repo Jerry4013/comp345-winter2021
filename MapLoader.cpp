@@ -12,13 +12,13 @@
 
 using namespace std;
 
-MapLoader::MapLoader(const MapLoader &ml): file(ml.file) {
-    this->GameMap=ml.GameMap;
-    this->file=ml.file;
-    this->lshape=ml.lshape;
-    this->number_of_mapboard=ml.number_of_mapboard;
-    this->number_of_regions=ml.number_of_regions;
-    this->number_of_continents=ml.number_of_continents;
+MapLoader::MapLoader(MapLoader *ml): file(ml->file) {
+    this->GameMap=ml->GameMap;
+    this->lshape=ml->lshape;
+    this->number_of_mapboard=ml->number_of_mapboard;
+    this->number_of_regions=ml->number_of_regions;
+    this->number_of_continents=ml->number_of_continents;
+    this->mapboard_order=ml->mapboard_order;
 }
 
 MapLoader ::MapLoader(string filename): file(filename) {
@@ -28,14 +28,22 @@ MapLoader ::MapLoader(string filename): file(filename) {
     vector<string> regions_buffer,continent_buffer,map_buffer;
     bool continents=false,regions=false,map=false;
 
+    //Look for these tokens in map file
     const string mapboard="numberofmapboards=",continent="numberofcontinents=",region="numberofregions=";
-    //read map file
+
+    /*
+     * Read map file and store string data in vector<string>
+     * If any information is missing, the program will throw an exception
+     */
     if (map_file.is_open())
     {
         while ( getline (map_file,line) )
         {
+            //change all characters to lowercase
             std::transform(line.begin(), line.end(), line.begin(),
                            [](unsigned char c){ return std::tolower(c); });
+
+            //must have map board data
             if(line.find(mapboard)!=string::npos){
                 try{
                     this->number_of_mapboard=stoi(line.substr(mapboard.size(),line.size()),nullptr,10);
@@ -103,6 +111,9 @@ MapLoader ::MapLoader(string filename): file(filename) {
     else
         throw std::string("Map file does not exist in the path"); //if the program cannot open the file throw error message;
 
+    /*
+     * Make sure all the required data are retrieved from map file
+     */
     if(number_of_regions==-1 || number_of_continents==-1
         || number_of_mapboard==-1 )
         throw std::string("Missing number of regions, continents or mapboard");
@@ -129,11 +140,18 @@ MapLoader ::MapLoader(string filename): file(filename) {
         temp=map_buffer.at(i);
         this->split(temp,deliminater,vector_temp);
         mapid = stoi(vector_temp[0], nullptr,10);
+
+        //mapid must be from 1 to number of map board (4 in GAME1.map).
         if(mapid<0 || mapid>number_of_mapboard)
             throw std::string("map board id is invalid");
         vector_temp.clear();
     }
 
+
+    /*
+     * processing [continents] data
+     * Retrieve continentid and continent name, and mapid that it belongs to.
+     */
     for(int i=0;i<continent_buffer.size();i++){
         temp=continent_buffer.at(i);
 
@@ -162,6 +180,12 @@ MapLoader ::MapLoader(string filename): file(filename) {
     std::vector<pair<int,int>> out_nodes;
     vector<int> mapoutnodes;
 
+    /*
+     * Processing [regions]
+     * Regions have 4 or 5 columns
+     * Regionid, region_name, continentid, connected nodes, (optional) map out port
+     * Because each node must be connect to at least one other node, it must have at least 4 columns.
+     */
     for(int i=0;i<regions_buffer.size();i++){
         temp=regions_buffer.at(i);
         this->split(temp,deliminater,vector_temp);
@@ -196,6 +220,10 @@ MapLoader ::MapLoader(string filename): file(filename) {
         vector_temp.clear();
     }
 
+    /*
+     * Build map object
+     * For each connected nodes, add edges
+     */
     for(int index=1;index<=number_of_regions;index++){
         continentid=Territory_buffer[index]->GetContinentNumber();
         this->GameMap->ReturnContinentHashMap()[continentid]->AddTerritory(Territory_buffer[index]);
@@ -206,6 +234,8 @@ MapLoader ::MapLoader(string filename): file(filename) {
 
     connection_vector_hashmap.clear();
 
+
+    //Random map generator
     std::random_device rd;
     std::seed_seq seed{rd(),rd(),rd(),rd(),rd(),rd(),rd(),rd()};
     std::mt19937 mt(seed);
@@ -214,6 +244,9 @@ MapLoader ::MapLoader(string filename): file(filename) {
     std::vector<int> maporder;
     std::vector<int>::iterator it;
 
+    //Map boards are connected randomly for each execution.
+    //For example, volcano can be connected to mountain
+    //Next execution, volcano could be connected to forest.
     for(int i = 0,temp;i<number_of_mapboard;i++){
         temp=dist_map(mt);
         it = find (maporder.begin(), maporder.end(), temp);
@@ -226,6 +259,8 @@ MapLoader ::MapLoader(string filename): file(filename) {
         }
     }
 
+
+    //Map's nodes connecting outside map is also chosen randomly
     std::uniform_int_distribution<int> dist_out(0,out_nodes.size()-1);
     bool find= false;
     for(int i = 0,map1,map2,temp,temp2;i<maporder.size()-1;i++){
@@ -269,6 +304,16 @@ std::ostream& operator<<(ostream& output, MapLoader * mapLoader) {
     return output;
 }
 
+MapLoader &MapLoader::operator=(const MapLoader &ml) {
+    this->GameMap=ml.GameMap;
+    this->file=ml.file;
+    this->lshape=ml.lshape;
+    this->number_of_mapboard=ml.number_of_mapboard;
+    this->number_of_regions=ml.number_of_regions;
+    this->number_of_continents=ml.number_of_continents;
+    return *this;
+}
+
 //Split into string vector
 void MapLoader::split( string input, const string& deliminater, vector<string>& result) {
     int pos;
@@ -280,6 +325,7 @@ void MapLoader::split( string input, const string& deliminater, vector<string>& 
     }
     result.push_back(input);
 }
+
 //Split into int vector
 void MapLoader::split( string input, const string& deliminater, vector<int>& result) {
     int pos;
@@ -292,6 +338,7 @@ void MapLoader::split( string input, const string& deliminater, vector<int>& res
     if(!input.empty())
         result.push_back(stoi(input, nullptr,10));
 }
+
 string MapLoader::getFile() {return this->file;}
 Map * MapLoader::getGameMap() {return this->GameMap;}
 int MapLoader::getNumberofmapboard(){return this->number_of_mapboard;}

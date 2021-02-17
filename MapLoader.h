@@ -12,8 +12,9 @@ class MapLoader {
 
 public:
     MapLoader(string);
-    MapLoader(const MapLoader &ml);
+    MapLoader( MapLoader * mapLoader);
     friend ostream& operator<<(ostream& output, MapLoader * mapLoader);
+    MapLoader &operator=(const MapLoader &ml);
     Map * getGameMap();
     string getFile();
     bool getLshape();
