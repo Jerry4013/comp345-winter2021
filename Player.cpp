@@ -55,7 +55,7 @@ void Player::PlaceNewArmies(int numberOfNewArmies, Territory &territory) {
 void Player::MoveOverLand(int numberOfArmies, Territory &from, Territory &to) {
     int troopsAtSourceTerritory = from.GetNumTroops(this->name);
     if (troopsAtSourceTerritory < numberOfArmies) {
-        // TODO: throw an exception
+        // throw an exception
         cout << "There is not enough troop to move!";
         return;
     }
@@ -69,7 +69,7 @@ void Player::MoveOverLand(int numberOfArmies, Territory &from, Territory &to) {
 void Player::MoveArmies(int numberOfArmies, Territory &from, Territory &to) {
     int troopsAtSourceTerritory = from.GetNumTroops(this->name);
     if (troopsAtSourceTerritory < numberOfArmies) {
-        // TODO: throw an exception
+        // throw an exception
         cout << "There is not enough troop to move!";
         return;
     }
@@ -88,7 +88,7 @@ void Player::BuildCity(Territory &territory) {
 void Player::DestroyArmy(int numberOfArmies, Player &player, Territory &territory) {
     int currTroops = territory.GetNumTroops(player.name);
     if (currTroops < numberOfArmies) {
-        // TODO: throw an exception
+        // throw an exception
         cout << "There is not enough troop to destroy!";
         return;
     }
