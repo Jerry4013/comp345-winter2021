@@ -6,9 +6,15 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(.)
 
 add_executable(comp345_winter2021
-        Cards.cpp
         Cards.h
-#        CardsMain.cpp
-
-        WholeGame.cpp
-        WholeGame.h)
+        Cards.cpp
+        Map.h
+        Map.cpp
+        Player.h
+        Player.cpp
+        BidingFacility.h
+        BidingFacility.cpp
+        MapLoader.cpp
+        MapLoader.h
+        PlayerDriver.cpp
+        )

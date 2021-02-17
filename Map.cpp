@@ -5,6 +5,7 @@
 
 #include "Map.h"
 #include "iostream"
+#include <sstream>
 using namespace std;
 
 #define NODE 6
@@ -54,7 +55,7 @@ int Territory::GetNumTroops(string PlayerNumber){
 
 //setter
 void Territory::SetNumTroops(string PlayerNum,int NumOfTroops){
-    this->territorystats[PlayerNum] = NumOfTroops;
+    this->territoryArmies[PlayerNum] = NumOfTroops;
 };
 
 
