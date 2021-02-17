@@ -26,11 +26,10 @@ int main(){
     Deck* deck =new Deck(4);
     Hand* hand=new Hand(deck);
     cout<<*hand<<endl;
-    P p;
     int n=0;
-    cout<<"please chose the card you want to pick: ";
+    cout<<"please chose the card you want to pick (Enter 1 - 6): ";
     cin>>n;
-    Card* c=hand->exchange(n,p,deck);
+    Card* c=hand->exchange(n, deck);
     cout<<"picked card: "<<n<<endl;
     cout<<*c<<endl;
 

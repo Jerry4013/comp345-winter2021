@@ -167,13 +167,6 @@ private:
     int money;
 };
 
-class P{
-public:
-    void Pay(){
-        std::cout<<"player.PayCoin() is called"<<endl;
-    }
-};
-
 class Hand {
 public:
     //default constructor
@@ -190,7 +183,7 @@ public:
     //get method
     std::vector<Card*>* getHandVector();
     //exchange method
-    Card* exchange(int card_number, P p, Deck* deck);
+    Card* exchange(int card_number, Deck* deck);
 
 
 private:

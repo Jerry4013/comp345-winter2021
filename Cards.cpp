@@ -939,7 +939,7 @@ std::vector<Card*> *Hand::getHandVector() {
     return handVector;
 }
 
-Card *Hand::exchange(int card_number, P p, Deck *deck) {
+Card *Hand::exchange(int card_number, Deck *deck) {
     for (int i = 0; i < handVector->size(); i++) {
         if (card_number - 1 == i) {
             Card* card = new Card(*handVector->at(i));
@@ -951,7 +951,6 @@ Card *Hand::exchange(int card_number, P p, Deck *deck) {
             handVector->erase(handVector->begin() + i);
             //draw a new card from deck
             handVector->emplace_back(deck->draw());
-            p.Pay();
             return card;
         }
     }
