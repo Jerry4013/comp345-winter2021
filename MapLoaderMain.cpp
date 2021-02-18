@@ -22,9 +22,6 @@ int mapLoader::main() {
         mapLoader_copy = new MapLoader(mapLoader);
         cout<< "Used copy constructor"<<endl;
         cout << mapLoader_copy <<endl;
-        HelperFunctionMap helper;
-        helper.PrintContinentMatrix();
-        helper.PrintTerritoryMatrix();
         mapLoader->getGameMap()->Validate(mapLoader->getGameMap());
 
         cout<<endl;

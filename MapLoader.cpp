@@ -22,7 +22,7 @@ MapLoader::MapLoader(MapLoader *ml): file(ml->file) {
 }
 
 MapLoader ::MapLoader(string filename): file(filename) {
-    this->GameMap = new Map("Game 1");
+
     string line;
     ifstream map_file (filename);
     vector<string> regions_buffer,continent_buffer,map_buffer;
@@ -121,15 +121,11 @@ MapLoader ::MapLoader(string filename): file(filename) {
             || number_of_mapboard!=map_buffer.size())
         throw std::string("Unmatched number of data");
 
+    this->GameMap = new Map("Game 1",number_of_continents,number_of_regions);
     string deliminater = " ";
-    size_t pos = 0;
     string token;
     string temp;
-    HelperFunctionMap helper;
-    GameMap->CreateCountryMatrix();
-    GameMap->CreateContinentMatrix();
     int mapid,continentid,regionid;
-    int column=0;
 
     //Use to store split input line
     vector<string> vector_temp;
@@ -228,7 +224,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
         continentid=Territory_buffer[index]->GetContinentNumber();
         this->GameMap->ReturnContinentHashMap()[continentid]->AddTerritory(Territory_buffer[index]);
         for(int regionid = 0;regionid<connection_vector_hashmap[index].size();regionid++){
-            helper.AddEdgesCountry(Territory_buffer[index],Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
+            this->GameMap->AddEdgesCountry(Territory_buffer[index],Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
         }
     }
 
@@ -260,7 +256,6 @@ MapLoader ::MapLoader(string filename): file(filename) {
 
     //Map's nodes connecting outside map is also chosen randomly
     std::uniform_int_distribution<int> dist_out(0,out_nodes.size()-1);
-    bool find= false;
     for(int i = 0,map1,map2,temp,temp2;i<maporder.size()-1;i++){
         map1=maporder.at(i);
         map2=maporder.at(i+1);
@@ -275,8 +270,8 @@ MapLoader ::MapLoader(string filename): file(filename) {
         while(true){
             temp2=dist_out(mt)%out_nodes.size();
             if(out_nodes.at(temp2).second==map2){
-                helper.AddEdgesCountry(Territory_buffer[temp],Territory_buffer[out_nodes.at(temp2).first]);
-                helper.AddEdgesCountry(Territory_buffer[out_nodes.at(temp2).first],Territory_buffer[temp]);
+                this->GameMap->AddEdgesCountry(Territory_buffer[temp],Territory_buffer[out_nodes.at(temp2).first]);
+                this->GameMap->AddEdgesCountry(Territory_buffer[out_nodes.at(temp2).first],Territory_buffer[temp]);
                 out_nodes.erase(out_nodes.begin()+temp2);
                 break;
             }

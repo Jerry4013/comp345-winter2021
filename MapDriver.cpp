@@ -8,7 +8,7 @@ using namespace std;
 #include "MapDriver.h"
 
 int mapDriver::main() {
-    Map testmap = Map("test", 6, 18);
+    Map testmap = Map("test", 6, 7);
     Continent continent1 = Continent("Continent1" , 1);
     Continent continent2 =Continent("Continent2" , 2);
     Continent continent3 =Continent("Continent3" , 3);

@@ -145,13 +145,13 @@ void Map::PrintContinentMatrix() {
 }
 void Map::PrintTerritoryMatrix() {
     cout << "Territory Matrix" <<endl;
-    for(int i = 0;i < 18;i++){
+    for(int i = 0;i < territoryMatrix.size();i++){
         cout << "    "  << i;
     }
     cout<<endl;
-    for(int i = 0;i < 18;i++){
+    for(int i = 0;i < territoryMatrix.size();i++){
         cout << i ;
-        for(int j = 0;j < 18;j++){
+        for(int j = 0;j < territoryMatrix.size();j++){
             cout <<"  "<< territoryMatrix[i][j]<<"  ";
         }
         cout <<endl;
@@ -179,11 +179,6 @@ void Continent::AddTerritory(Territory* Territory){
 }
 //method return terriroty value
 std::vector<Territory*> Continent::ReturnTerritory(){
-    for(int i=0;i<this->territories.size();i++)
-    {
-//        cout<< this->territories[i]->GetTerritoryName()<<" ";
-    }
-//    cout<< "\n";
     return this->territories;
 }
 
@@ -196,18 +191,16 @@ int Continent::GetContinentNum(){
 //map
 Map::Map(std::string mapName, int numberOfContinents, int numberOfRegions){
     this->MapName = mapName;
-    this->continents = std::vector<Continent*>();
+    //this->continents = std::vector<Continent*>();
+    //continentmatrix = std::vector<std:vector<int>>
+
     for(int i = 0; i < numberOfContinents; i++){
         vector<int> row(numberOfContinents);
-        for(int j = 0; j < numberOfContinents; j++){
-            continentMatrix.push_back(row);
-        }
+        continentMatrix.push_back(row);
     }
     for(int i = 0; i < numberOfRegions; i++){
         vector<int> row(numberOfRegions);
-        for(int j = 0; j < numberOfRegions; j++){
-            continentMatrix.push_back(row);
-        }
+        territoryMatrix.push_back(row);
     }
 }
 Map::~Map() {}
@@ -257,7 +250,7 @@ bool Map::CheckTerritoryBelongToOneContinent(Map* map){
 
 void Map::traverseTerritory(int u, bool visited[]){
     visited[u] = true; //mark v as visited
-    for(int v = 0; v<18; v++) {
+    for(int v = 0; v<territoryMatrix.size(); v++) {
         if(territoryMatrix[u][v]) {
             if(!visited[v])
                 traverseTerritory(v, visited);
@@ -276,13 +269,13 @@ void Map::traverseContinent(int u, bool visited[]){
 };
 
 bool Map::validateTerritory(){
-    bool *vis = new bool[18];
+    bool *vis = new bool[territoryMatrix.size()];
     //for all vertex u as start point, check whether all nodes are visible or not
-    for(int u=0; u < 18; u++) {
-        for(int i = 0; i<18; i++)
+    for(int u=0; u < territoryMatrix.size(); u++) {
+        for(int i = 0; i<territoryMatrix.size(); i++)
             vis[i] = false; //initialize as no node is visited
         traverseTerritory(u, vis);
-        for(int i = 0; i<18; i++) {
+        for(int i = 0; i<territoryMatrix.size(); i++) {
             if(!vis[i]) //if there is a node, not visited by traversal, graph is not connected
                 return false;
         }
