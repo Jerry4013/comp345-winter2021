@@ -228,7 +228,6 @@ MapLoader ::MapLoader(string filename): file(filename) {
         continentid=Territory_buffer[index]->GetContinentNumber();
         this->GameMap->ReturnContinentHashMap()[continentid]->AddTerritory(Territory_buffer[index]);
         for(int regionid = 0;regionid<connection_vector_hashmap[index].size();regionid++){
-            cout << index<<","<<connection_vector_hashmap[index][regionid]<<endl;
             helper.AddEdgesCountry(Territory_buffer[index],Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
         }
     }
