@@ -12,9 +12,6 @@
 
 using namespace std;
 
-extern int ContinentMatrix[6][6];
-//extern int RegionMatrix[10][10];
-
 
 class Territory {
 private:
@@ -41,19 +38,6 @@ public:
     string toString() const;
 };
 
-class HelperFunctionMap{
-public:
-    //TODO::Made change
-    void AddEdgesCountry(Territory *,Territory *);
-    void DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo);
-
-    //TODO::Delete addedgescontinents
-    void AddEdgesContinents(int ContinentOne,int ContinentTwo);
-    void DeleteEdgesContinents(int ContinentOne,int ContinentTwo);
-    void PrintTerritoryMatrix();
-    void PrintContinentMatrix();
-};
-
 class Continent{
 private:
     std::string Continetname;
@@ -65,8 +49,6 @@ public:
     std::string GetContinentName();
     void AddTerritory(Territory* territory);
     std::vector<Territory*> ReturnTerritory();
-    void AddEdgeContinent(int FirstContinent,int SecondContinent);
-    void RemoveEdgeContinent(int FirstContinent,int SecondContinent);
     int GetContinentNum();
 };
 
@@ -78,13 +60,12 @@ private:
     //consider using hashmap
     //TODO::Made change
     std::unordered_map<int,Continent*> continent_hashmap;
+    vector<vector<int> > continentMatrix;
+    vector<vector<int> > territoryMatrix;
 public:
-    Map(std::string mapname);
+    Map(std::string mapName, int numberOfContinents, int numberOfRegions);
     ~Map();
     std::string GetMapName();
-
-    void CreateContinentMatrix();
-    void CreateCountryMatrix();
 
     std::vector<Continent*> ReturnContient();
 
@@ -98,6 +79,16 @@ public:
     bool CheckTerritoryBelongToOneContinent(Map* map);
     bool validateTerritory();
     bool validateContinent();
+    vector<vector<int> >& getContinentMatrix();
+    vector<vector<int> >& getTerritoryMatrix();
+    //TODO::Made change
+    void AddEdgesCountry(Territory *,Territory *);
+    void DeleteEdgesCountry(int TerritoryOne,int TerritoryTwo);
 
+    //TODO::Delete addedgescontinents
+    void AddEdgesContinents(int ContinentOne,int ContinentTwo);
+    void DeleteEdgesContinents(int ContinentOne,int ContinentTwo);
+    void PrintTerritoryMatrix();
+    void PrintContinentMatrix();
 };
 

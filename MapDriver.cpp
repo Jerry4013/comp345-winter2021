@@ -8,10 +8,7 @@ using namespace std;
 #include "MapDriver.h"
 
 int mapDriver::main() {
-    Map testmap = Map("test");
-    HelperFunctionMap helper;
-    testmap.CreateCountryMatrix();
-    testmap.CreateContinentMatrix();
+    Map testmap = Map("test", 6, 18);
     Continent continent1 = Continent("Continent1" , 1);
     Continent continent2 =Continent("Continent2" , 2);
     Continent continent3 =Continent("Continent3" , 3);
@@ -64,26 +61,26 @@ int mapDriver::main() {
     continent5.AddTerritory(T5);
     continent6.AddTerritory(T6);
 
-    helper.AddEdgesCountry(T0,T1);
-    helper.AddEdgesCountry(T1,T0);
+    testmap.AddEdgesCountry(T0,T1);
+    testmap.AddEdgesCountry(T1,T0);
 
-    helper.AddEdgesCountry(T1,T2);
-    helper.AddEdgesCountry(T2,T1);
+    testmap.AddEdgesCountry(T1,T2);
+    testmap.AddEdgesCountry(T2,T1);
 
-    helper.AddEdgesCountry(T2,T3);
-    helper.AddEdgesCountry(T3,T2);
+    testmap.AddEdgesCountry(T2,T3);
+    testmap.AddEdgesCountry(T3,T2);
 
-    helper.AddEdgesCountry(T3,T4);
-    helper.AddEdgesCountry(T4,T3);
+    testmap.AddEdgesCountry(T3,T4);
+    testmap.AddEdgesCountry(T4,T3);
 
-    helper.AddEdgesCountry(T4,T5);
-    helper.AddEdgesCountry(T5,T4);
+    testmap.AddEdgesCountry(T4,T5);
+    testmap.AddEdgesCountry(T5,T4);
 
-    helper.AddEdgesCountry(T5,T6);
-    helper.AddEdgesCountry(T6,T5);
+    testmap.AddEdgesCountry(T5,T6);
+    testmap.AddEdgesCountry(T6,T5);
 
-    helper.PrintContinentMatrix();
-    helper.PrintTerritoryMatrix();
+    testmap.PrintContinentMatrix();
+    testmap.PrintTerritoryMatrix();
 
     testmap.Validate(&testmap);
 
