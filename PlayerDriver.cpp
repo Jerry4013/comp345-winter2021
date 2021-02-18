@@ -2,10 +2,11 @@
 #include <vector>
 #include "Player.h"
 #include <string>
+#include "PlayerDriver.h"
 
 using namespace std;
 
-int main() {
+int player::main() {
 
     // Test Constructors
     cout << endl << "Test Constructors:" << endl << "------------------------------------------------" << endl;
@@ -48,7 +49,7 @@ int main() {
     cout << endl << "Let's give player1 a card." << endl;
     vector<Card*> cards;
     Card lake(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-         false,true, false, false, false, false, true, 0);
+              false,true, false, false, false, false, true, 0);
     cards.push_back(&lake);
     player1.setCards(cards);
     cout << "Player1 has a card:" << endl;
@@ -81,3 +82,4 @@ int main() {
 
     return 0;
 }
+

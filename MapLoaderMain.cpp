@@ -4,10 +4,11 @@
 
 #include <iostream>
 #include "MapLoader.h"
+#include "MapLoaderMain.h"
 
 using std::cout,std::endl;
 
-int main(){
+int mapLoader::main() {
     MapLoader *mapLoader,*mapLoader_invalid, *mapLoader_valid, *mapLoader_copy;
     try {
         cout << "Loading valid map"<<endl;

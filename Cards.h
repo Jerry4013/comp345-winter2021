@@ -4,11 +4,6 @@
 #pragma once
 
 
-//
-// Created by Liu He on 2020-11-22.
-//
-
-
 #include <iostream>
 #include <vector>
 #include <string>

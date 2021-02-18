@@ -1,11 +1,11 @@
 //
 // Created by Ming on 2/15/2021.
 //
-
+#include "BidingFacilityMain.h"
 #include "BidingFacility.h"
 using namespace std;
 
-int main (){
+int biding::main (){
     cout << "\nTesting Driver >> Biding Facility" << endl;
 
     // {"Jack","Tim", "July", "Thierry"} {"Ngyuan", "Noah", "Chen"}

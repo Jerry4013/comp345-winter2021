@@ -4,9 +4,10 @@
 
 #include <iostream>
 #include "Cards.h"
+#include "CardsMain.h"
 using namespace std;
 
-int main(){
+int cards::main(){
     //deck demo
 //    cout<<"original cards:"<<endl;
 //    Deck d(2);
@@ -36,5 +37,5 @@ int main(){
     cout<<"rest of hand:"<<endl;
     cout<<*hand<<endl;
 
-
+    return 0;
 }

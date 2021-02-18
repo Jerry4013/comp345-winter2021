@@ -5,8 +5,9 @@
 #include "Map.h"
 using namespace std;
 #include "iostream"
+#include "MapDriver.h"
 
-int main() {
+int mapDriver::main() {
     Map testmap = Map("test");
     HelperFunctionMap helper;
     testmap.CreateCountryMatrix();
