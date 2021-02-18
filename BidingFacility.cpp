@@ -45,7 +45,7 @@ void BidingFacility::start() {
         cout << "BidingFacility hasn't been initialized yet"; return;
     }
 
-    string str = "";
+    std::string str = "";
     int playerNumber = players.size();
 //    int playerNumber = 3;
     int bids[playerNumber];
@@ -79,7 +79,7 @@ void BidingFacility::start() {
 
     cout << "\n\nBID REVEAL\n==========\n";
     for (int i = 0; i < playerNumber; i++){
-        str = "[" + to_string(i) + "] " + players[i] + "'s bid: " +  to_string(bids[i]) + "\n";
+        str = "[" + std::to_string(i) + "] " + players[i] + "'s bid: " +  std::to_string(bids[i]) + "\n";
         cout << str;
 
     }
