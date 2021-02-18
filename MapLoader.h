@@ -13,6 +13,7 @@ class MapLoader {
 public:
     MapLoader(string);
     MapLoader( MapLoader * mapLoader);
+    ~MapLoader();
     friend ostream& operator<<(ostream& output, MapLoader * mapLoader);
     MapLoader &operator=(const MapLoader &ml);
     Map * getGameMap();

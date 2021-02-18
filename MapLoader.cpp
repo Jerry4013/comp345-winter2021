@@ -234,7 +234,6 @@ MapLoader ::MapLoader(string filename): file(filename) {
 
     connection_vector_hashmap.clear();
 
-
     //Random map generator
     std::random_device rd;
     std::seed_seq seed{rd(),rd(),rd(),rd(),rd(),rd(),rd(),rd()};
@@ -258,7 +257,6 @@ MapLoader ::MapLoader(string filename): file(filename) {
             this->mapboard_order+=to_string(temp);
         }
     }
-
 
     //Map's nodes connecting outside map is also chosen randomly
     std::uniform_int_distribution<int> dist_out(0,out_nodes.size()-1);
@@ -285,7 +283,16 @@ MapLoader ::MapLoader(string filename): file(filename) {
         }
     }
 
+    Territory_buffer.clear();
+    out_nodes.clear();
+    mapoutnodes.clear();
+    maporder.clear();
 
+}
+
+MapLoader ::~MapLoader() {
+    this->GameMap= nullptr;
+    delete this->GameMap;
 }
 
 std::ostream& operator<<(ostream& output, MapLoader * mapLoader) {
