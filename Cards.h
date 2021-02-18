@@ -29,6 +29,7 @@ public:
 
     //copy constructor
     Card(const Card &c);
+    ~Card();
     //stream insertion operator "to string"
     friend ostream& operator<<(ostream& output, const Card& card);
     //assignment operator

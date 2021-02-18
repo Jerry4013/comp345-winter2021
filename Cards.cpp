@@ -395,6 +395,10 @@ void Card::setMoney(int money) {
     Card::money = money;
 }
 
+Card::~Card() {
+
+}
+
 Deck::Deck() {
     cout << "default 2 players deck:" << endl;
     deckVector = new std::vector<Card*>();
