@@ -106,13 +106,13 @@ void HelperFunctionMap::AddEdgesCountry(Territory *t1,Territory *t2){
     int TerritoryTwo=t2->GetTerritoryNumber()-1;
     if(t1->GetContinentNumber()==t2->GetContinentNumber()){
         TerritoryMatrix[TerritoryOne][TerritoryTwo]=1;
-        TerritoryMatrix[TerritoryTwo][TerritoryOne]=1;
+        //TerritoryMatrix[TerritoryTwo][TerritoryOne]=1;
     }
     else{
         TerritoryMatrix[TerritoryOne][TerritoryTwo]=3;
-        TerritoryMatrix[TerritoryTwo][TerritoryOne]=3;
+        //TerritoryMatrix[TerritoryTwo][TerritoryOne]=3;
         ContinentMatrix[t1->GetContinentNumber()-1][t2->GetContinentNumber()-1]=t1->GetTerritoryNumber();
-        ContinentMatrix[t2->GetContinentNumber()-1][t1->GetContinentNumber()-1]=t2->GetTerritoryNumber();
+        //ContinentMatrix[t2->GetContinentNumber()-1][t1->GetContinentNumber()-1]=t2->GetTerritoryNumber();
     }
 
 };
@@ -328,7 +328,7 @@ bool Map::validateContinent(){
 
 void Map::Validate(Map* map){
     if(CheckTerritoryBelongToOneContinent(map)){
-        cout << "Each country belongs to one and only one continent"<<endl;
+        cout <<endl<< "Each country belongs to one and only one continent"<<endl;
     }
     else
         cout << "Each country does not belong only one continent"<<endl;

@@ -22,7 +22,7 @@ shape=L
 2 volcano1_upper2 1 1,5
 3 volcano2_upper 2 4,5
 4 volcano2_middle1 2 3,5 1
-5 volcano2_middle2 2 3,4,6
+5 volcano2_middle2 2 2,3,4,6
 6 volcano2_bottom1 2 5,7 1
 7 volcano2_bottom2 2 6 1
 8 redforest_upper 3 9 2
@@ -35,4 +35,4 @@ shape=L
 15 village_bottom2 4 14 3
 16 mountain1_upper 5 17 4,4
 17 mountain1_middle 5 16,18 4,4
-18 mountain2 6 15
+18 mountain2 6 17
