@@ -8,20 +8,20 @@ using namespace std;
 #include "MapDriver.h"
 
 int mapDriver::main() {
-    Map testmap = Map("test", 6, 7);
+    Map testMap = Map("test", 6, 7);
     Continent continent1 = Continent("Continent1" , 1);
-    Continent continent2 =Continent("Continent2" , 2);
-    Continent continent3 =Continent("Continent3" , 3);
-    Continent continent4 =Continent("Continent4" , 4);
-    Continent continent5 =Continent("Continent5" , 5);
-    Continent continent6 =Continent("Continent6" , 6);
+    Continent continent2 = Continent("Continent2" , 2);
+    Continent continent3 = Continent("Continent3" , 3);
+    Continent continent4 = Continent("Continent4" , 4);
+    Continent continent5 = Continent("Continent5" , 5);
+    Continent continent6 = Continent("Continent6" , 6);
 
-    testmap.AddContinent(&continent1);
-    testmap.AddContinent(&continent2);
-    testmap.AddContinent(&continent3);
-    testmap.AddContinent(&continent4);
-    testmap.AddContinent(&continent5);
-    testmap.AddContinent(&continent6);
+    testMap.AddContinent(&continent1);
+    testMap.AddContinent(&continent2);
+    testMap.AddContinent(&continent3);
+    testMap.AddContinent(&continent4);
+    testMap.AddContinent(&continent5);
+    testMap.AddContinent(&continent6);
 
     /*
     helper.AddEdgesContinents(1,2);
@@ -61,28 +61,18 @@ int mapDriver::main() {
     continent5.AddTerritory(T5);
     continent6.AddTerritory(T6);
 
-    testmap.AddEdgesCountry(T0,T1);
-    testmap.AddEdgesCountry(T1,T0);
+    testMap.AddEdgesCountry(T0, T1);
+    testMap.AddEdgesCountry(T1, T2);
+    testMap.AddEdgesCountry(T2, T3);
+    testMap.AddEdgesCountry(T3, T4);
+    testMap.AddEdgesCountry(T4, T5);
+    testMap.AddEdgesCountry(T5, T6);
 
-    testmap.AddEdgesCountry(T1,T2);
-    testmap.AddEdgesCountry(T2,T1);
+    testMap.PrintContinentMatrix();
+    testMap.PrintTerritoryMatrix();
 
-    testmap.AddEdgesCountry(T2,T3);
-    testmap.AddEdgesCountry(T3,T2);
-
-    testmap.AddEdgesCountry(T3,T4);
-    testmap.AddEdgesCountry(T4,T3);
-
-    testmap.AddEdgesCountry(T4,T5);
-    testmap.AddEdgesCountry(T5,T4);
-
-    testmap.AddEdgesCountry(T5,T6);
-    testmap.AddEdgesCountry(T6,T5);
-
-    testmap.PrintContinentMatrix();
-    testmap.PrintTerritoryMatrix();
-
-    testmap.Validate(&testmap);
+    testMap.Validate(&testMap);
+    testMap.dfsValidate();
 
     return 0;
 

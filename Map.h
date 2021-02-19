@@ -62,6 +62,7 @@ private:
     std::unordered_map<int,Continent*> continent_hashmap;
     vector<vector<int> > continentMatrix;
     vector<vector<int> > territoryMatrix;
+    void dfs(unordered_map<int, vector<int>>& neighborsMap, vector<bool>& visited, int territoryNumber);
 public:
     Map(std::string mapName, int numberOfContinents, int numberOfRegions);
     ~Map();
@@ -90,5 +91,6 @@ public:
     void DeleteEdgesContinents(int ContinentOne,int ContinentTwo);
     void PrintTerritoryMatrix();
     void PrintContinentMatrix();
+    bool dfsValidate();
 };
 
