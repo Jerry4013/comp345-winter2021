@@ -12,6 +12,15 @@
 
 using namespace std;
 
+MapLoader::MapLoader() {
+    this->GameMap= nullptr;
+    this->lshape=false;
+    this->number_of_mapboard=0;
+    this->number_of_regions=0;
+    this->number_of_continents=0;
+    this->mapboard_order="";
+}
+
 MapLoader::MapLoader(MapLoader *ml): file(ml->file) {
     this->GameMap=ml->GameMap;
     this->lshape=ml->lshape;

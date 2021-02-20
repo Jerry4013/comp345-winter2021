@@ -11,6 +11,7 @@ using namespace std;
 class MapLoader {
 
 public:
+    MapLoader();
     MapLoader(string);
     MapLoader( MapLoader * mapLoader);
     ~MapLoader();
