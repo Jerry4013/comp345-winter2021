@@ -62,11 +62,17 @@ int mapDriver::main() {
     continent6.AddTerritory(T6);
 
     testMap.AddEdgesCountry(T0, T1);
+    testMap.AddEdgesCountry(T1, T0);
     testMap.AddEdgesCountry(T1, T2);
+    testMap.AddEdgesCountry(T2, T1);
     testMap.AddEdgesCountry(T2, T3);
+    testMap.AddEdgesCountry(T3, T2);
     testMap.AddEdgesCountry(T3, T4);
+    testMap.AddEdgesCountry(T4, T3);
     testMap.AddEdgesCountry(T4, T5);
+    testMap.AddEdgesCountry(T5, T4);
     testMap.AddEdgesCountry(T5, T6);
+    testMap.AddEdgesCountry(T6, T5);
 
     testMap.PrintContinentMatrix();
     testMap.PrintTerritoryMatrix();
@@ -119,9 +125,13 @@ int mapDriver::main() {
     continent6_2.AddTerritory(T6_2);
     
     testMap2.AddEdgesCountry(T0_2, T1_2);
+    testMap2.AddEdgesCountry(T1_2, T0_2);
     testMap2.AddEdgesCountry(T1_2, T2_2);
+    testMap2.AddEdgesCountry(T2_2, T1_2);
     testMap2.AddEdgesCountry(T4_2, T5_2);
+    testMap2.AddEdgesCountry(T5_2, T4_2);
     testMap2.AddEdgesCountry(T5_2, T6_2);
+    testMap2.AddEdgesCountry(T6_2, T5_2);
     
     testMap2.PrintContinentMatrix();
     testMap2.PrintTerritoryMatrix();

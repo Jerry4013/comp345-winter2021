@@ -105,11 +105,11 @@ void Map::AddEdgesCountry(Territory *t1, Territory *t2) {
     int TerritoryTwo=t2->GetTerritoryNumber() - 1;
     if(t1->GetContinentNumber()==t2->GetContinentNumber()) {
         territoryMatrix[TerritoryOne][TerritoryTwo] = 1;
-        territoryMatrix[TerritoryTwo][TerritoryOne] = 1;
+//        territoryMatrix[TerritoryTwo][TerritoryOne] = 1;
     }
     else{
         territoryMatrix[TerritoryOne][TerritoryTwo] = 3;
-        territoryMatrix[TerritoryTwo][TerritoryOne] = 3;
+//        territoryMatrix[TerritoryTwo][TerritoryOne] = 3;
         continentMatrix[t1->GetContinentNumber() - 1][t2->GetContinentNumber() - 1] = t1->GetTerritoryNumber();
 //        continentMatrix[t2->GetContinentNumber() - 1][t1->GetContinentNumber() - 1] = t2->GetTerritoryNumber();
     }

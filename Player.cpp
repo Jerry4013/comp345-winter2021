@@ -2,7 +2,7 @@
 #include <sstream>
 
 Player::Player() {
-    name = "Alice Lin";
+    name = "Alice";
     biding = 1;
     coins = 12;
     score = 0;
@@ -38,7 +38,12 @@ Player::Player(const Player& player) {
 }
 
 Player::~Player() {
-    // do nothing
+    for (int i = 0; i < territories.size(); ++i) {
+        territories[i] = nullptr;
+    }
+    for (int i = 0; i < cards.size(); ++i) {
+        cards[i] = nullptr;
+    }
 }
 
 void Player::PayCoin(int costOfCard) {
