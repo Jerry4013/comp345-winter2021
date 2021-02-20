@@ -71,9 +71,63 @@ int mapDriver::main() {
     testMap.PrintContinentMatrix();
     testMap.PrintTerritoryMatrix();
 
-    testMap.Validate(&testMap);
+//    testMap.Validate(&testMap);
     testMap.dfsValidate();
-
+    
+    Map testMap2 = Map("test", 6, 7);
+    Continent continent1_2 = Continent("Continent1" , 1);
+    Continent continent2_2= Continent("Continent2" , 2);
+    Continent continent3_2 = Continent("Continent3" , 3);
+    Continent continent4_2 = Continent("Continent4" , 4);
+    Continent continent5_2 = Continent("Continent5" , 5);
+    Continent continent6_2 = Continent("Continent6" , 6);
+    
+    testMap2.AddContinent(&continent1_2);
+    testMap2.AddContinent(&continent2_2);
+    testMap2.AddContinent(&continent3_2);
+    testMap2.AddContinent(&continent4_2);
+    testMap2.AddContinent(&continent5_2);
+    testMap2.AddContinent(&continent6_2);
+    
+    Territory *T0_2 = new Territory("Territory1",1,1);
+    Territory *T1_2 = new Territory("Territory2",2,1);
+    Territory *T2_2 = new Territory("Territory3",3,2);
+    Territory *T3_2 = new Territory("Territory4",4,3);
+    Territory *T4_2 = new Territory("Territory5",5,4);
+    Territory *T5_2 = new Territory("Territory6",6,5);
+    Territory *T6_2 = new Territory("Territory7",7,6);
+    
+    T0_2->SetNumTroops("player1",1);
+    T1_2->SetNumTroops("player2",2);
+    T2_2->SetNumTroops("player3",3);
+    T3_2->SetNumTroops("player4",4);
+    
+    T0_2->GetNumTroops("player1");
+    T1_2->GetNumTroops("player2");
+    T2_2->GetNumTroops("player3");
+    T3_2->GetNumTroops("player4");
+    T4_2->GetNumTroops("player1");
+    T5_2->GetNumTroops("player2");
+    T6_2->GetNumTroops("player3");
+    
+    continent1_2.AddTerritory(T0_2);
+    continent1_2.AddTerritory(T1_2);
+    continent2_2.AddTerritory(T2_2);
+    continent3_2.AddTerritory(T3_2);
+    continent4_2.AddTerritory(T4_2);
+    continent5_2.AddTerritory(T5_2);
+    continent6_2.AddTerritory(T6_2);
+    
+    testMap2.AddEdgesCountry(T0_2, T1_2);
+    testMap2.AddEdgesCountry(T1_2, T2_2);
+    testMap2.AddEdgesCountry(T4_2, T5_2);
+    testMap2.AddEdgesCountry(T5_2, T6_2);
+    
+    testMap2.PrintContinentMatrix();
+    testMap2.PrintTerritoryMatrix();
+    
+    //    testMap.Validate(&testMap);
+    testMap2.dfsValidate();
     return 0;
 
 }
