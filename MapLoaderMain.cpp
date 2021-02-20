@@ -22,6 +22,8 @@ int mapLoader::main() {
         mapLoader_copy = new MapLoader(mapLoader);
         cout<< "Used copy constructor"<<endl;
         cout << mapLoader_copy <<endl;
+        //mapLoader->getGameMap()->PrintContinentMatrix();
+        //mapLoader->getGameMap()->PrintTerritoryMatrix();
         mapLoader->getGameMap()->Validate(mapLoader->getGameMap());
 
         cout<<endl;
@@ -34,10 +36,12 @@ int mapLoader::main() {
     catch (const std::string e) {
         cout << e<<endl;
     }
+
+    delete mapLoader,mapLoader_invalid,mapLoader_valid,mapLoader_copy;
     mapLoader= nullptr;
     mapLoader_invalid= nullptr;
     mapLoader_valid= nullptr;
-    delete mapLoader,mapLoader_invalid,mapLoader_valid;
+    mapLoader_copy = nullptr;
 
     return 0;
 };

@@ -295,8 +295,8 @@ MapLoader ::MapLoader(string filename): file(filename) {
 }
 
 MapLoader ::~MapLoader() {
-    this->GameMap= nullptr;
     delete this->GameMap;
+    this->GameMap= nullptr;
 }
 
 std::ostream& operator<<(ostream& output, MapLoader * mapLoader) {
