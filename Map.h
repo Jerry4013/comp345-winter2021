@@ -15,20 +15,22 @@ using namespace std;
 
 class Territory {
 private:
-    std::string TerritoryName;
+    string TerritoryName;
     int TerritoryNumber;
     //TODO::
     int ContinentNumber;
     int PlayerArmyArray[3];
-    std::map<string,int> territoryArmies;
-    std::map<string,int> territoryCities;
+    map<string,int> territoryArmies;
+    map<string,int> territoryCities;
 public:
     Territory();
     ~Territory();
+    Territory(const Territory&);
     Territory(std::string TerritoryName,int TerritoryNumber,int ContinentNumber);
+    Territory& operator=(const Territory& secondTerritory);
     friend ostream& operator<<(ostream& out, const Territory& territory);
-    std::string GetTerritoryName();
-    std::string GetPlayerName();
+    string GetTerritoryName();
+    string GetPlayerName();
     int GetTerritoryNumber();
     int GetContinentNumber();
     int GetNumTroops(string PlayerNumber);
@@ -40,37 +42,43 @@ public:
 
 class Continent{
 private:
-    std::string Continetname;
-    std::vector<Territory*> territories;
+    string ContinentName;
+    vector<Territory*> territories;
     int ContinentNum;
 public:
     ~Continent();
     Continent(std::string name,int ContinentNum);
-    std::string GetContinentName();
+    Continent(const Continent&);
+    Continent& operator=(const Continent& continent);
+    friend ostream& operator<<(ostream& out, const Continent& continent);
+    string GetContinentName();
     void AddTerritory(Territory* territory);
-    std::vector<Territory*> ReturnTerritory();
+    vector<Territory*> ReturnTerritory();
     int GetContinentNum();
 };
 
 
 class Map {
 private:
-    std::string MapName;
-    std::vector<Continent*> continents;
+    string MapName;
+    vector<Continent*> continents;
     //consider using hashmap
     //TODO::Made change
-    std::unordered_map<int,Continent*> continent_hashmap;
+    unordered_map<int,Continent*> continent_hashmap;
     vector<vector<int> > continentMatrix;
     vector<vector<int> > territoryMatrix;
     void dfs(unordered_map<int, vector<int>>& neighborsMap, vector<bool>& visited, int territoryNumber);
 public:
     Map(std::string mapName, int numberOfContinents, int numberOfRegions);
     ~Map();
-    std::string GetMapName();
+    Map(const Map&);
+    Map& operator=(const Map& map);
+    friend ostream& operator<<(ostream& out, const Map& map);
+    string GetMapName();
 
-    std::vector<Continent*> ReturnContient();
+    vector<Continent*> ReturnContinent();
 
-    std::unordered_map<int,Continent*> ReturnContinentHashMap();
+    unordered_map<int,Continent*> ReturnContinentHashMap();
     void AddContinent(Continent* continent);
 
     void traverseTerritory(int u, bool visited[]);

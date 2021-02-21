@@ -13,9 +13,11 @@ using namespace std;
 class BidingFacility {
 public:
     BidingFacility();
-
     BidingFacility(string pString[4], int i);
+    BidingFacility(const BidingFacility&);
 
+    BidingFacility& operator=(const BidingFacility& secondBidingFacility);
+    friend ostream& operator<<(ostream& out, const BidingFacility& bidingFacility);
     void start();
     void getResultLog();
     void initialize();

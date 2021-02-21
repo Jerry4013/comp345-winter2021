@@ -99,6 +99,23 @@ ostream &operator<<(ostream &out, const Territory &territory) {
     return out;
 }
 
+Territory::Territory(const Territory& territory) {
+    TerritoryName = territory.TerritoryName;
+    TerritoryNumber = territory.TerritoryNumber;
+    ContinentNumber = territory.ContinentNumber;
+    territoryArmies = territory.territoryArmies;
+    territoryCities = territory.territoryCities;
+}
+
+Territory &Territory::operator=(const Territory &territory) {
+    TerritoryName = territory.TerritoryName;
+    TerritoryNumber = territory.TerritoryNumber;
+    ContinentNumber = territory.ContinentNumber;
+    territoryArmies = territory.territoryArmies;
+    territoryCities = territory.territoryCities;
+    return *this;
+}
+
 //TODO::Made change
 void Map::AddEdgesCountry(Territory *t1, Territory *t2) {
     int TerritoryOne=t1->GetTerritoryNumber() - 1;
@@ -163,14 +180,14 @@ void Map::PrintTerritoryMatrix() {
 
 Continent::Continent(std::string name,int ContinentNumber) {
     this->territories = std::vector<Territory*>();
-    this->Continetname = name;
+    this->ContinentName = name;
     this->ContinentNum = ContinentNumber;
 }
 
 Continent::~Continent() {}
 
 std::string Continent::GetContinentName() {
-    return this->Continetname;
+    return this->ContinentName;
 }
 
 void Continent::AddTerritory(Territory* Territory){
@@ -184,6 +201,33 @@ std::vector<Territory*> Continent::ReturnTerritory(){
 //method get continent name
 int Continent::GetContinentNum(){
     return this->ContinentNum;
+}
+
+Continent::Continent(const Continent& continent) {
+    ContinentName = continent.ContinentName;
+    ContinentNum = continent.ContinentNum;
+    territories = continent.territories;
+}
+
+Continent &Continent::operator=(const Continent &continent) {
+    ContinentName = continent.ContinentName;
+    ContinentNum = continent.ContinentNum;
+    territories = continent.territories;
+    return *this;
+}
+
+ostream &operator<<(ostream &out, const Continent &continent) {
+    out << "Continent{ name=" << continent.ContinentName << "; ";
+    out << "continentNum=" << continent.ContinentNum << "; ";
+    out << "territories=[";
+    for (int i = 0; i < continent.territories.size(); i++) {
+        out << *continent.territories[i];
+        if (i < continent.territories.size() - 1) {
+            out << ", ";
+        }
+    }
+    out << "]}";
+    return out;
 };
 
 //map
@@ -213,7 +257,7 @@ std::string Map::GetMapName() {
     return this->MapName;
 }
 
-std::vector<Continent*> Map::ReturnContient(){
+std::vector<Continent*> Map::ReturnContinent(){
     for(int i=0;i<this->continents.size();i++)
     {
 //        cout<< "The map "<<this->MapName<<" has these continents: " <<this->continents[i]->GetContinentName()<<" ";
@@ -362,6 +406,33 @@ void Map::dfs(unordered_map<int, vector<int> >& neighborsMap, vector<bool> &visi
     for (int i = 0; i < neighbors.size(); i++) {
         dfs(neighborsMap, visited, neighbors[i]);
     }
+}
+
+Map::Map(const Map& secondMap) {
+    MapName = secondMap.MapName;
+    continents = secondMap.continents;
+    continent_hashmap = secondMap.continent_hashmap;
+    continentMatrix = secondMap.continentMatrix;
+    territoryMatrix = secondMap.territoryMatrix;
+}
+
+Map &Map::operator=(const Map &secondMap) {
+    MapName = secondMap.MapName;
+    continents = secondMap.continents;
+    continent_hashmap = secondMap.continent_hashmap;
+    continentMatrix = secondMap.continentMatrix;
+    territoryMatrix = secondMap.territoryMatrix;
+    return *this;
+}
+
+ostream &operator<<(ostream &out, const Map &outputMap) {
+    out << "Map{ name=" << outputMap.MapName << "; ";
+    out << "continents=[";
+    for (auto const& [key, val] : outputMap.continent_hashmap) {
+        out << key << ":" << val << ";";
+    }
+    out << "]}";
+    return out;
 }
 
 

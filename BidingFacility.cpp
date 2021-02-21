@@ -156,6 +156,33 @@ void BidingFacility::getResultLog(){
     else cout << resultLog << endl;
 }
 
+BidingFacility::BidingFacility(const BidingFacility& bidingFacility) {
+    resultLog = bidingFacility.resultLog;
+    ifInitialized = bidingFacility.ifInitialized;
+    players = bidingFacility.players;
+}
+
+BidingFacility &BidingFacility::operator=(const BidingFacility &bidingFacility) {
+    resultLog = bidingFacility.resultLog;
+    ifInitialized = bidingFacility.ifInitialized;
+    players = bidingFacility.players;
+    return *this;
+}
+
+ostream &operator<<(ostream &out, const BidingFacility &bidingFacility) {
+    out << "BidingFacility{ resultLog=" << bidingFacility.resultLog << "; ";
+    out << "ifInitialized=" << bidingFacility.ifInitialized << "; ";
+    out << "players=[";
+    for (int i = 0; i < bidingFacility.players.size(); i++) {
+        out << bidingFacility.players[i];
+        if (i < bidingFacility.players.size() - 1) {
+            out << ", ";
+        }
+    }
+    out << "]}";
+    return out;
+}
+
 //int main(){
 //
 //    cout << "\nTesting Driver >> Biding Facility" << endl;
