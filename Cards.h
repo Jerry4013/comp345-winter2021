@@ -12,8 +12,18 @@ using namespace std;
 
 //use enum to set card type
 enum CardType{
-    night, cursed, arcane, ancient, dire, forest,noble,mountain,emptyKind
+    night, cursed, arcane, ancient, dire, forest, noble, mountain, emptyKind
 };
+enum AbilityType {
+    move, army, flying, elixir, gainCoins, VP
+};
+enum ActionType {
+    placeArmy, moveArmy, buildCity, destroyArmy, immuneAttack
+};
+enum vpType {
+    cardType, cardSet, coinsLeft
+};
+
 class Deck;
 class Card{
 public:
@@ -142,7 +152,7 @@ private:
     int kill_army;
     //goods:
     //top functions
-    int elixers;
+    int elixirs;
     int fly_ability;
     int victory_point;
     int build_ability;
@@ -165,23 +175,14 @@ private:
 
 class Hand {
 public:
-    //default constructor
     Hand();
     explicit Hand(Deck* deck);
-    //destructor
     ~Hand();
-    //copy constructor
     Hand(const Hand& obj);
-    //assignment operator
     Hand& operator= (const Hand& obj);
-    //stream insertion operator
     friend ostream& operator<<(ostream& output, const Hand& hand);
-    //get method
     std::vector<Card*>* getHandVector();
-    //exchange method
     Card* exchange(int card_number, Deck* deck);
-
-
 private:
     std::vector<Card*>* handVector;
 };
@@ -204,7 +205,6 @@ public:
     std::vector<Card*>* getDeckVector();
     //draw method
     Card* draw();
-
 
 private:
     std::vector<Card*>* deckVector;

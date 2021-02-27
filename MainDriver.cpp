@@ -1,36 +1,15 @@
 
 #include <iostream>
 
-#include "MapDriver.h"
-#include "MapLoaderMain.h"
-#include "PlayerDriver.h"
-#include "CardsMain.h"
-#include "BidingFacilityMain.h"
-
+#include "Game.h"
 
 
 int main(){
-
-    std::cout << "************************************************" << std::endl;
-    mapDriver::main();
-    std::cout << "************************************************" << std::endl;
-
-    std::cout << "************************************************" << std::endl;
-    mapLoader::main();
-    std::cout << "************************************************" << std::endl;
-
-    std::cout << "************************************************" << std::endl;
-    player::main();
-    std::cout << "************************************************" << std::endl;
-
-    std::cout << "************************************************" << std::endl;
-    cards::main();
-    std::cout << "************************************************" << std::endl;
-
-    std::cout << "************************************************" << std::endl;
-    biding::main();
-    std::cout << "************************************************" << std::endl;
-
+    Game* game = new Game(2);
+    game->start();
+    game->startup();
+    game->play();
+    game->computeScore();
 }
 
 

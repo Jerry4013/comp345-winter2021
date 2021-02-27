@@ -45,13 +45,13 @@ int mapDriver::main() {
     T2->SetNumTroops("player3",3);
     T3->SetNumTroops("player4",4);
 
-    T0->GetNumTroops("player1");
-    T1->GetNumTroops("player2");
-    T2->GetNumTroops("player3");
-    T3->GetNumTroops("player4");
-    T4->GetNumTroops("player1");
-    T5->GetNumTroops("player2");
-    T6->GetNumTroops("player3");
+    T0->getArmiesOfPlayer("player1");
+    T1->getArmiesOfPlayer("player2");
+    T2->getArmiesOfPlayer("player3");
+    T3->getArmiesOfPlayer("player4");
+    T4->getArmiesOfPlayer("player1");
+    T5->getArmiesOfPlayer("player2");
+    T6->getArmiesOfPlayer("player3");
 
     continent1.AddTerritory(T0);
     continent1.AddTerritory(T1);
@@ -61,23 +61,23 @@ int mapDriver::main() {
     continent5.AddTerritory(T5);
     continent6.AddTerritory(T6);
 
-    testMap.AddEdgesCountry(T0, T1);
-    testMap.AddEdgesCountry(T1, T0);
-    testMap.AddEdgesCountry(T1, T2);
-    testMap.AddEdgesCountry(T2, T1);
-    testMap.AddEdgesCountry(T2, T3);
-    testMap.AddEdgesCountry(T3, T2);
-    testMap.AddEdgesCountry(T3, T4);
-    testMap.AddEdgesCountry(T4, T3);
-    testMap.AddEdgesCountry(T4, T5);
-    testMap.AddEdgesCountry(T5, T4);
-    testMap.AddEdgesCountry(T5, T6);
-    testMap.AddEdgesCountry(T6, T5);
+    testMap.addEdgesTerritory(T0, T1);
+    testMap.addEdgesTerritory(T1, T0);
+    testMap.addEdgesTerritory(T1, T2);
+    testMap.addEdgesTerritory(T2, T1);
+    testMap.addEdgesTerritory(T2, T3);
+    testMap.addEdgesTerritory(T3, T2);
+    testMap.addEdgesTerritory(T3, T4);
+    testMap.addEdgesTerritory(T4, T3);
+    testMap.addEdgesTerritory(T4, T5);
+    testMap.addEdgesTerritory(T5, T4);
+    testMap.addEdgesTerritory(T5, T6);
+    testMap.addEdgesTerritory(T6, T5);
 
     testMap.PrintContinentMatrix();
     testMap.PrintTerritoryMatrix();
 
-//    testMap.Validate(&testMap);
+//    testMap.validate(&testMap);
     testMap.dfsValidate();
     
     Map testMap2 = Map("test", 6, 7);
@@ -107,14 +107,14 @@ int mapDriver::main() {
     T1_2->SetNumTroops("player2",2);
     T2_2->SetNumTroops("player3",3);
     T3_2->SetNumTroops("player4",4);
-    
-    T0_2->GetNumTroops("player1");
-    T1_2->GetNumTroops("player2");
-    T2_2->GetNumTroops("player3");
-    T3_2->GetNumTroops("player4");
-    T4_2->GetNumTroops("player1");
-    T5_2->GetNumTroops("player2");
-    T6_2->GetNumTroops("player3");
+
+    T0_2->getArmiesOfPlayer("player1");
+    T1_2->getArmiesOfPlayer("player2");
+    T2_2->getArmiesOfPlayer("player3");
+    T3_2->getArmiesOfPlayer("player4");
+    T4_2->getArmiesOfPlayer("player1");
+    T5_2->getArmiesOfPlayer("player2");
+    T6_2->getArmiesOfPlayer("player3");
     
     continent1_2.AddTerritory(T0_2);
     continent1_2.AddTerritory(T1_2);
@@ -123,20 +123,20 @@ int mapDriver::main() {
     continent4_2.AddTerritory(T4_2);
     continent5_2.AddTerritory(T5_2);
     continent6_2.AddTerritory(T6_2);
-    
-    testMap2.AddEdgesCountry(T0_2, T1_2);
-    testMap2.AddEdgesCountry(T1_2, T0_2);
-    testMap2.AddEdgesCountry(T1_2, T2_2);
-    testMap2.AddEdgesCountry(T2_2, T1_2);
-    testMap2.AddEdgesCountry(T4_2, T5_2);
-    testMap2.AddEdgesCountry(T5_2, T4_2);
-    testMap2.AddEdgesCountry(T5_2, T6_2);
-    testMap2.AddEdgesCountry(T6_2, T5_2);
+
+    testMap2.addEdgesTerritory(T0_2, T1_2);
+    testMap2.addEdgesTerritory(T1_2, T0_2);
+    testMap2.addEdgesTerritory(T1_2, T2_2);
+    testMap2.addEdgesTerritory(T2_2, T1_2);
+    testMap2.addEdgesTerritory(T4_2, T5_2);
+    testMap2.addEdgesTerritory(T5_2, T4_2);
+    testMap2.addEdgesTerritory(T5_2, T6_2);
+    testMap2.addEdgesTerritory(T6_2, T5_2);
     
     testMap2.PrintContinentMatrix();
     testMap2.PrintTerritoryMatrix();
     
-    //    testMap.Validate(&testMap);
+    //    testMap.validate(&testMap);
     testMap2.dfsValidate();
     return 0;
 

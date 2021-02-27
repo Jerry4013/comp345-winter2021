@@ -2,7 +2,7 @@
 #include <sstream>
 
 Player::Player() {
-    name = "Alice";
+    firstName = "Alice";
     biding = 1;
     coins = 12;
     score = 0;
@@ -13,7 +13,7 @@ Player::Player() {
 }
 
 Player::Player(const string &name, int biding, int coins, vector<Territory *> &territories) {
-    this->name = name;
+    this->firstName = name;
     this->biding = biding;
     this->coins = coins;
     this->territories = territories;
@@ -25,7 +25,7 @@ Player::Player(const string &name, int biding, int coins, vector<Territory *> &t
 }
 
 Player::Player(const Player& player) {
-    name = player.name;
+    firstName = player.firstName;
     biding = player.biding;
     coins = player.coins;
     score = player.score;
@@ -48,62 +48,62 @@ Player::~Player() {
 
 void Player::PayCoin(int costOfCard) {
     coins -= costOfCard;
-    cout << "Player " + this->name + " paid " << costOfCard << endl;
+    cout << "Player " + this->firstName + " paid " << costOfCard << endl;
 }
 
 void Player::PlaceNewArmies(int numberOfNewArmies, Territory &territory) {
-    int currTroops = territory.GetNumTroops(this->name);
-    territory.SetNumTroops(this->name, currTroops + numberOfNewArmies);
-    cout << numberOfNewArmies << " new armies are placed on territory " + territory.GetTerritoryName() << endl;
+    int currTroops = territory.getArmiesOfPlayer(this->firstName);
+    territory.SetNumTroops(this->firstName, currTroops + numberOfNewArmies);
+    cout << numberOfNewArmies << " new armies are placed on territory " + territory.getName() << endl;
 }
 
 void Player::MoveOverLand(int numberOfArmies, Territory &from, Territory &to) {
-    int troopsAtSourceTerritory = from.GetNumTroops(this->name);
+    int troopsAtSourceTerritory = from.getArmiesOfPlayer(this->firstName);
     if (troopsAtSourceTerritory < numberOfArmies) {
         // throw an exception
         cout << "There is not enough troop to move!";
         return;
     }
-    from.SetNumTroops(this->name, troopsAtSourceTerritory - numberOfArmies);
-    int troopsAtTargetTerritory = to.GetNumTroops(this->name);
-    to.SetNumTroops(this->name, troopsAtTargetTerritory + numberOfArmies);
-    cout << numberOfArmies << " armies were moved from " + from.GetTerritoryName() + " to " + to.GetTerritoryName()
+    from.SetNumTroops(this->firstName, troopsAtSourceTerritory - numberOfArmies);
+    int troopsAtTargetTerritory = to.getArmiesOfPlayer(this->firstName);
+    to.SetNumTroops(this->firstName, troopsAtTargetTerritory + numberOfArmies);
+    cout << numberOfArmies << " armies were moved from " + from.getName() + " to " + to.getName()
         << endl;
 }
 
 void Player::MoveArmies(int numberOfArmies, Territory &from, Territory &to) {
-    int troopsAtSourceTerritory = from.GetNumTroops(this->name);
+    int troopsAtSourceTerritory = from.getArmiesOfPlayer(this->firstName);
     if (troopsAtSourceTerritory < numberOfArmies) {
         // throw an exception
         cout << "There is not enough troop to move!";
         return;
     }
-    from.SetNumTroops(this->name, troopsAtSourceTerritory - numberOfArmies);
-    int troopsAtTargetTerritory = to.GetNumTroops(this->name);
-    to.SetNumTroops(this->name, troopsAtTargetTerritory + numberOfArmies);
-    cout << numberOfArmies << " armies were moved from " + from.GetTerritoryName() + " to " + to.GetTerritoryName()
+    from.SetNumTroops(this->firstName, troopsAtSourceTerritory - numberOfArmies);
+    int troopsAtTargetTerritory = to.getArmiesOfPlayer(this->firstName);
+    to.SetNumTroops(this->firstName, troopsAtTargetTerritory + numberOfArmies);
+    cout << numberOfArmies << " armies were moved from " + from.getName() + " to " + to.getName()
          << endl;
 }
 
 void Player::BuildCity(Territory &territory) {
-    int currCity = territory.getCities(this->name);
-    territory.setCities(this->name, currCity + 1);
+    int currCity = territory.getCities(this->firstName);
+    territory.setCities(this->firstName, currCity + 1);
 }
 
 void Player::DestroyArmy(int numberOfArmies, Player &player, Territory &territory) {
-    int currTroops = territory.GetNumTroops(player.name);
+    int currTroops = territory.getArmiesOfPlayer(player.firstName);
     if (currTroops < numberOfArmies) {
         // throw an exception
         cout << "There is not enough troop to destroy!";
         return;
     }
-    territory.SetNumTroops(player.name, currTroops - numberOfArmies);
-    cout << numberOfArmies << " armies are destroyed on territory " + territory.GetTerritoryName() << endl;
+    territory.SetNumTroops(player.firstName, currTroops - numberOfArmies);
+    cout << numberOfArmies << " armies are destroyed on territory " + territory.getName() << endl;
 }
 
 
 Player &Player::operator=(const Player &player) {
-    name = player.name;
+    firstName = player.firstName;
     biding = player.biding;
     coins = player.coins;
     score = player.score;
@@ -118,7 +118,7 @@ Player &Player::operator=(const Player &player) {
 
 string Player::toString() const {
     stringstream ss;
-    ss << "Player{ name=" << name << "; ";
+    ss << "Player{ firstName=" << firstName << "; ";
     ss << "biding=" << biding << "; ";
     ss << "coins=" << coins << "; ";
     ss << "score=" << score << "; ";
@@ -145,7 +145,7 @@ string Player::toString() const {
 }
 
 ostream &operator<<(ostream &out, const Player &player) {
-    out << "Player{ name=" << player.name << "; ";
+    out << "Player{ firstName=" << player.firstName << "; ";
     out << "biding=" << player.biding << "; ";
     out << "coins=" << player.coins << "; ";
     out << "score=" << player.score << "; ";
@@ -173,18 +173,18 @@ ostream &operator<<(ostream &out, const Player &player) {
 
 
 string Player::getName() const {
-    return name;
+    return firstName;
 }
 
 void Player::setName(const string &newName) {
-    name = newName;
+    firstName = newName;
 }
 
 int Player::getBiding() const {
     return biding;
 }
 
-void Player::setBiding(int biding) {
+void Player::setBidding(int biding) {
     this->biding = biding;
 }
 

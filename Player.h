@@ -22,10 +22,13 @@ public:
     void DestroyArmy(int numberOfArmies, Player& player, Territory& territory);
 
     // Getters and Setters
-    string getName() const;
+    int getId() const;
+    string getFirstName() const;
+    string getLastName() const;
+    string getColor() const;
     void setName(const string& newName);
     int getBiding() const;
-    void setBiding(int biding);
+    void setBidding(int biding);
     int getCoins() const;
     void setCoins(int coins);
     int getScore() const;
@@ -44,7 +47,10 @@ public:
     void setCards(vector<Card*>& cards);
 
 private:
-    string name;
+    int id;
+    string firstName;
+    string lastName;
+    string color;
     int biding;                     // 游戏开始时，该玩家愿意出多少钱
     int coins;                      // 手上还有多少钱
     int score;                      // 现在有多少分了

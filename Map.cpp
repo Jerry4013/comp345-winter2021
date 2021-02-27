@@ -10,9 +10,9 @@ using namespace std;
 
 
 Territory::Territory(){
-    this->TerritoryNumber = -1;
-    this->ContinentNumber = -1;
-    this->TerritoryName = "None";
+    this->id = -1;
+    this->continentId = -1;
+    this->name = "None";
     for(int i = 0; i < 4; i++){
         PlayerArmyArray[i]=0;
     }
@@ -20,15 +20,15 @@ Territory::Territory(){
 
 Territory::~Territory(){}
 Territory:: Territory(std::string TerritoryName, int TerritoryNumber, int ContinentNumber) {
-    this->TerritoryNumber = TerritoryNumber;
-    this->TerritoryName = TerritoryName;
-    this->ContinentNumber = ContinentNumber;
-    this->territoryArmies = {
+    this->id = TerritoryNumber;
+    this->name = TerritoryName;
+    this->continentId = ContinentNumber;
+    this->armies = {
             { "player1", 0 },
             { "player2", 0 },
             { "player3", 0 },
             { "player4", 0 }};
-    this->territoryCities = {
+    this->cities = {
             { "player1", 0 },
             { "player2", 0 },
             { "player3", 0 },
@@ -36,63 +36,63 @@ Territory:: Territory(std::string TerritoryName, int TerritoryNumber, int Contin
 }
 
 //getter
-int Territory::GetTerritoryNumber() {
-    return this->TerritoryNumber;
+int Territory::getId() {
+    return this->id;
 }
 
 //TODO::Made change
-int Territory::GetContinentNumber() {
-    return this->ContinentNumber;
+int Territory::getContinentId() {
+    return this->continentId;
 }
-string Territory::GetTerritoryName() {
-    return this->TerritoryName;
+string Territory::getName() {
+    return this->name;
 }
-//int Territory::GetNumTroops(){cout<<this->GetTerritoryName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
+//int Territory::getArmiesOfPlayer(){cout<<this->getName()<<" has troops: "<<this->NumberOfTroops<<endl;return this->NumberOfTroops;};
 //string Territory::GetPlayerName(){return this->OwnerName;};
-int Territory::GetNumTroops(string PlayerNumber) {
-    cout<<PlayerNumber<<" has "<<this->territoryArmies[PlayerNumber]<<" armies at territory "<<this->TerritoryNumber <<endl;
-    return this->territoryArmies[PlayerNumber];
+int Territory::getArmiesOfPlayer(string PlayerNumber) {
+    cout << PlayerNumber << " has " << this->armies[PlayerNumber] << " armies at territory " << this->id << endl;
+    return this->armies[PlayerNumber];
 }
 
 //setter
 void Territory::SetNumTroops(string PlayerNum,int NumOfTroops){
-    this->territoryArmies[PlayerNum] = NumOfTroops;
+    this->armies[PlayerNum] = NumOfTroops;
 }
 
 int Territory::getCities(const string& playerName) {
-    cout<<playerName<<" has "<<this->territoryCities[playerName]<<" cities at territory "<<this->TerritoryNumber <<endl;
-    return this->territoryCities[playerName];
+    cout << playerName << " has " << this->cities[playerName] << " cities at territory " << this->id << endl;
+    return this->cities[playerName];
 }
 
 void Territory::setCities(const string& playerName, int number) {
-    this->territoryArmies[playerName] = number;
+    this->armies[playerName] = number;
 }
 
 string Territory::toString() const {
     stringstream ss;
-    ss << "Territory{ TerritoryName=" << TerritoryName << "; ";
-    ss << "TerritoryNumber=" << TerritoryNumber << "; ";
-    ss << "ContinentNumber=" << ContinentNumber << "; ";
-    ss << "territoryArmies={";
-    for (const auto &[k, v] : territoryArmies) {
+    ss << "Territory{ firstName=" << name << "; ";
+    ss << "id=" << id << "; ";
+    ss << "continentId=" << continentId << "; ";
+    ss << "armies={";
+    for (const auto &[k, v] : armies) {
         ss << "Armies[" << k << "] = " << v << " " << endl;
     }
-    for (const auto &[k, v] : territoryCities) {
+    for (const auto &[k, v] : cities) {
         ss << "Cities[" << k << "] = " << v << " " << endl;
     }
     return ss.str();
 }
 
 ostream &operator<<(ostream &out, const Territory &territory) {
-    out << "Territory{ TerritoryName=" << territory.TerritoryName << "; ";
-    out << "TerritoryNumber=" << territory.TerritoryNumber << "; ";
-    out << "ContinentNumber=" << territory.ContinentNumber << "; ";
-    out << "territoryArmies={";
-    for (const auto &[k, v] : territory.territoryArmies) {
+    out << "Territory{ firstName=" << territory.name << "; ";
+    out << "id=" << territory.id << "; ";
+    out << "continentId=" << territory.continentId << "; ";
+    out << "armies={";
+    for (const auto &[k, v] : territory.armies) {
         out << "Armies[" << k << "] = " << v << "; ";
     }
-    out << "};  territoryCities={";
-    for (const auto &[k, v] : territory.territoryCities) {
+    out << "};  cities={";
+    for (const auto &[k, v] : territory.cities) {
         out << "Cities[" << k << "] = " << v << "; ";
     }
     out << "}";
@@ -100,35 +100,35 @@ ostream &operator<<(ostream &out, const Territory &territory) {
 }
 
 Territory::Territory(const Territory& territory) {
-    TerritoryName = territory.TerritoryName;
-    TerritoryNumber = territory.TerritoryNumber;
-    ContinentNumber = territory.ContinentNumber;
-    territoryArmies = territory.territoryArmies;
-    territoryCities = territory.territoryCities;
+    name = territory.name;
+    id = territory.id;
+    continentId = territory.continentId;
+    armies = territory.armies;
+    cities = territory.cities;
 }
 
 Territory &Territory::operator=(const Territory &territory) {
-    TerritoryName = territory.TerritoryName;
-    TerritoryNumber = territory.TerritoryNumber;
-    ContinentNumber = territory.ContinentNumber;
-    territoryArmies = territory.territoryArmies;
-    territoryCities = territory.territoryCities;
+    name = territory.name;
+    id = territory.id;
+    continentId = territory.continentId;
+    armies = territory.armies;
+    cities = territory.cities;
     return *this;
 }
 
 //TODO::Made change
-void Map::AddEdgesCountry(Territory *t1, Territory *t2) {
-    int TerritoryOne=t1->GetTerritoryNumber() - 1;
-    int TerritoryTwo=t2->GetTerritoryNumber() - 1;
-    if(t1->GetContinentNumber()==t2->GetContinentNumber()) {
+void Map::addEdgesTerritory(Territory *, Territory *) {
+    int TerritoryOne= t1->getId() - 1;
+    int TerritoryTwo= t2->getId() - 1;
+    if(t1->getContinentId() == t2->getContinentId()) {
         territoryMatrix[TerritoryOne][TerritoryTwo] = 1;
 //        territoryMatrix[TerritoryTwo][TerritoryOne] = 1;
     }
     else{
         territoryMatrix[TerritoryOne][TerritoryTwo] = 3;
 //        territoryMatrix[TerritoryTwo][TerritoryOne] = 3;
-        continentMatrix[t1->GetContinentNumber() - 1][t2->GetContinentNumber() - 1] = t1->GetTerritoryNumber();
-//        continentMatrix[t2->GetContinentNumber() - 1][t1->GetContinentNumber() - 1] = t2->GetTerritoryNumber();
+        continentMatrix[t1->getContinentId() - 1][t2->getContinentId() - 1] = t1->getId();
+//        continentMatrix[t2->GetContinentNumber() - 1][t1->getContinentId() - 1] = t2->getId();
     }
 }
 
@@ -178,46 +178,46 @@ void Map::PrintTerritoryMatrix() {
     }
 }
 
-Continent::Continent(std::string name,int ContinentNumber) {
+Continent::Continent(std::string name,int id) {
     this->territories = std::vector<Territory*>();
-    this->ContinentName = name;
-    this->ContinentNum = ContinentNumber;
+    this->name = name;
+    this->ContinentNum = id;
 }
 
 Continent::~Continent() {}
 
-std::string Continent::GetContinentName() {
-    return this->ContinentName;
+std::string Continent::getName() {
+    return this->name;
 }
 
 void Continent::AddTerritory(Territory* Territory){
     this->territories.push_back(Territory);
 }
 
-std::vector<Territory*> Continent::ReturnTerritory(){
+std::vector<Territory*> Continent::getTerritories(){
     return this->territories;
 }
 
-//method get continent name
+//method get continent firstName
 int Continent::GetContinentNum(){
     return this->ContinentNum;
 }
 
 Continent::Continent(const Continent& continent) {
-    ContinentName = continent.ContinentName;
+    name = continent.name;
     ContinentNum = continent.ContinentNum;
     territories = continent.territories;
 }
 
 Continent &Continent::operator=(const Continent &continent) {
-    ContinentName = continent.ContinentName;
+    name = continent.name;
     ContinentNum = continent.ContinentNum;
     territories = continent.territories;
     return *this;
 }
 
 ostream &operator<<(ostream &out, const Continent &continent) {
-    out << "Continent{ name=" << continent.ContinentName << "; ";
+    out << "Continent{ firstName=" << continent.name << "; ";
     out << "continentNum=" << continent.ContinentNum << "; ";
     out << "territories=[";
     for (int i = 0; i < continent.territories.size(); i++) {
@@ -260,7 +260,7 @@ std::string Map::GetMapName() {
 std::vector<Continent*> Map::ReturnContinent(){
     for(int i=0;i<this->continents.size();i++)
     {
-//        cout<< "The map "<<this->MapName<<" has these continents: " <<this->continents[i]->GetContinentName()<<" ";
+//        cout<< "The map "<<this->MapName<<" has these continents: " <<this->continents[i]->getName()<<" ";
     }
 //    cout<< "\n";
     return this->continents;
@@ -271,15 +271,15 @@ std::unordered_map<int,Continent*> Map::ReturnContinentHashMap() {
     return this->continent_hashmap;
 }
 
-bool Map::CheckTerritoryBelongToOneContinent(Map* map) {
+bool Map::checkTerritoryBelongsToOneContinent(Map* map) {
     int error = 0;
     for(int i = 1; i <= continentMatrix.size(); i++) {
         Continent* continent = map->ReturnContinentHashMap()[i];
-        string continentName = continent->GetContinentName();
-        vector<Territory*> territories = continent->ReturnTerritory();
+        string continentName = continent->getName();
+        vector<Territory*> territories = continent->getTerritories();
         for(int j = 0; j < territories.size(); j++) {
-            int continentNumber = territories[j]->GetContinentNumber();
-            string territoryName = territories[j]->GetTerritoryName();
+            int continentNumber = territories[j]->getContinentId();
+            string territoryName = territories[j]->getName();
             if (continentNumber != 0) {
                 cout << territoryName << " only belongs to  " << continentName << endl;
             } else {
@@ -345,8 +345,8 @@ bool Map::validateContinent(){
     return true;
 }
 
-void Map::Validate(Map* map){
-    if(CheckTerritoryBelongToOneContinent(map)) {
+void Map::validate(Map* map){
+    if(checkTerritoryBelongsToOneContinent(map)) {
         cout << endl << "Each country belongs to one and only one continent" << endl;
     } else {
         cout << "Each country does not belong only one continent" << endl;
@@ -386,7 +386,7 @@ bool Map::dfsValidate() {
         neighborsMap[i + 1] = neighbors;
     }
     vector<bool> visited(numberOfTerritory, false);
-    dfs(neighborsMap, visited, 1);
+    dfsTerritories(neighborsMap, visited, 1);
     for (int i = 0; i < visited.size(); i++) {
         if (!visited[i]) {
             cout << "DFS: This is not a connected map." << endl;
@@ -404,7 +404,7 @@ void Map::dfs(unordered_map<int, vector<int> >& neighborsMap, vector<bool> &visi
     visited[territoryNumber - 1] = true;
     vector<int> neighbors = neighborsMap.at(territoryNumber);
     for (int i = 0; i < neighbors.size(); i++) {
-        dfs(neighborsMap, visited, neighbors[i]);
+        dfsTerritories(neighborsMap, visited, neighbors[i]);
     }
 }
 
@@ -426,7 +426,7 @@ Map &Map::operator=(const Map &secondMap) {
 }
 
 ostream &operator<<(ostream &out, const Map &outputMap) {
-    out << "Map{ name=" << outputMap.MapName << "; ";
+    out << "Map{ firstName=" << outputMap.MapName << "; ";
     out << "continents=[";
     for (auto const& [key, val] : outputMap.continent_hashmap) {
         out << key << ":" << val << ";";

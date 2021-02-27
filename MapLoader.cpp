@@ -30,6 +30,7 @@ MapLoader::MapLoader(MapLoader *ml): file(ml->file) {
     this->mapboard_order=ml->mapboard_order;
 }
 
+// TODO： 函数太长了，可以分割出去一些内容作为private method
 MapLoader ::MapLoader(string filename): file(filename) {
 
     string line;
@@ -155,7 +156,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
 
     /*
      * processing [continents] data
-     * Retrieve continentid and continent name, and mapid that it belongs to.
+     * Retrieve continentid and continent firstName, and mapid that it belongs to.
      */
     for(int i=0;i<continent_buffer.size();i++){
         temp=continent_buffer.at(i);
@@ -168,7 +169,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
         if(continentid<0 || continentid>number_of_continents)
             throw std::string("continent id is invalid");
 
-        //Second entry is continent name
+        //Second entry is continent firstName
         this->GameMap->AddContinent(new Continent(vector_temp[1],continentid));
 
         //Third entry is map board id
@@ -203,7 +204,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
             throw std::string("Territory/region id is invalid");
         connection_vector_hashmap.insert(std::make_pair(regionid,vector<int>()));
 
-        //Second entry, region name
+        //Second entry, region firstName
         //Thrid entry, continentid
         continentid=stoi(vector_temp[2], nullptr,10);
         if(continentid<0 || continentid>number_of_continents)
@@ -230,10 +231,11 @@ MapLoader ::MapLoader(string filename): file(filename) {
      * For each connected nodes, add edges
      */
     for(int index=1;index<=number_of_regions;index++){
-        continentid=Territory_buffer[index]->GetContinentNumber();
+        continentid= Territory_buffer[index]->getContinentId();
         this->GameMap->ReturnContinentHashMap()[continentid]->AddTerritory(Territory_buffer[index]);
         for(int regionid = 0;regionid<connection_vector_hashmap[index].size();regionid++){
-            this->GameMap->AddEdgesCountry(Territory_buffer[index],Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
+            this->GameMap->addEdgesTerritory(Territory_buffer[index],
+                                             Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
         }
     }
 
@@ -279,8 +281,8 @@ MapLoader ::MapLoader(string filename): file(filename) {
         while(true){
             temp2=dist_out(mt)%out_nodes.size();
             if(out_nodes.at(temp2).second==map2){
-                this->GameMap->AddEdgesCountry(Territory_buffer[temp],Territory_buffer[out_nodes.at(temp2).first]);
-                this->GameMap->AddEdgesCountry(Territory_buffer[out_nodes.at(temp2).first],Territory_buffer[temp]);
+                this->GameMap->addEdgesTerritory(Territory_buffer[temp], Territory_buffer[out_nodes.at(temp2).first]);
+                this->GameMap->addEdgesTerritory(Territory_buffer[out_nodes.at(temp2).first], Territory_buffer[temp]);
                 out_nodes.erase(out_nodes.begin()+temp2);
                 break;
             }

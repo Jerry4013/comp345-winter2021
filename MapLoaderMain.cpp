@@ -24,7 +24,7 @@ int mapLoader::main() {
         cout << mapLoader_copy <<endl;
         //mapLoader->getGameMap()->PrintContinentMatrix();
         //mapLoader->getGameMap()->PrintTerritoryMatrix();
-        mapLoader->getGameMap()->Validate(mapLoader->getGameMap());
+        mapLoader->getGameMap()->validate(mapLoader->getGameMap());
 
         cout<<endl;
         cout <<"Loading invalid map"<<endl;

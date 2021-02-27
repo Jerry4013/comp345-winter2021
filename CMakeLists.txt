@@ -24,5 +24,7 @@ add_executable(comp345_winter2021
         CardsMain.cpp
         MapDriver.h
         MapDriver.cpp
+        Game.cpp
+        Game.h
         MainDriver.cpp
         )

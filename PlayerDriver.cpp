@@ -17,7 +17,7 @@ int player::main() {
     int coins;
     Territory territory1("territory1", 1, 1);
     Territory territory2("territory2", 2, 2);
-    cout << "Enter player name: ";
+    cout << "Enter player firstName: ";
     cin >> name;
     cout << "Enter biding coins: ";
     cin >> biding;
@@ -29,10 +29,10 @@ int player::main() {
     Player userCreatedPlayer(name, biding, coins, territories);
     cout << "A customized player is created: " << endl << userCreatedPlayer.toString() << endl << endl;
     Player player1(userCreatedPlayer);
-    cout << "player1 is created by copy constructor. name is " + player1.getName() << endl;
+    cout << "player1 is created by copy constructor. firstName is " + player1.getName() << endl;
     Player player2;
     player2 = player1;
-    cout << "player2 is created by assignment operator. name is " + player2.getName() << endl;
+    cout << "player2 is created by assignment operator. firstName is " + player2.getName() << endl;
     cout << "Print this player with stream insertion: " << endl;
     cout << player2 << endl;
 

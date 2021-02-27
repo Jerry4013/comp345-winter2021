@@ -23,7 +23,7 @@ kill_army, int fly_ability, int victory_point, int build_ability, int move_abili
                                                            number_of_army
                                                                    (number_of_army),
                                                            number_of_movement(number_of_movement), buildCity(buildCity),
-                                                           elixers(elixers), kill_army(kill_army),
+                                                           elixirs(elixers), kill_army(kill_army),
                                                            fly_ability(fly_ability), victory_point(victory_point),
                                                            build_ability(build_ability), move_ability
                                                                    (move_ability), immune_to_attack(immune_to_attack),
@@ -39,7 +39,7 @@ kill_army, int fly_ability, int victory_point, int build_ability, int move_abili
                                                            three_vp_four_noble
                                                                    (three_vp_four_noble), OR_CARD(OR_CARD),
                                                            money(money) {
-//    std::cout<<"card: "+name+" is created!"<<endl;
+//    std::cout<<"card: "+firstName+" is created!"<<endl;
 }
 
 Card::Card(const Card &card) {
@@ -48,7 +48,7 @@ Card::Card(const Card &card) {
     number_of_army = card.number_of_army;
     number_of_movement = card.number_of_movement;
     buildCity = card.buildCity;
-    elixers = card.elixers;
+    elixirs = card.elixirs;
     kill_army = card.kill_army;
     fly_ability = card.fly_ability;
     victory_point = card.victory_point;
@@ -71,10 +71,10 @@ Card::Card(const Card &card) {
 
 //to string method
 std::ostream &operator<<(std::ostream &output, const Card &card) {
-    output << "card name: " + card.name << endl;
+    output << "card firstName: " + card.name << endl;
     output << "Action: " << endl;
     if (card.number_of_army > 0) {
-        output << "can build army: " << card.number_of_army << endl;
+        output << "can build armies: " << card.number_of_army << endl;
     }
     if (card.number_of_movement > 0) {
         output << "can move: " << card.number_of_movement << endl;
@@ -83,12 +83,12 @@ std::ostream &operator<<(std::ostream &output, const Card &card) {
         output << "build one city" << endl;
     }
     if (card.kill_army > 0) {
-        output << "can kill army: " << card.kill_army << endl;
+        output << "can kill armies: " << card.kill_army << endl;
     }
 
     output << "Goods: " << endl;
-    if (card.elixers > 0) {
-        output << "elixers: " << card.elixers << endl;
+    if (card.elixirs > 0) {
+        output << "elixirs: " << card.elixirs << endl;
     }
 
     if (card.fly_ability > 0) {
@@ -98,7 +98,7 @@ std::ostream &operator<<(std::ostream &output, const Card &card) {
         output << "has victory point: " << card.victory_point << endl;
     }
     if (card.build_ability > 0) {
-        output << "build one more army when build army" << endl;
+        output << "build one more armies when build armies" << endl;
     }
     if (card.move_ability > 0) {
         output << "one more movement when move" << endl;
@@ -152,7 +152,7 @@ Card::Card() {
     number_of_army = 0;
     number_of_movement = 0;
     buildCity = 0;
-    elixers = 0;
+    elixirs = 0;
     kill_army = 0;
     fly_ability = 0;
     victory_point = 0;
@@ -180,7 +180,7 @@ Card &Card::operator=(const Card &card) {
     this->number_of_army = card.number_of_army;
     this->number_of_movement = card.number_of_movement;
     this->buildCity = card.buildCity;
-    this->elixers = card.elixers;
+    this->elixirs = card.elixirs;
     this->kill_army = card.kill_army;
     this->fly_ability = card.fly_ability;
     this->victory_point = card.victory_point;
@@ -252,11 +252,11 @@ void Card::setKillArmy(int killArmy) {
 }
 
 int Card::getElixers() const {
-    return elixers;
+    return elixirs;
 }
 
 void Card::setElixers(int elixers) {
-    Card::elixers = elixers;
+    Card::elixirs = elixers;
 }
 
 int Card::getFlyAbility() const {
