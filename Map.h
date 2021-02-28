@@ -12,89 +12,95 @@ using namespace std;
 
 class Territory {
 public:
-    Territory();
     ~Territory();
     Territory(const Territory&);
-    Territory(std::string TerritoryName,int TerritoryNumber,int ContinentNumber);
+    Territory(int id, string& newName, int continentId);
     Territory& operator=(const Territory& secondTerritory);
     friend ostream& operator<<(ostream& out, const Territory& territory);
 
-    string getName() const;
-    void setName(const string& newName);
     int getId() const;
-    void setId(const int newId);
+    void setId(int newId);
+    string getName() const;
+    void setName(const string& name);
     int getContinentId() const;
-    void setContinentId(const int newContinentId);
+    void setContinentId(int newContinentId);
 
     int getArmiesOfPlayer(int playerId);
     void placeNewArmiesOfPlayer(int playerId, int numOfNewArmies);
     void removeArmiesOfPlayer(int playerId, int numOfArmiesToRemove);
-    int displayCityInfo();
+    void displayCityInfo();
     void buildCity(int playerId);
-    vector<int> getNeighbors();
-    void addNeighbor(int neighborId, int distance);
-    int getDistance(int neighborId);
-    int getOwningPlayerId() const; // If this territory is not owned by anyone, return 0;
-
-    string toString() const;
+    int getControllingPlayerId(); // If this territory is not owned by anyone, return 0;
+    unordered_map<int, int>& getArmies();
+    unordered_map<int, int>& getCities();
     void printTerritory();
+    string toString() const;
 private:
     int id;
     string name;
     int continentId;
     unordered_map<int, int> armies; // playerId -> number of armies
-    unordered_map<int, bool> cities; // playerId -> whether this player has built city here
-    vector<int> neighbors;          // neighbor Id list
-    unordered_map<int, int> distance; // neighborId -> the distance to this neighbor (1 or 3).
+    unordered_map<int, int> cities; // playerId -> whether this player has built city here
 };
 
 class Continent{
 public:
-    ~Continent();
-    Continent(int id, string name, vector<Territory*> territories, vector<int> neighbors);
+    Continent(int id, string& name);
     Continent(const Continent&);
+    ~Continent();
     Continent& operator=(const Continent& continent);
     friend ostream& operator<<(ostream& out, const Continent& continent);
 
     int getId() const;
-    void setId(int id);
+    void setId(int newId);
     string getName() const;
-    void setName(string name);
+    void setName(string& newName);
     void addTerritory(Territory* territory);
-    void addNeighbor(int neighborContinentId);
     vector<int> getTerritoryIdList();
     Territory* getTerritoryById(int id) const;
-    int getOwningPlayerId() const; // If this continent is not owned by anyone, return 0;
+    int getControllingPlayerId() const; // If this continent is not owned by anyone, return 0;
 private:
     int id;
+    int mapId;
     string name;
     vector<Territory*> territories;
-    vector<int> neighbors;
 };
 
 
 class Map {
 public:
-    Map(vector<Territory*> territories);
-    Map(vector<Continent*> continents);
-    Map(vector<Continent*> continents, vector<Territory*> territories);
+    Map(int id, string& name);
     ~Map();
     Map(const Map&);
-    Map& operator=(const Map& map);
+    Map& operator=(const Map& secondMap);
     friend ostream& operator<<(ostream& out, const Map& map);
 
-    Territory* getTerritoryById(int id);
-    Continent* getContinentById(int id);
+    int getId() const;
+    void setId(int newId);
+    string getName() const;
+    void setName(string& newName);
+    vector<Continent*>& getContinents();
+    void addContinent(Continent* newContinent);
+    vector<Territory*>& getTerritories();
+    Territory* getTerritoryById(int territoryId);
+    Continent* getContinentById(int continentId);
+    vector<int>&
+    void addEdgesTerritory(int territoryId1, int territoryId2);
+    void getTerritoryNeighborsById(int territoryId);
+    void printTerritoryAdjacencyList();
+    void printContinentAdjacencyList();
     bool validate();
     bool checkTerritoryBelongsToOneContinent(Map* map);
-    void addEdgesTerritory(Territory *, Territory *);
-    void printMap();
+    Map* extend(Map* newMap);
 private:
+    int id;
+    string name;
     vector<Continent*> continents;
     vector<Territory*> territories;
     unordered_map<int, vector<int>> territoryAdjacencyList;  // territoryId -> list of it's neighbors id;
     unordered_map<int, vector<int>> continentAdjacencyList;  // continentId -> list of it's neighbors id;
     void dfsTerritories(vector<bool>& visited, int territoryId);
+    void dfsContinents(vector<bool>& visited, int continentId);
     bool validateTerritories();
     bool validateContinents();
 };

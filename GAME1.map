@@ -16,7 +16,7 @@ shape=L
 4 village 3
 5 mountain1 4
 6 mountain2 4
-//id, name, continent_id, connection
+//id, name, continent_id, connection, map_id
 [regions]
 1 volcano1_upper1 1 2 1
 2 volcano1_upper2 1 1,5
@@ -36,3 +36,5 @@ shape=L
 16 mountain1_upper 5 17 4,4
 17 mountain1_middle 5 16,18 4,4
 18 mountain2 6 17
+
+最后一列是map_id，有几个出口就重复了几次
