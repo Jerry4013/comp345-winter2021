@@ -37,10 +37,6 @@ public:
     void setRemainingCity(int city);
     int getRemainingCubes() const;
     void setRemainingCubes(int cubes);
-    int getNumberOfOwnedTerritories() const;
-    void setNumberOfOwnedTerritories(int ownedTerritories);
-    int getNumberOfOwnedContinents() const;
-    void setNumberOfOwnedContinents(int ownedContinents);
     vector<Territory *> getTerritories() const;
     void setTerritories(vector<Territory*>& territories);
     vector<Card*> getCards() const;
@@ -51,14 +47,12 @@ private:
     string firstName;
     string lastName;
     string color;
-    int biding;                     // 游戏开始时，该玩家愿意出多少钱
-    int coins;                      // 手上还有多少钱
-    int score;                      // 现在有多少分了
-    int remainingCity;              // 一共3个城，还有多少城可以用
-    int remainingCubes;             // 一共18个军队，还有多少军队可以用
-    int numberOfOwnedTerritories;   // 有多少地区是我占领的，能给我加分
-    int numberOfOwnedContinents;    // 有多少大陆是我占领的，能给我加分
-    vector<Territory*> territories; // 该玩家有兵或有城堡的区域
-    vector<Card*> cards;            // 该玩家手上所有的卡牌
+    int biding;
+    int coins;
+    int score;
+    int remainingCity;
+    int remainingCubes;
+    vector<Territory*> territories;
+    vector<Card*> cards;
 };
 

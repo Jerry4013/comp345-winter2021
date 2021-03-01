@@ -234,7 +234,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
         continentid= Territory_buffer[index]->getContinentId();
         this->GameMap->ReturnContinentHashMap()[continentid]->AddTerritory(Territory_buffer[index]);
         for(int regionid = 0;regionid<connection_vector_hashmap[index].size();regionid++){
-            this->GameMap->addEdgesTerritory(Territory_buffer[index],
+            this->GameMap->addTerritoryEdges(Territory_buffer[index],
                                              Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
         }
     }
@@ -281,8 +281,8 @@ MapLoader ::MapLoader(string filename): file(filename) {
         while(true){
             temp2=dist_out(mt)%out_nodes.size();
             if(out_nodes.at(temp2).second==map2){
-                this->GameMap->addEdgesTerritory(Territory_buffer[temp], Territory_buffer[out_nodes.at(temp2).first]);
-                this->GameMap->addEdgesTerritory(Territory_buffer[out_nodes.at(temp2).first], Territory_buffer[temp]);
+                this->GameMap->addTerritoryEdges(Territory_buffer[temp], Territory_buffer[out_nodes.at(temp2).first]);
+                this->GameMap->addTerritoryEdges(Territory_buffer[out_nodes.at(temp2).first], Territory_buffer[temp]);
                 out_nodes.erase(out_nodes.begin()+temp2);
                 break;
             }

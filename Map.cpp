@@ -2,31 +2,41 @@
 // Created by Luojia yan on 2021-02-07.
 //
 
-
 #include "Map.h"
 #include "iostream"
 #include <sstream>
+#include <unordered_map>
+#include <unordered_set>
+#include <iomanip>
+
 using namespace std;
 
 
-Territory::~Territory(){}
-Territory:: Territory(int id, string& newName, int continentId) {
+Territory::~Territory() {
+    // TODO: hashmap是否需要删除？
+}
+Territory::Territory(int id, string& newName, int continentId, int numOfPlayers) {
     this->id = id;
     this->name = newName;
     this->continentId = continentId;
+    for (int i = 0; i < numOfPlayers; ++i) {
+        armies[i + 1] = 0;
+        cities[i + 1] = 0;
+    }
 }
 
 Territory::Territory(const Territory& territory) {
-    name = territory.name;
+    // TODO:需要测试hashmap的深拷贝还是浅拷贝
     id = territory.id;
+    name = territory.name;
     continentId = territory.continentId;
     armies = territory.armies;
     cities = territory.cities;
 }
 
 Territory &Territory::operator=(const Territory &territory) {
-    name = territory.name;
     id = territory.id;
+    name = territory.name;
     continentId = territory.continentId;
     armies = territory.armies;
     cities = territory.cities;
@@ -34,7 +44,7 @@ Territory &Territory::operator=(const Territory &territory) {
 }
 
 ostream &operator<<(ostream &out, const Territory &territory) {
-    out << "Territory{ firstName=" << territory.name << "; ";
+    out << "Territory{ name=" << territory.name << "; ";
     out << "id=" << territory.id << "; ";
     out << "continentId=" << territory.continentId << "; ";
     out << "armies={";
@@ -127,36 +137,29 @@ int Territory::getControllingPlayerId() {
 }
 
 void Territory::printTerritory() {
-    // TODO: Print all the info of this territory in a table
-}
-
-
-string Territory::toString() const {
-    stringstream ss;
-    ss << "Territory{ firstName=" << name << "; ";
-    ss << "id=" << id << "; ";
-    ss << "continentId=" << continentId << "; ";
-    ss << "armies={";
+    cout << "Territory" << endl;
+    cout << "ID: " << id << "\tName: " << name << "\tContinent ID: " << continentId << endl;
+    cout << "------------------------------------------" << endl;
+    cout << setw(8) << "" << setw(10) << "Armies" << setw(10) << "Cities" << endl;
     for (const auto &[k, v] : armies) {
-        ss << "Armies[" << k << "] = " << v << " " << endl;
+        cout << "player " << k << setw(10) << v << setw(10) << cities[k] << endl;
     }
-    for (const auto &[k, v] : cities) {
-        ss << "Cities[" << k << "] = " << v << " " << endl;
-    }
-    return ss.str();
+    cout << "\n\n";
 }
 
-unordered_map<int, int> &Territory::getArmies() {
+map<int, int> &Territory::getArmies() {
     return armies;
 }
 
-unordered_map<int, int> &Territory::getCities() {
+map<int, int> &Territory::getCities() {
     return cities;
 }
 
-Continent::Continent(int id, string& name) {
+
+Continent::Continent(int id, string& name, int mapId) {
     this->id = id;
     this->name = name;
+    this->mapId = mapId;
 }
 
 Continent::Continent(const Continent& continent) {
@@ -204,6 +207,14 @@ void Continent::setName(string& newName) {
     name = newName;
 }
 
+int Continent::getMapId() const {
+    return mapId;
+}
+
+void Continent::setMapId(int newMapId) {
+    this->mapId = newMapId;
+}
+
 void Continent::addTerritory(Territory* Territory) {
     territories.emplace_back(Territory);
 }
@@ -216,9 +227,24 @@ vector<int> Continent::getTerritoryIdList() {
     return list;
 }
 
-Territory *Continent::getTerritoryById(int id) const {
+void Continent::printContinent() {
+    vector<int> territoryIdList = getTerritoryIdList();
+    cout << "Continent" << endl;
+    cout << "ID: " << id << "\tName: " << name << "\tMap ID: " << mapId << endl;
+    cout << "------------------------------------------" << endl;
+    cout << "Territories: [";
+    for (int i = 0; i < territoryIdList.size(); ++i) {
+        cout << territoryIdList[i];
+        if (i != territoryIdList.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << "]\n\n" << endl;
+}
+
+Territory *Continent::getTerritoryById(int territoryId) const {
     for (auto & territory : territories) {
-        if (territory->getId() == id) {
+        if (territory->getId() == territoryId) {
             return territory;
         }
     }
@@ -252,20 +278,22 @@ Map::Map(int id, string& name) {
     this->name = name;
 }
 
-Map::~Map() {}
+Map::~Map() {
+    // TODO: unordered_map和vector是否需要删除？
+}
 
 
 Map::Map(const Map& secondMap) {
-
+    // TODO
 }
 
 Map &Map::operator=(const Map &secondMap) {
-
-
+    // TODO
     return *this;
 }
 
 ostream &operator<<(ostream &out, const Map &outputMap) {
+    // TODO
     out << "Map{ firstName=" << "; ";
     out << "continents=[";
 
@@ -319,89 +347,198 @@ Continent *Map::getContinentById(int continentId) {
     return nullptr;
 }
 
-
-void Map::validate(Map* map){
-    if(checkTerritoryBelongsToOneContinent(map)) {
-        cout << endl << "Each country belongs to one and only one continent" << endl;
-    } else {
-        cout << "Each country does not belong only one continent" << endl;
-    }
-    if(validateTerritory()) {
-        cout << "The map is connected graph" << endl;
-    } else {
-        cout << "The map is not connected graph" << endl;
-    }
-    if(validateContinent()) {
-        cout << "The Continent graph is connected graph" << endl;
-    } else {
-        cout << "The Continent graph is not connected graph" << endl;
-    }
+vector<int> &Map::getTerritoryNeighborsById(int territoryId) {
+    return territoryAdjacencyList[territoryId];
 }
 
+vector<int> &Map::getContinentNeighborsById(int continentId) {
+    return continentAdjacencyList[continentId];
+}
 
-bool Map::checkTerritoryBelongsToOneContinent(Map* map) {
-    int error = 0;
-    for(int i = 1; i <= continentMatrix.size(); i++) {
-        Continent* continent = map->ReturnContinentHashMap()[i];
-        string continentName = continent->getName();
-        vector<Territory*> territories = continent->getTerritories();
-        for(int j = 0; j < territories.size(); j++) {
-            int continentNumber = territories[j]->getContinentId();
-            string territoryName = territories[j]->getName();
-            if (continentNumber != 0) {
-                cout << territoryName << " only belongs to  " << continentName << endl;
-            } else {
-                error++;
-                cout << territoryName << " does not belong to any continent "<< endl;
-            }
+bool Map::edgeExists(int territoryId1, int territoryId2) {
+    if (territoryAdjacencyList.find(territoryId1) == territoryAdjacencyList.end() ||
+        territoryAdjacencyList.find(territoryId2) == territoryAdjacencyList.end()) {
+        return false;
+    }
+    vector<int> neighborsOfTerritory1 = territoryAdjacencyList[territoryId1];
+    for (int neighbor : neighborsOfTerritory1) {
+        if (neighbor == territoryId2) {
+            return true;
         }
     }
-    return error == 0;
+    return false;
 }
 
-void Map::addEdgesTerritory(int territoryId1, int territoryId2) {
-
-}
-
-bool Map::dfsValidate() {
-    int numberOfTerritory = territoryMatrix.size();
-    unordered_map<int, vector<int>> neighborsMap;
-    for (int i = 0; i < territoryMatrix.size(); i++) {
-        vector<int> neighbors;
-        for (int j = 0; j < territoryMatrix.size(); j++) {
-            if (territoryMatrix[i][j]) {
-                neighbors.push_back(j + 1);
-            }
-        }
-        neighborsMap[i + 1] = neighbors;
+void Map::addTerritoryEdges(int territoryId1, int territoryId2) {
+    if (edgeExists(territoryId1, territoryId2)) {
+        return;
     }
-    vector<bool> visited(numberOfTerritory, false);
-    dfsTerritories(neighborsMap, visited, 1);
-    for (int i = 0; i < visited.size(); i++) {
-        if (!visited[i]) {
-            cout << "DFS: This is not a connected map." << endl;
+    if (territoryAdjacencyList.find(territoryId1) == territoryAdjacencyList.end()) {
+        vector<int> neighborsOfTerritory1;
+        neighborsOfTerritory1.emplace_back(territoryId2);
+        territoryAdjacencyList[territoryId1] = neighborsOfTerritory1;
+    } else {
+        territoryAdjacencyList[territoryId1].emplace_back(territoryId2);
+    }
+    if (territoryAdjacencyList.find(territoryId2) == territoryAdjacencyList.end()) {
+        vector<int> neighborsOfTerritory2;
+        neighborsOfTerritory2.emplace_back(territoryId1);
+        territoryAdjacencyList[territoryId2] = neighborsOfTerritory2;
+    } else {
+        territoryAdjacencyList[territoryId2].emplace_back(territoryId1);
+    }
+    addContinentEdges(territoryId1, territoryId2);
+}
+
+bool Map::continentEdgeExists(int continentId1, int continentId2) {
+    if (continentAdjacencyList.find(continentId1) == continentAdjacencyList.end() ||
+        continentAdjacencyList.find(continentId2) == continentAdjacencyList.end()) {
+        return false;
+    }
+    vector<int> neighborsOfContinent1 = continentAdjacencyList[continentId1];
+    for (int neighbor : neighborsOfContinent1) {
+        if (neighbor == continentId2) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Map::addContinentEdges(int territoryId1, int territoryId2) {
+    int continentId1 = getTerritoryById(territoryId1)->getContinentId();
+    int continentId2 = getTerritoryById(territoryId2)->getContinentId();
+    if (continentEdgeExists(continentId1, continentId2)) {
+        return;
+    }
+    if (continentAdjacencyList.find(continentId1) == continentAdjacencyList.end()) {
+        vector<int> neighborsOfContinent1;
+        neighborsOfContinent1.emplace_back(continentId2);
+        continentAdjacencyList[continentId1] = neighborsOfContinent1;
+    } else {
+        continentAdjacencyList[continentId1].emplace_back(continentId2);
+    }
+    if (continentAdjacencyList.find(continentId2) == continentAdjacencyList.end()) {
+        vector<int> neighborsOfContinent2;
+        neighborsOfContinent2.emplace_back(territoryId1);
+        continentAdjacencyList[continentId2] = neighborsOfContinent2;
+    } else {
+        continentAdjacencyList[continentId2].emplace_back(continentId1);
+    }
+}
+
+void Map::addMultiEdges(int territoryId1, vector<int> &neighbors) {
+    //TODO: 方便给一个territory一次性添加多条边
+}
+
+int Map::getDistance(int territoryId1, int territoryId2) {
+    if (territoryAdjacencyList.find(territoryId1) == territoryAdjacencyList.end()) {
+        return -1;
+    }
+    int continentId1 = getTerritoryById(territoryId1)->getContinentId();
+    int continentId2 = getTerritoryById(territoryId2)->getContinentId();
+    if (continentId1 == continentId2) {
+        return 1;
+    }
+    return 3;
+}
+
+void Map::printTerritoryAdjacencyList() {
+    //TODO
+}
+
+void Map::printContinentAdjacencyList() {
+    //TODO
+}
+
+bool Map::validate() {
+    if(checkTerritoryBelongsToOneContinent() && validateTerritories() && validateContinents()) {
+        cout << "This map is valid." << endl;
+        return true;
+    }
+    cout << "This map is not valid." << endl;
+    return false;
+}
+
+bool Map::checkTerritoryBelongsToOneContinent() {
+    for (auto & territory : territories) {
+        if (getContinentById(territory->getContinentId()) == nullptr) {
+            cout << territory->getName() << " does not belong any continent." << endl;
             return false;
         }
     }
-    cout << "DFS: This is a connected map." << endl;
+    unordered_set<int> allTerritories;
+    for (auto & continent : continents) {
+        vector<int> territoryIdList = continent->getTerritoryIdList();
+        for (int territoryId : territoryIdList) {
+            if (allTerritories.find(territoryId) != allTerritories.end()) {
+                cout << getTerritoryById(territoryId)->getName() << " belongs to more than one continent! Error!" << endl;
+                return false;
+            }
+            allTerritories.insert(territoryId);
+        }
+    }
+    cout << "Each territory belongs to one and only one continent." << endl;
+    return allTerritories.size() == territories.size();
+}
+
+bool Map::validateTerritories() {
+    int numberOfTerritory = territories.size();
+    if (numberOfTerritory == 0) {
+        return true;
+    }
+    unordered_map<int, bool> visited;
+    for (auto & territory : territories) {
+        visited[territory->getId()] = false;
+    }
+    dfsTerritories(visited, territories[0]->getId());
+    for (const auto &[k, v] : visited) {
+        if (!v) {
+            cout << "DFS for Territories: This is not a connected map." << endl;
+            return false;
+        }
+    }
+    cout << "DFS for Territories: This is a connected map." << endl;
     return true;
 }
 
-void Map::dfs(unordered_map<int, vector<int> >& neighborsMap, vector<bool> &visited, int territoryNumber) {
-    if (visited[territoryNumber - 1]) {
+bool Map::validateContinents() {
+    int numberOfContinents = continents.size();
+    if (numberOfContinents == 0) {
+        return true;
+    }
+    unordered_map<int, bool> visited;
+    for (auto & continent : continents) {
+        visited[continent->getId()] = false;
+    }
+    dfsContinents(visited, continents[0]->getId());
+    for (const auto &[k, v] : visited) {
+        if (!v) {
+            cout << "DFS for Continents: This is not a connected map." << endl;
+            return false;
+        }
+    }
+    cout << "DFS for Continents: This is a connected map." << endl;
+    return true;
+}
+
+void Map::dfsTerritories(unordered_map<int, bool> &visited, int territoryId) {
+    if (visited[territoryId]) {
         return;
     }
-    visited[territoryNumber - 1] = true;
-    vector<int> neighbors = neighborsMap.at(territoryNumber);
-    for (int i = 0; i < neighbors.size(); i++) {
-        dfsTerritories(neighborsMap, visited, neighbors[i]);
+    visited[territoryId] = true;
+    vector<int> neighbors = territoryAdjacencyList[territoryId];
+    for (int neighbor : neighbors) {
+        dfsTerritories(visited, neighbor);
     }
 }
 
-
-
-
-
-
-
-
+void Map::dfsContinents(unordered_map<int, bool> &visited, int continentId) {
+    if (visited[continentId]) {
+        return;
+    }
+    visited[continentId] = true;
+    vector<int> neighbors = continentAdjacencyList[continentId];
+    for (int neighbor : neighbors) {
+        dfsContinents(visited, neighbor);
+    }
+}

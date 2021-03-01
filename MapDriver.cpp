@@ -61,18 +61,18 @@ int mapDriver::main() {
     continent5.AddTerritory(T5);
     continent6.AddTerritory(T6);
 
-    testMap.addEdgesTerritory(T0, T1);
-    testMap.addEdgesTerritory(T1, T0);
-    testMap.addEdgesTerritory(T1, T2);
-    testMap.addEdgesTerritory(T2, T1);
-    testMap.addEdgesTerritory(T2, T3);
-    testMap.addEdgesTerritory(T3, T2);
-    testMap.addEdgesTerritory(T3, T4);
-    testMap.addEdgesTerritory(T4, T3);
-    testMap.addEdgesTerritory(T4, T5);
-    testMap.addEdgesTerritory(T5, T4);
-    testMap.addEdgesTerritory(T5, T6);
-    testMap.addEdgesTerritory(T6, T5);
+    testMap.addTerritoryEdges(T0, T1);
+    testMap.addTerritoryEdges(T1, T0);
+    testMap.addTerritoryEdges(T1, T2);
+    testMap.addTerritoryEdges(T2, T1);
+    testMap.addTerritoryEdges(T2, T3);
+    testMap.addTerritoryEdges(T3, T2);
+    testMap.addTerritoryEdges(T3, T4);
+    testMap.addTerritoryEdges(T4, T3);
+    testMap.addTerritoryEdges(T4, T5);
+    testMap.addTerritoryEdges(T5, T4);
+    testMap.addTerritoryEdges(T5, T6);
+    testMap.addTerritoryEdges(T6, T5);
 
     testMap.PrintContinentMatrix();
     testMap.PrintTerritoryMatrix();
@@ -124,14 +124,14 @@ int mapDriver::main() {
     continent5_2.AddTerritory(T5_2);
     continent6_2.AddTerritory(T6_2);
 
-    testMap2.addEdgesTerritory(T0_2, T1_2);
-    testMap2.addEdgesTerritory(T1_2, T0_2);
-    testMap2.addEdgesTerritory(T1_2, T2_2);
-    testMap2.addEdgesTerritory(T2_2, T1_2);
-    testMap2.addEdgesTerritory(T4_2, T5_2);
-    testMap2.addEdgesTerritory(T5_2, T4_2);
-    testMap2.addEdgesTerritory(T5_2, T6_2);
-    testMap2.addEdgesTerritory(T6_2, T5_2);
+    testMap2.addTerritoryEdges(T0_2, T1_2);
+    testMap2.addTerritoryEdges(T1_2, T0_2);
+    testMap2.addTerritoryEdges(T1_2, T2_2);
+    testMap2.addTerritoryEdges(T2_2, T1_2);
+    testMap2.addTerritoryEdges(T4_2, T5_2);
+    testMap2.addTerritoryEdges(T5_2, T4_2);
+    testMap2.addTerritoryEdges(T5_2, T6_2);
+    testMap2.addTerritoryEdges(T6_2, T5_2);
     
     testMap2.PrintContinentMatrix();
     testMap2.PrintTerritoryMatrix();
