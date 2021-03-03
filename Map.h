@@ -13,9 +13,9 @@ using namespace std;
 
 class Territory {
 public:
+    Territory(int id, string& newName, int continentId, int numOfPlayers);
     ~Territory();
     Territory(const Territory&);
-    Territory(int id, string& newName, int continentId, int numOfPlayers);
     Territory& operator=(const Territory& secondTerritory);
     friend ostream& operator<<(ostream& out, const Territory& territory);
 
@@ -48,8 +48,8 @@ private:
 class Continent{
 public:
     Continent(int id, string& name, int mapId);
-    Continent(const Continent&);
     ~Continent();
+    Continent(const Continent&);
     Continent& operator=(const Continent& continent);
     friend ostream& operator<<(ostream& out, const Continent& continent);
 
@@ -87,6 +87,7 @@ public:
     vector<Continent*>& getContinents();
     void addContinent(Continent* newContinent);
     vector<Territory*>& getTerritories();
+    void addTerritory(Territory* newTerritory);
     Territory* getTerritoryById(int territoryId);
     Continent* getContinentById(int continentId);
     vector<int>& getTerritoryNeighborsById(int territoryId);
@@ -99,13 +100,14 @@ public:
     void printContinentAdjacencyList();
     bool validate();
     bool checkTerritoryBelongsToOneContinent();
+    Map* extend(Map* secondMap, int port1, int port2, int newId, string& newName);
 private:
     int id;
     string name;
     vector<Territory*> territories;
     vector<Continent*> continents;
-    unordered_map<int, vector<int>> territoryAdjacencyList;  // territoryId -> list of it's neighbors id;
-    unordered_map<int, vector<int>> continentAdjacencyList;  // continentId -> list of it's neighbors id;
+    map<int, vector<int>> territoryAdjacencyList;  // territoryId -> list of it's neighbors id;
+    map<int, vector<int>> continentAdjacencyList;  // continentId -> list of it's neighbors id;
     bool continentEdgeExists(int continentId1, int continentId2);
     void addContinentEdges(int territoryId1, int territoryId2);
     void dfsTerritories(unordered_map<int, bool> &visited, int territoryId);

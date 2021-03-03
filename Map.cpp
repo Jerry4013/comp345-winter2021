@@ -6,15 +6,13 @@
 #include "iostream"
 #include <sstream>
 #include <unordered_map>
+#include <map>
 #include <unordered_set>
 #include <iomanip>
 
 using namespace std;
 
 
-Territory::~Territory() {
-    // TODO: hashmap是否需要删除？
-}
 Territory::Territory(int id, string& newName, int continentId, int numOfPlayers) {
     this->id = id;
     this->name = newName;
@@ -25,8 +23,11 @@ Territory::Territory(int id, string& newName, int continentId, int numOfPlayers)
     }
 }
 
+Territory::~Territory() {
+    // No pointer to delete;
+}
+
 Territory::Territory(const Territory& territory) {
-    // TODO:需要测试hashmap的深拷贝还是浅拷贝
     id = territory.id;
     name = territory.name;
     continentId = territory.continentId;
@@ -279,12 +280,17 @@ Map::Map(int id, string& name) {
 }
 
 Map::~Map() {
-    // TODO: unordered_map和vector是否需要删除？
+    // All the pointers are not created in the constructor.
 }
 
 
 Map::Map(const Map& secondMap) {
-    // TODO
+    id = secondMap.id;
+    name = secondMap.name;
+    territories = secondMap.territories;
+    continents = secondMap.continents;
+    territoryAdjacencyList = secondMap.territoryAdjacencyList;
+    continentAdjacencyList = secondMap.continentAdjacencyList;
 }
 
 Map &Map::operator=(const Map &secondMap) {
@@ -327,6 +333,10 @@ void Map::addContinent(Continent *newContinent) {
 
 vector<Territory *> &Map::getTerritories() {
     return territories;
+}
+
+void Map::addTerritory(Territory* newTerritory) {
+    territories.emplace_back(newTerritory);
 }
 
 Territory *Map::getTerritoryById(int territoryId) {
@@ -407,9 +417,10 @@ bool Map::continentEdgeExists(int continentId1, int continentId2) {
 void Map::addContinentEdges(int territoryId1, int territoryId2) {
     int continentId1 = getTerritoryById(territoryId1)->getContinentId();
     int continentId2 = getTerritoryById(territoryId2)->getContinentId();
-    if (continentEdgeExists(continentId1, continentId2)) {
+    if (continentId1 == continentId2 || continentEdgeExists(continentId1, continentId2)) {
         return;
     }
+    // TODO: 有bug，不能添加自己
     if (continentAdjacencyList.find(continentId1) == continentAdjacencyList.end()) {
         vector<int> neighborsOfContinent1;
         neighborsOfContinent1.emplace_back(continentId2);
@@ -443,11 +454,35 @@ int Map::getDistance(int territoryId1, int territoryId2) {
 }
 
 void Map::printTerritoryAdjacencyList() {
-    //TODO
+    cout << "Territory neighbors:" << endl;
+    cout << "------------------------------------------" << endl;
+    for (const auto &[k, v] : territoryAdjacencyList) {
+        cout << "Territory " << k << " -> [";
+        for (int i = 0; i < v.size(); i++) {
+            cout << v[i];
+            if (i != v.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << "]" << endl;
+    }
+    cout << "\n\n" << endl;
 }
 
 void Map::printContinentAdjacencyList() {
-    //TODO
+    cout << "Continent neighbors:" << endl;
+    cout << "------------------------------------------" << endl;
+    for (const auto &[k, v] : continentAdjacencyList) {
+        cout << "Continent " << k << " -> [";
+        for (int i = 0; i < v.size(); i++) {
+            cout << v[i];
+            if (i != v.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << "]" << endl;
+    }
+    cout << "\n\n" << endl;
 }
 
 bool Map::validate() {
@@ -541,4 +576,14 @@ void Map::dfsContinents(unordered_map<int, bool> &visited, int continentId) {
     for (int neighbor : neighbors) {
         dfsContinents(visited, neighbor);
     }
+}
+
+Map* Map::extend(Map* secondMap, int port1, int port2, int newId, string& newName) {
+    // TODO: 函数内部新建对象，怎么销毁？能不能传出去？
+    Map* largerMap = new Map(newId, newName);
+    largerMap->territories = territories;
+    for (auto & territory : secondMap->getTerritories()) {
+        largerMap->territories.emplace_back(territory);
+    }
+    return largerMap;
 }
