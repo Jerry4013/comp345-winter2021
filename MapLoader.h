@@ -31,7 +31,7 @@ public:
     static Map* loadMap(string& filePath); // 生成Map对象后，要使用Map里的validate方法，验证地图的合法性
 
     // TODO: 需要两个map文件，一个叫lshape.map,另一个叫rectangular.map
-
+    // TODO: 建议直接使用json格式文件解析数据，不需要逐行读取txt文本。
 private:
 
     // TODO: 以下属性均可删除，所有逻辑都放在两个static方法中。
