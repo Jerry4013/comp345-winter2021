@@ -1,9 +1,9 @@
 //
-// Created by jerry on 2/26/2021.
+// Created by jingyi on 3/5/2021.
 //
 
-#ifndef COMP345_WINTER2021_GAME_H
-#define COMP345_WINTER2021_GAME_H
+#ifndef COMP345_WINTER2021_GAMESTART_H
+#define COMP345_WINTER2021_GAMESTART_H
 #include "Map.h"
 #include "MapLoader.h"
 #include "Player.h"
@@ -13,15 +13,12 @@
 #include <filesystem>
 
 
-class Game {
+class GameStart {
 public:
-    Game();
-    Game(int numOfPlayer);
-    ~Game();
-    void start();
-    void startup();
-    void play();
-    void computeScore();
+    GameStart();
+    GameStart(int numOfPlayer);
+    ~GameStart();
+    static void start();
 
 private:
     int numOfPlayer;

@@ -1,8 +1,8 @@
 //
-// Created by jerry on 2/26/2021.
+// Created by jingyi on 3/5/2021.
 //
 
-#include "Game.h"
+#include "GameStart.h"
 
 Game::Game() {
     numOfPlayer = 2;
@@ -33,6 +33,8 @@ void Game::start() {
    	}
    	MapLoader *ml = new MapLoader();
 	int filepathoption=-1;
+
+	//Map selection
    	while(true){
    		try{
    			cout << "Please chose your game map"<<endl;
@@ -50,14 +52,43 @@ void Game::start() {
    				break;
    			}
    			filepath=path+mapfiles[filepathoption-1];
-   			ml.loadMap(filepath);
+   			this->map=ml.loadMap(filepath);
    			break;
    		}
    		catch(const std::string e) {
         	cout << e<<endl;
    		}
    	}
-}
+
+   	//Player creation
+   	string name;
+    int biding;
+    int coins;
+    Territory territory1("territory1", 1, 1);
+    Territory territory2("territory2", 2, 2);
+
+    cout << "Enter player firstName: ";
+    cin >> name;
+    cout << "Enter biding coins: ";
+    cin >> biding;
+    cout << "Enter initial coins: ";
+    cin >> coins;
+    vector<Territory*> territories;
+    territories.push_back(&territory1);
+    territories.push_back(&territory2);
+    Player userCreatedPlayer1(name, biding, coins, territories);
+
+    cout << "Enter player firstName: ";
+    cin >> name;
+    cout << "Enter biding coins: ";
+    cin >> biding;
+    cout << "Enter initial coins: ";
+    cin >> coins;
+    vector<Territory*> territories;
+    territories.push_back(&territory1);
+    territories.push_back(&territory2);
+    Player userCreatedPlayer2(name, biding, coins, territories);
+}	
 
 void Game::startup() {
 

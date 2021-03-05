@@ -13,26 +13,24 @@
 using namespace std;
 
 MapLoader::MapLoader() {
-    this->GameMap= nullptr;
-    this->lshape=false;
-    this->number_of_mapboard=0;
-    this->number_of_regions=0;
-    this->number_of_continents=0;
-    this->mapboard_order="";
+    this->MapPtr=nullptr;
+    this->lshape="";
+    this->counter=0;
 }
 
-MapLoader::MapLoader(MapLoader *ml): file(ml->file) {
-    this->GameMap=ml->GameMap;
+MapLoader::MapLoader(MapLoader *ml) {
+    this->MapPtr=ml->MapPtr;
     this->lshape=ml->lshape;
-    this->number_of_mapboard=ml->number_of_mapboard;
-    this->number_of_regions=ml->number_of_regions;
-    this->number_of_continents=ml->number_of_continents;
-    this->mapboard_order=ml->mapboard_order;
+    this->counter=ml->counter;
 }
 
-// TODO： 函数太长了，可以分割出去一些内容作为private method
-MapLoader ::MapLoader(string filename): file(filename) {
+MapLoader ::~MapLoader() {
+    delete this->MapPtr;
+    this->MapPtr= nullptr;
+}
 
+MapLoader::loadMap(string& filePath){
+    this->counter++;
     string line;
     ifstream map_file (filename);
     vector<string> regions_buffer,continent_buffer,map_buffer;
@@ -40,13 +38,13 @@ MapLoader ::MapLoader(string filename): file(filename) {
 
     //Look for these tokens in map file
     const string mapboard="numberofmapboards=",continent="numberofcontinents=",region="numberofregions=";
-
+    string mapboard_order;
+    int number_of_mapboard=-1,number_of_regions=-1,number_of_continents=-1;
     /*
      * Read map file and store string data in vector<string>
      * If any information is missing, the program will throw an exception
      */
-    if (map_file.is_open())
-    {
+    if (map_file.is_open()){
         while ( getline (map_file,line) )
         {
             //change all characters to lowercase
@@ -56,7 +54,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
             //must have map board data
             if(line.find(mapboard)!=string::npos){
                 try{
-                    this->number_of_mapboard=stoi(line.substr(mapboard.size(),line.size()),nullptr,10);
+                    number_of_mapboard=stoi(line.substr(mapboard.size(),line.size()),nullptr,10);
                 }
                 catch (std::exception& e){
                     throw std::string("Cannot convert string to integer for mapboard");
@@ -65,7 +63,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
             }
             else if(line.find(continent)!=string::npos){
                 try{
-                    this->number_of_continents=stoi(line.substr(continent.size(),line.size()),nullptr,10);
+                    number_of_continents=stoi(line.substr(continent.size(),line.size()),nullptr,10);
                 }
                 catch (std::exception& e){
                     throw std::string("Cannot convert string to integer for continent");
@@ -73,7 +71,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
             }
             else if(line.find(region)!=string::npos){
                 try{
-                    this->number_of_regions=stoi(line.substr(region.size(),line.size()), nullptr,10);
+                    number_of_regions=stoi(line.substr(region.size(),line.size()), nullptr,10);
                 }
                 catch (std::exception& e){
                     throw std::string("Cannot convert string to integer for regions");
@@ -120,18 +118,10 @@ MapLoader ::MapLoader(string filename): file(filename) {
     }
     else
         throw std::string("Map file does not exist in the path"); //if the program cannot open the file throw error message;
+    
+    validateMapFile(map_buffer,continent_buffer,regions_buffer,number_of_mapboard,number_of_continents,number_of_regions);
 
-    /*
-     * Make sure all the required data are retrieved from map file
-     */
-    if(number_of_regions==-1 || number_of_continents==-1
-       || number_of_mapboard==-1 )
-        throw std::string("Missing number of regions, continents or mapboard");
-    else if(number_of_regions!=regions_buffer.size() || number_of_continents!=continent_buffer.size()
-            || number_of_mapboard!=map_buffer.size())
-        throw std::string("Unmatched number of data");
-
-    this->GameMap = new Map("Game 1",number_of_continents,number_of_regions);
+    Map* GameMap = new Map(this->counter, "GAME "+to_string(this->counter));
     string deliminater = " ";
     string token;
     string temp;
@@ -156,7 +146,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
 
     /*
      * processing [continents] data
-     * Retrieve continentid and continent firstName, and mapid that it belongs to.
+     * Retrieve continentid and continent name, and mapid that it belongs to.
      */
     for(int i=0;i<continent_buffer.size();i++){
         temp=continent_buffer.at(i);
@@ -169,13 +159,14 @@ MapLoader ::MapLoader(string filename): file(filename) {
         if(continentid<0 || continentid>number_of_continents)
             throw std::string("continent id is invalid");
 
-        //Second entry is continent firstName
-        this->GameMap->AddContinent(new Continent(vector_temp[1],continentid));
-
         //Third entry is map board id
         mapid=stoi(vector_temp[2], nullptr,10);
         if(mapid<0 || mapid>number_of_mapboard)
             throw std::string("map board id is invalid");
+
+        //Second entry is continent name
+        GameMap->addContinent(new Continent(continentid,vector_temp[1],mapid));
+
         vector_temp.clear();
     }
 
@@ -204,16 +195,26 @@ MapLoader ::MapLoader(string filename): file(filename) {
             throw std::string("Territory/region id is invalid");
         connection_vector_hashmap.insert(std::make_pair(regionid,vector<int>()));
 
-        //Second entry, region firstName
+        //Second entry, region name
         //Thrid entry, continentid
         continentid=stoi(vector_temp[2], nullptr,10);
         if(continentid<0 || continentid>number_of_continents)
             throw std::string("Continent id is invalid");
 
-        Territory_buffer.insert(make_pair(regionid,new Territory(vector_temp[1],regionid,continentid)));
+        //Territory_buffer.insert(make_pair(regionid,new Territory(vector_temp[1],regionid,continentid)));
 
         //Fourth entry, connected node
         this->split(vector_temp[3],deliminater_comma,connection_vector_hashmap[regionid]);
+
+        /*
+        * Build map object
+        * Add each territory and
+        * for each connected nodes, add edges and 
+        */
+        GameMap->addTerritory(new Territory(regionid, vector_temp[1], continentid, 2))
+        for (int i = 0;i<connection_vector_hashmap[regionid].size();i++) {
+            GameMap->addTerritoryEdges(regionid,connection_vector_hashmap[regionid][i]);
+        }
 
         //Fifth entry, if out nodes
         if(vector_temp.size()==5){
@@ -226,18 +227,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
         vector_temp.clear();
     }
 
-    /*
-     * Build map object
-     * For each connected nodes, add edges
-     */
-    for(int index=1;index<=number_of_regions;index++){
-        continentid= Territory_buffer[index]->getContinentId();
-        this->GameMap->ReturnContinentHashMap()[continentid]->AddTerritory(Territory_buffer[index]);
-        for(int regionid = 0;regionid<connection_vector_hashmap[index].size();regionid++){
-            this->GameMap->addTerritoryEdges(Territory_buffer[index],
-                                             Territory_buffer[connection_vector_hashmap[index].at(regionid)]);
-        }
-    }
+    
 
     connection_vector_hashmap.clear();
 
@@ -261,7 +251,7 @@ MapLoader ::MapLoader(string filename): file(filename) {
         }
         else{
             maporder.push_back(temp);
-            this->mapboard_order+=to_string(temp);
+            mapboard_order+=to_string(temp);
         }
     }
 
@@ -281,8 +271,8 @@ MapLoader ::MapLoader(string filename): file(filename) {
         while(true){
             temp2=dist_out(mt)%out_nodes.size();
             if(out_nodes.at(temp2).second==map2){
-                this->GameMap->addTerritoryEdges(Territory_buffer[temp], Territory_buffer[out_nodes.at(temp2).first]);
-                this->GameMap->addTerritoryEdges(Territory_buffer[out_nodes.at(temp2).first], Territory_buffer[temp]);
+                GameMap->addTerritoryEdges(Territory_buffer[temp],Territory_buffer[out_nodes.at(temp2).first]);
+                GameMap->addTerritoryEdges(Territory_buffer[out_nodes.at(temp2).first],Territory_buffer[temp]);
                 out_nodes.erase(out_nodes.begin()+temp2);
                 break;
             }
@@ -293,28 +283,28 @@ MapLoader ::MapLoader(string filename): file(filename) {
     out_nodes.clear();
     mapoutnodes.clear();
     maporder.clear();
-
-}
-
-MapLoader ::~MapLoader() {
-    delete this->GameMap;
-    this->GameMap= nullptr;
+    this->MapPtr=GameMap;
+    return GameMap;
 }
 
 std::ostream& operator<<(ostream& output, MapLoader * mapLoader) {
 
     //Print the shape of map, map board, number of continents, number of node
-    //number of regions
-    output<< "MapLoader is loading game board from:"<<endl;
-    output<<mapLoader->getFile()<<"."<<endl;
-    if(mapLoader->getLshape())
-        output<<"This Map is L shaped."<<endl;
+    // //number of regions
+    // output<< "MapLoader is loading game board from:"<<endl;
+    // output<<mapLoader->getFile()<<"."<<endl;
+    // if(mapLoader->getLshape())
+    //     output<<"This Map is L shaped."<<endl;
+    // else
+    //     output<<"This Map is long rectangle shaped."<<endl;
+    // output << "The map has " << mapLoader->getNumberofmapboard() <<" map boards"<<endl;
+    // output << "The number of continents: "<<mapLoader->getNumberofcontinents()<<endl;
+    // output << "The number of territory: "<<mapLoader->getNumberofregions()<<endl;
+    // output << "The map board order: "<<mapLoader->mapboard_order<<endl;
+    if(this->MapPtr==nullptr)
+        output<< "MapLoader did not load any map"<<endl;
     else
-        output<<"This Map is long rectangle shaped."<<endl;
-    output << "The map has " << mapLoader->getNumberofmapboard() <<" map boards"<<endl;
-    output << "The number of continents: "<<mapLoader->getNumberofcontinents()<<endl;
-    output << "The number of territory: "<<mapLoader->getNumberofregions()<<endl;
-    output << "The map board order: "<<mapLoader->mapboard_order<<endl;
+        output<< "MapLoader loaded " << this->counter<<" maps."<<endl;
     return output;
 }
 
@@ -326,6 +316,18 @@ MapLoader &MapLoader::operator=(const MapLoader &ml) {
     this->number_of_regions=ml.number_of_regions;
     this->number_of_continents=ml.number_of_continents;
     return *this;
+}
+
+void MapLoader:: validateMapFile(vector<string> map_buffer,vector<string> continent_buffer,vector<string> regions_buffer){
+    /*
+     * Make sure all the required data are retrieved from map file
+     */
+    if(number_of_regions==-1 || number_of_continents==-1
+       || number_of_mapboard==-1 )
+        throw std::string("Missing number of regions, continents or mapboard");
+    else if(number_of_regions!=regions_buffer.size() || number_of_continents!=continent_buffer.size()
+            || number_of_mapboard!=map_buffer.size())
+        throw std::string("Unmatched number of data");
 }
 
 //Split into string vector
