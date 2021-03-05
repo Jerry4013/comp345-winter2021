@@ -294,16 +294,58 @@ Map::Map(const Map& secondMap) {
 }
 
 Map &Map::operator=(const Map &secondMap) {
-    // TODO
+    id = secondMap.id;
+    name = secondMap.name;
+    territories = secondMap.territories;
+    continents = secondMap.continents;
+    territoryAdjacencyList = secondMap.territoryAdjacencyList;
+    continentAdjacencyList = secondMap.continentAdjacencyList;
     return *this;
 }
 
 ostream &operator<<(ostream &out, const Map &outputMap) {
-    // TODO
-    out << "Map{ firstName=" << "; ";
-    out << "continents=[";
-
-    out << "]}";
+    out << "Map" << endl;
+    out << "ID: " << outputMap.id << "\tName: " << outputMap.name << endl;
+    out << "------------------------------------------" << endl;
+    out << "Territories: [";
+    for (int i = 0; i < outputMap.territories.size(); ++i) {
+        out << outputMap.territories[i]->getId();
+        if (i != outputMap.territories.size() - 1) {
+            out << ", ";
+        }
+    }
+    out << "]\n" << endl;
+    out << "Continents: [";
+    for (int i = 0; i < outputMap.continents.size(); ++i) {
+        out << outputMap.continents[i]->getId();
+        if (i != outputMap.continents.size() - 1) {
+            out << ", ";
+        }
+    }
+    out << "]\n" << endl;
+    out << "Territory neighbors:" << endl;
+    for (const auto &[k, v] : outputMap.territoryAdjacencyList) {
+        out << k << " -> [";
+        for (int i = 0; i < v.size(); i++) {
+            out << v[i];
+            if (i != v.size() - 1) {
+                out << ", ";
+            }
+        }
+        out << "]" << endl;
+    }
+    out << "\nContinent neighbors:" << endl;
+    for (const auto &[k, v] : outputMap.continentAdjacencyList) {
+        out << k << " -> [";
+        for (int i = 0; i < v.size(); i++) {
+            out << v[i];
+            if (i != v.size() - 1) {
+                out << ", ";
+            }
+        }
+        out << "]" << endl;
+    }
+    out << "\n\n";
     return out;
 }
 
@@ -420,7 +462,6 @@ void Map::addContinentEdges(int territoryId1, int territoryId2) {
     if (continentId1 == continentId2 || continentEdgeExists(continentId1, continentId2)) {
         return;
     }
-    // TODO: 有bug，不能添加自己
     if (continentAdjacencyList.find(continentId1) == continentAdjacencyList.end()) {
         vector<int> neighborsOfContinent1;
         neighborsOfContinent1.emplace_back(continentId2);
@@ -430,7 +471,7 @@ void Map::addContinentEdges(int territoryId1, int territoryId2) {
     }
     if (continentAdjacencyList.find(continentId2) == continentAdjacencyList.end()) {
         vector<int> neighborsOfContinent2;
-        neighborsOfContinent2.emplace_back(territoryId1);
+        neighborsOfContinent2.emplace_back(continentId1);
         continentAdjacencyList[continentId2] = neighborsOfContinent2;
     } else {
         continentAdjacencyList[continentId2].emplace_back(continentId1);

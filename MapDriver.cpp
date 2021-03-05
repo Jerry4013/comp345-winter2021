@@ -23,10 +23,6 @@ int mapDriver::main() {
                                  {7, 11}, {11, 12}, {11, 13}, {12, 13}, {12, 14}, {13, 14}, {14, 15}, {13, 16},
                                  {16, 17}, {17, 18}, {10, 16}};
 
-//    vector<Map*> maps(mapNames.size());
-//    for (int i = 0; i < maps.size(); i++) {
-//        maps[i] = new Map(i + 1, mapNames[i]);
-//    }
     string mapName = "testMap";
     Map* testMap1 = new Map(1, mapName);
     vector<Continent*> continents(continentNames.size());
@@ -41,13 +37,10 @@ int mapDriver::main() {
         continents[belongsToContinentId[i] - 1]->addTerritory(territories[i]);
         testMap1->addTerritory(territories[i]);
     }
-
     for (auto & edge : edges) {
         testMap1->addTerritoryEdges(edge[0], edge[1]);
     }
-    testMap1->printTerritoryAdjacencyList();
-    testMap1->printContinentAdjacencyList();
-    
+    cout << *testMap1 << endl;
     // TODO: need more tests
     return 0;
 
