@@ -125,7 +125,7 @@ std::ostream &operator<<(std::ostream &output, const Card &card) {
         output << "one victory point for each forest card" << endl;
     }
     if (card.one_vp_3_coins) {
-        output << "one victory point for every 3 coins" << endl;
+        output << "one victory point for every 3 coinSupply" << endl;
     }
     if (card.one_vp_for_fly) {
         output << "one victory point for each wing" << endl;
@@ -134,7 +134,7 @@ std::ostream &operator<<(std::ostream &output, const Card &card) {
         output << "This is a card with OR, you need to choose the action later." << endl;
     }
     if (card.money != 0) {
-        output << "This card have 2 more coins" << endl;
+        output << "This card have 2 more coinSupply" << endl;
     }
     if (card.three_vp_have_two_mountain) {
         output << "+3vp if you have two Mountain cards" << endl;
@@ -933,7 +933,7 @@ std::ostream &operator<<(std::ostream &output, const Hand &hand) {
                            {4, 2},
                            {5, 3}};
     for (int i = 0; i < hand.handVector->size(); i++) {
-        output << "Card " << i + 1 << " this card takes " << moneyMap[i] << " coins " << endl;
+        output << "Card " << i + 1 << " this card takes " << moneyMap[i] << " coinSupply " << endl;
         output << *hand.handVector->at(i) << endl;
     }
     return output;

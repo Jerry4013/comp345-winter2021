@@ -45,18 +45,15 @@ Territory &Territory::operator=(const Territory &territory) {
 }
 
 ostream &operator<<(ostream &out, const Territory &territory) {
-    out << "Territory{ name=" << territory.name << "; ";
-    out << "id=" << territory.id << "; ";
-    out << "continentId=" << territory.continentId << "; ";
-    out << "armies={";
-    for (const auto &[k, v] : territory.armies) {
-        out << "Armies[" << k << "] = " << v << "; ";
+    out << "Territory" << endl;
+    out << "ID: " << territory.id << "\tName: " << territory.name << "\tContinent ID: " << territory.continentId << endl;
+    out << "------------------------------------------" << endl;
+    out << setw(8) << "" << setw(10) << "Armies" << setw(10) << "Cities" << endl;
+    map<int, int> cities = territory.cities;
+    for (auto &[k, v] : territory.armies) {
+        out << "player " << k << setw(10) << v << setw(10) << cities[k] << endl;
     }
-    out << "};  cities={";
-    for (const auto &[k, v] : territory.cities) {
-        out << "Cities[" << k << "] = " << v << "; ";
-    }
-    out << "}";
+    out << "\n\n";
     return out;
 }
 

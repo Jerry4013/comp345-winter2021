@@ -12,9 +12,8 @@
 class Game {
 public:
     Game();
-    Game(int numOfPlayer);
+    Game(int numOfPlayer, Map* gameMap);
     ~Game();
-    void start();
     void startup();
     void play();
     void computeScore();
@@ -25,9 +24,10 @@ private:
     vector<Player*> players;
     Deck* deck;
     Hand* hand;
-    int coins;
+    int coinSupply;
     int nonPlayerArmy;
     int turn;   // if two players, then turn could be 1 or 2.
+    void createPlayers();
 };
 
 
