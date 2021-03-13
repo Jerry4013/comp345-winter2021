@@ -7,7 +7,7 @@
 class Player {
 public:
     Player();
-    Player(const string& name, int biding, int coins, vector<Territory*>& territories);
+    Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins);
     Player(const Player&);
     Player& operator=(const Player& secondPlayer);
     friend ostream& operator<<(ostream& out, const Player& player);
@@ -16,23 +16,26 @@ public:
 
     void PayCoin(int costOfCard);
     void PlaceNewArmies(int numberOfNewArmies, Territory& territory);
-    void MoveArmies(int numberOfArmies, Territory& from, Territory& to);
-    void MoveOverLand(int numberOfArmies, Territory& from, Territory& to);
+    int MoveArmies(int numberOfArmies, Territory& from, Territory& to, int movingPoints);
+    int MoveOverLand(int numberOfArmies, Territory& from, Territory& to, int movingPoints);
     void BuildCity(Territory& territory);
-    void DestroyArmy(int numberOfArmies, Player& player, Territory& territory);
+    int DestroyArmy(int numberOfArmies, int playerId, Territory& territory, int destroyPoints);
 
     // Getters and Setters
     int getId() const;
+    void setId(int newId);
     string getFirstName() const;
+    void setFirstName(string& newFirstName);
     string getLastName() const;
+    void setLastName(string& newLastName);
     string getColor() const;
-    void setName(const string& newName);
+    void setColor(string& newColor);
     int getBiding() const;
-    void setBidding(int biding);
+    void setBidding(int newBiding);
     int getCoins() const;
-    void setCoins(int coins);
+    void setCoins(int newCoins);
     int getScore() const;
-    void setScore(int score);
+    void setScore(int newScore);
     int getRemainingCity() const;
     void setRemainingCity(int city);
     int getRemainingCubes() const;
@@ -54,5 +57,5 @@ private:
     int remainingCubes;
     vector<Territory*> territories;
     vector<Card*> cards;
+    map<string, int> abilities;
 };
-

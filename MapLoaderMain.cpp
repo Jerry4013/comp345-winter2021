@@ -8,29 +8,18 @@
 
 using std::cout,std::endl;
 
-int mapLoader::main() {
+int main() {
     MapLoader *mapLoader,*mapLoader_invalid, *mapLoader_valid, *mapLoader_copy;
     try {
         cout << "Loading valid map"<<endl;
-        mapLoader = new MapLoader("..\\GAME1.map");
-        cout << mapLoader <<endl;
-
-        mapLoader_valid = mapLoader;
-        cout << "Used assign operator"<<endl;
-        cout << mapLoader_valid<<endl;
-
-        mapLoader_copy = new MapLoader(mapLoader);
-        cout<< "Used copy constructor"<<endl;
-        cout << mapLoader_copy <<endl;
+        mapLoader = new MapLoader();
+        [[maybe_unused]] Map *mapptr = mapLoader->loadMap("..\\Maps\\GAME1.map");
+        mapptr->printContinentAdjacencyList();
+        mapptr->printTerritoryAdjacencyList();
+        mapptr->validate();
         //mapLoader->getGameMap()->PrintContinentMatrix();
         //mapLoader->getGameMap()->PrintTerritoryMatrix();
-        mapLoader->getGameMap()->validate(mapLoader->getGameMap());
-
-        cout<<endl;
-        cout <<"Loading invalid map"<<endl;
-        mapLoader_invalid = new MapLoader("..\\GAME1_invalid.map");
-        cout << mapLoader_invalid <<endl;
-
+        //mapLoader->getGameMap()->validate(mapLoader->getGameMap());
 
     }
     catch (const std::string e) {

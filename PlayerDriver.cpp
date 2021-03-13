@@ -15,8 +15,8 @@ int player::main() {
     string name;
     int biding;
     int coins;
-    Territory territory1("territory1", 1, 1);
-    Territory territory2("territory2", 2, 2);
+    //Territory territory1("territory1", 1, 1);
+    //Territory territory2("territory2", 2, 2);
     cout << "Enter player firstName: ";
     cin >> name;
     cout << "Enter biding coins: ";
@@ -24,8 +24,8 @@ int player::main() {
     cout << "Enter initial coins: ";
     cin >> coins;
     vector<Territory*> territories;
-    territories.push_back(&territory1);
-    territories.push_back(&territory2);
+    //territories.push_back(&territory1);
+    //territories.push_back(&territory2);
     Player userCreatedPlayer(name, biding, coins, territories);
     cout << "A customized player is created: " << endl << userCreatedPlayer.toString() << endl << endl;
     Player player1(userCreatedPlayer);

@@ -7,7 +7,7 @@ using namespace std;
 #include "iostream"
 #include "MapDriver.h"
 
-int mapDriver::main() {
+int main() {
     vector<string> mapNames = {"volcano", "redForest", "village", "mountain"};
 
     vector<string> continentNames = {"volcano1", "volcano2", "redForest", "village", "mountain1", "mountain2"};
@@ -41,6 +41,7 @@ int mapDriver::main() {
         testMap1->addTerritoryEdges(edge[0], edge[1]);
     }
     cout << *testMap1 << endl;
+    testMap1->validate();
     // TODO: need more tests
     return 0;
 

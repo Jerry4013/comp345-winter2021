@@ -1,15 +1,12 @@
 
 #include <iostream>
 
-#include "Game.h"
-
+#include "GameStart.h"
 
 int main(){
-    Game* game = new Game(2);
+    GameStart* game = new GameStart();
     game->start();
-    game->startup();
-    game->play();
-    game->computeScore();
+    return 0;
 }
 
 

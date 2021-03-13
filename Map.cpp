@@ -223,6 +223,7 @@ void Continent::addTerritory(Territory* Territory) {
 vector<int> Continent::getTerritoryIdList() {
     vector<int> list;
     for (auto & territory : territories) {
+        cout << territory->getId()<<endl;
         list.emplace_back(territory->getId());
     }
     return list;
@@ -379,6 +380,7 @@ vector<Territory *> &Map::getTerritories() {
 
 void Map::addTerritory(Territory* newTerritory) {
     territories.emplace_back(newTerritory);
+    continents[newTerritory->getContinentId()-1]->addTerritory(newTerritory);
 }
 
 Territory *Map::getTerritoryById(int territoryId) {
@@ -552,6 +554,7 @@ bool Map::checkTerritoryBelongsToOneContinent() {
             }
             allTerritories.insert(territoryId);
         }
+
     }
     cout << "Each territory belongs to one and only one continent." << endl;
     return allTerritories.size() == territories.size();

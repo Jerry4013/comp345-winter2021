@@ -5,18 +5,14 @@
 #ifndef COMP345_WINTER2021_GAME_H
 #define COMP345_WINTER2021_GAME_H
 #include "Map.h"
-#include "MapLoader.h"
 #include "Player.h"
 #include "Cards.h"
 #include <vector>
-#include <iostream>
-#include <filesystem>
-
 
 class Game {
 public:
     Game();
-    Game(int numOfPlayer);
+    Game(int numOfPlayer, Map* gameMap);
     ~Game();
     void start();
     void startup();
@@ -29,9 +25,10 @@ private:
     vector<Player*> players;
     Deck* deck;
     Hand* hand;
-    int coins;
+    int coinSupply;
     int nonPlayerArmy;
     int turn;   // if two players, then turn could be 1 or 2.
+    void createPlayers();
 };
 
 
