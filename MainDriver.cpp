@@ -3,10 +3,21 @@
 
 #include "GameStart.h"
 
+
+using namespace std;
+
+
 int main(){
     GameStart* game = new GameStart();
     game->start();
-    return 0;
+    /*
+    Game* game = gameStart();
+    game->startup();
+    game->play();
+    game->computeScore();
+    */
 }
+
+
 
 

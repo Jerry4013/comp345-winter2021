@@ -104,6 +104,7 @@ void Game::start() {
     Player userCreatedPlayer2(name, biding, coins, territories);
 }
 
+
 void Game::createPlayers() {
     int coins;
     if (numOfPlayer == 4) {

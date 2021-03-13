@@ -12,12 +12,12 @@ add_executable(comp345_winter2021
         Player.cpp
         BidingFacility.h
         BidingFacility.cpp
-        MapLoader.cpp
-        MapLoader.h
+#        MapLoader.cpp
+#        MapLoader.h
         PlayerDriver.h
         PlayerDriver.cpp
-        MapLoaderMain.h
-        MapLoaderMain.cpp
+#        MapLoaderMain.h
+#        MapLoaderMain.cpp
         BidingFacilityMain.h
         BidingFacilityMain.cpp
         CardsMain.h

@@ -14,7 +14,6 @@ public:
     Game();
     Game(int numOfPlayer, Map* gameMap);
     ~Game();
-    void start();
     void startup();
     void play();
     void computeScore();
