@@ -265,7 +265,3 @@ vector<Card *> Player::getCards() const {
 void Player::setCards(vector<Card *> &cards) {
     this->cards = cards;
 }
-
-
-
-

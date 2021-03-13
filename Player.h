@@ -59,4 +59,3 @@ private:
     vector<Card*> cards;
     map<string, int> abilities;
 };
-

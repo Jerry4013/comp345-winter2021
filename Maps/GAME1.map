@@ -36,5 +36,3 @@ shape=L
 16 mountain1_upper 5 10,13,17 4,4
 17 mountain1_middle 5 16,18 4,4
 18 mountain2 6 17
-
-最后一列是map_id，有几个出口就重复了几次

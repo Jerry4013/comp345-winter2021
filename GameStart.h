@@ -1,19 +1,25 @@
 //
-// Created by jerry on 2/26/2021.
+// Created by lllll on 2021-03-13.
 //
 
-#ifndef COMP345_WINTER2021_GAME_H
-#define COMP345_WINTER2021_GAME_H
+#ifndef COMP345_WINTER2021_GAMESTART_H
+#define COMP345_WINTER2021_GAMESTART_H
+
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
+#include "MapLoader.h"
+#include <iostream>
+#include <filesystem>
 #include <vector>
+using std::string;
 
-class Game {
+class GameStart {
 public:
-    Game();
-    Game(int numOfPlayer, Map* gameMap);
-    ~Game();
+    GameStart();
+    GameStart(int numOfPlayer, Map* gameMap);
+    ~GameStart();
+    void start();
     void startup();
     void play();
     void computeScore();
@@ -31,4 +37,4 @@ private:
 };
 
 
-#endif //COMP345_WINTER2021_GAME_H
+#endif //COMP345_WINTER2021_GAMESTART_H
