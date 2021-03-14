@@ -36,7 +36,6 @@ public:
     one_vp_for_forest,bool one_vp_3_coins,bool one_vp_for_fly,bool three_vp_have_two_mountain ,bool three_vp_four_noble ,bool OR_CARD,int money);
     //constructor
 
-
     //copy constructor
     Card(const Card &c);
     ~Card();
@@ -47,99 +46,52 @@ public:
 
     //getters and setters:
     CardType getType() const;
-
     void setType(CardType type);
-
     const string &getName() const;
-
     void setName(const string &name);
-
     int getNumberOfArmy() const;
-
     void setNumberOfArmy(int numberOfArmy);
-
     int getNumberOfMovement() const;
-
     void setNumberOfMovement(int numberOfMovement);
-
     int getBuildCity() const;
-
     void setBuildCity(int buildCity);
-
     int getKillArmy() const;
-
     void setKillArmy(int killArmy);
-
     int getElixers() const;
-
     void setElixers(int elixers);
-
     int getFlyAbility() const;
-
     void setFlyAbility(int flyAbility);
-
     int getVictoryPoint() const;
-
     void setVictoryPoint(int victoryPoint);
-
     int getBuildAbility() const;
-
     void setBuildAbility(int buildAbility);
-
     int getMoveAbility() const;
-
     void setMoveAbility(int moveAbility);
-
     int getImmuneToAttack() const;
-
     void setImmuneToAttack(int immuneToAttack);
-
     bool isOneVpForNight() const;
-
     void setOneVpForNight(bool oneVpForNight);
-
     bool isOneVpForCursed() const;
-
     void setOneVpForCursed(bool oneVpForCursed);
-
     bool isOneVpForArcane() const;
-
     void setOneVpForArcane(bool oneVpForArcane);
-
     bool isOneVpForAncient() const;
-
     void setOneVpForAncient(bool oneVpForAncient);
-
     bool isOneVpForDire() const;
-
     void setOneVpForDire(bool oneVpForDire);
-
     bool isOneVpForForest() const;
-
     void setOneVpForForest(bool oneVpForForest);
-
     bool isOneVp3Coins() const;
-
     void setOneVp3Coins(bool oneVp3Coins);
-
     bool isOneVpForFly() const;
-
     void setOneVpForFly(bool oneVpForFly);
-
     bool isThreeVpHaveTwoMountain() const;
-
     void setThreeVpHaveTwoMountain(bool threeVpHaveTwoMountain);
-
     bool isThreeVpFourNoble() const;
-
     void setThreeVpFourNoble(bool threeVpFourNoble);
-
     bool isOrCard() const;
-
     void setOrCard(bool orCard);
-
     int getMoney() const;
-
     void setMoney(int money);
 
 private:

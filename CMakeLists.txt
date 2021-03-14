@@ -16,8 +16,8 @@ add_executable(comp345_winter2021
         MapLoader.h
         PlayerDriver.h
         PlayerDriver.cpp
-#        MapLoaderMain.h
-#        MapLoaderMain.cpp
+        MapLoaderMain.h
+        MapLoaderMain.cpp
         BidingFacilityMain.h
         BidingFacilityMain.cpp
         CardsMain.h
@@ -28,5 +28,5 @@ add_executable(comp345_winter2021
         Game.h
 #        GameStart.cpp
 #        GameStart.h
-        MainDriver.cpp
+#        MainDriver.cpp
         )

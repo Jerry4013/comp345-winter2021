@@ -7,7 +7,8 @@
 using namespace std;
 
 int player::main() {
-  
+
+    // TODO 重新写测试
 //    // Test Constructors
 //    cout << endl << "Test Constructors:" << endl << "------------------------------------------------" << endl;
 //    Player defaultPlayer;

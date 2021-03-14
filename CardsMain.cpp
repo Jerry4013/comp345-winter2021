@@ -7,7 +7,7 @@
 #include "CardsMain.h"
 using namespace std;
 
-int cards::main(){
+int main(){
     //deck demo
 //    cout<<"original cards:"<<endl;
 //    Deck d(2);

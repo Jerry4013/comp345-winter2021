@@ -61,6 +61,7 @@ void Game::play() {
         for (int i : order) {
             cout << "It's player " << i << "'s turn:\n" << endl;
             Player* currentPlayer = getPlayerById(i);
+            // TODO: 给玩家一些行动选择，比如查看地图以及其他各种信息
             printSixCards();
             while (true) {
                 cout << "Please select a card (1-6):" << endl;
@@ -82,7 +83,8 @@ void Game::play() {
             hand->exchange(cardIndex + 1, deck);
             printSixCards();
         }
-        gameEnd = players[0]->getCards().size() == 13;
+        // TODO： 暂时把回合数改成2,记得改回13
+        gameEnd = players[0]->getCards().size() == 2;
     }
 }
 

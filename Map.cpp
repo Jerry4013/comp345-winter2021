@@ -620,7 +620,7 @@ void Map::dfsContinents(unordered_map<int, bool> &visited, int continentId) {
 }
 
 Map* Map::extend(Map* secondMap, int port1, int port2, int newId, string& newName) {
-    // TODO: 函数内部新建对象，怎么销毁？能不能传出去？
+    // TODO 没写完
     Map* largerMap = new Map(newId, newName);
     largerMap->territories = territories;
     for (auto & territory : secondMap->getTerritories()) {

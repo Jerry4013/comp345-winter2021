@@ -630,22 +630,9 @@ std::vector<Card*> *Hand::getHandVector() {
 }
 
 Card *Hand::exchange(int card_number, Deck *deck) {
-    for (int i = 0; i < handVector->size(); i++) {
-        if (card_number - 1 == i) {
-            Card* card = new Card(*handVector->at(i));
-
-            // TODO: 这个指针不能删除，只是换到玩家手里了，后面还需要
-            //std::cout << **(handVector->begin() + i)<<endl;
-            //delete the ptr , avoid memory leak
-            delete *(handVector->begin() + i);
-            *(handVector->begin() + i)= nullptr;
-            handVector->erase(handVector->begin() + i);
-            //draw a new card from deck
-            handVector->emplace_back(deck->draw());
-            return card;
-        }
-    }
-
-    return nullptr;
+    Card* card = (*handVector)[card_number - 1];
+    handVector->erase(handVector->begin() + card_number - 1);
+    handVector->emplace_back(deck->draw());
+    return card;
 }
 
