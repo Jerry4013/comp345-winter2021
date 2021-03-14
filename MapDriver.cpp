@@ -3,11 +3,12 @@
 //
 
 #include "Map.h"
-using namespace std;
 #include "iostream"
 #include "MapDriver.h"
 
-int main() {
+using namespace std;
+
+int mapDriver::main() {
     vector<string> mapNames = {"volcano", "redForest", "village", "mountain"};
 
     vector<string> continentNames = {"volcano1", "volcano2", "redForest", "village", "mountain1", "mountain2"};

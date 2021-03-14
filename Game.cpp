@@ -3,25 +3,50 @@
 //
 
 #include <sstream>
+#include <filesystem>
+#include <algorithm>
+#include <random>
 #include "Game.h"
+#include "MapLoader.h"
+#include "BidingFacility.h"
+
+using namespace std;
+
+const vector<int> Game::CARD_COSTS = {0, 0, 1, 1, 2, 2, 3};
+const vector<string> Game::COLORS = {"purple", "white", "green", "grey"};
 
 Game::Game() {
-    numOfPlayer = 2;
-}
-
-Game::Game(int numOfPlayer, Map* gameMap) {
-    this->numOfPlayer = numOfPlayer;
-    this->map = gameMap;
-    coinSupply = 36;
-    createPlayers();
 }
 
 Game::~Game() {
 
 }
 
-void Game::startup() {
+bool Game::start() {
+    cout << "****************************" << endl;
+    cout << "Eight-Minute_Empire_Legends." << endl;
+    cout << "****************************" << endl;
+    bool selectMapSucceed = selectMap();
+    if (!selectMapSucceed) {
+        return false;
+    }
+    selectNumberOfPlayers();
+    createPlayers();
+    createDeck();
+    coinSupply = 36;
+    for (const auto & color : COLORS) {
+        armies[color] = 18;
+        cities[color] = 3;
+    }
+    return true;
+}
 
+void Game::startup() {
+    //Shuffling the cards: the deck is already shuffled when creating.
+    hand = new Hand(deck); // draw six cards
+    printSixCards();
+    createArmiesAndCities();
+    bid();
 }
 
 void Game::play() {
@@ -32,78 +57,51 @@ void Game::computeScore() {
 
 }
 
-void Game::start() {
-    string filepath;
-    bool exit;
-    namespace fs = std::filesystem;
-    cout <<string(20,*)<<endl;
-    cout << "Eight-Minute_Empire_Legends."<<endl;
-    cout <<string(20,*)<<endl;
 
+bool Game::selectMap() {
+    string filePath;
     string path = "../Maps/";
-    vector<string> mapfiles;
-    for (const auto & entry : fs::directory_iterator(path)){
-        mapfiles.push_back(entry.path().erase(entry.path().find(path),path.size()));
+    vector<string> mapFiles;
+    for (const auto & entry : std::filesystem::directory_iterator(path)){
+        mapFiles.push_back(entry.path().string().erase(entry.path().string().find(path), path.size()));
     }
-    MapLoader *ml = new MapLoader();
-    int filepathoption=-1;
+    int filePathOption = -1;
 
     //Map selection
-    while(true){
+    while (true) {
         try{
             cout << "Please chose your game map"<<endl;
-            for(int i = 0;i<mapfiles.size();i++)
-                cout << i+1 <<". "<<mapfiles[i] <<endl;
-            cout <<mapfiles.size()<<". Exit"<<endl;
-
-            cout << ">>";
-            cin >> filepathoption;
-            if(filepathoption<1 || filepathoption>(mapfiles.size()+1))
-                throw string("Unknow option, please chose again!");
-            else if(filepathoption==mapfiles.size()+1){
-                cout <<"GOODBYE"<<endl;
-                exit=true;
-                break;
+            for(int i = 0; i < mapFiles.size(); i++) {
+                cout << i + 1 << ". " << mapFiles[i] << endl;
             }
-            filepath=path+mapfiles[filepathoption-1];
-            this->map=ml.loadMap(filepath);
+            cout << mapFiles.size() + 1 << ". Exit" << endl;
+            cout << ">>";
+            cin >> filePathOption;
+            if(filePathOption < 1 || filePathOption > (mapFiles.size() + 1)) {
+                throw string("Unknown option, please chose again!");
+            } else if (filePathOption == mapFiles.size() + 1) {
+                cout << "GOODBYE" << endl;
+                return false;
+            }
+            filePath = path + mapFiles[filePathOption - 1];
+            map = MapLoader::loadMap(filePath);
+            cout << *map << endl;
+            cout << "The map is created successfully!\n" << endl;
             break;
-        }
-        catch(const std::string e) {
-            cout << e<<endl;
+        } catch (const std::string e) {
+            cout << e << endl;
         }
     }
-
-    //Player creation
-    string name;
-    int biding;
-    int coins;
-    Territory territory1("territory1", 1, 1);
-    Territory territory2("territory2", 2, 2);
-
-    cout << "Enter player firstName: ";
-    cin >> name;
-    cout << "Enter biding coins: ";
-    cin >> biding;
-    cout << "Enter initial coins: ";
-    cin >> coins;
-    vector<Territory*> territories;
-    territories.push_back(&territory1);
-    territories.push_back(&territory2);
-    Player userCreatedPlayer1(name, biding, coins, territories);
-
-    cout << "Enter player firstName: ";
-    cin >> name;
-    cout << "Enter biding coins: ";
-    cin >> biding;
-    cout << "Enter initial coins: ";
-    cin >> coins;
-    vector<Territory*> territories;
-    territories.push_back(&territory1);
-    territories.push_back(&territory2);
-    Player userCreatedPlayer2(name, biding, coins, territories);
+    return true;
 }
 
+void Game::selectNumberOfPlayers() {
+    int numberOfPlayers;
+    cout << "Please select the number of players: (2, 3, 4)" << endl;
+    cout << ">>";
+    cin >> numberOfPlayers;
+    this->numOfPlayer = numberOfPlayers;
+}
 
 void Game::createPlayers() {
     int coins;
@@ -120,18 +118,66 @@ void Game::createPlayers() {
     string color;
     int bidding;
     for (int i = 0; i < numOfPlayer; ++i) {
-        cout << "Please enter the name of player " << i + 1 << ":" << endl;
-        getline(cin, name);
-        stringstream ss(name);
-        ss >> firstName;
-        ss >> lastName;
-        cout << "Please enter the color of player " << i + 1 << ":" << endl;
+        cout << "Please enter the first name of player " << i + 1 << ":" << endl;
+        cout << ">>";
+        cin >> firstName;
+        cout << "Please enter the last name of player " << i + 1 << ":" << endl;
+        cout << ">>";
+        cin >> lastName;
+        cout << "Please enter the color of player " << i + 1 << ": (purple, white, green, grey) " << endl;
+        cout << ">>";
         cin >> color;
         cout << "Please enter the bidding of player " << i + 1 << ":" << endl;
+        cout << ">>";
         cin >> bidding;
         coinSupply -= coins;
         players.emplace_back(new Player(i + 1, firstName, lastName, color, bidding, coins));
-        cout << "Player " << i + 1 << " is created successfully!" << endl;
-        cout << players[i];
+        cout << *players[i];
+        cout << "Player " << i + 1 << " is created successfully!\n" << endl;
+    }
+}
+
+void Game::createDeck() {
+    deck = new Deck(numOfPlayer);
+
+    // TODO: deckVector最好能改成不是指针
+}
+
+void Game::createArmiesAndCities() {
+    int startingRegion = selectStartingRegion();
+
+    // TODO: 在Map和Player里都需要初始化军队 (Part 2, 第2)
+    // TODO：根据游戏规则，如果是两个玩家，需要有nonPlayerArmy
+    // TODO: 最后要print player
+}
+
+void Game::printSixCards() {
+    // TODO: 第一行是card cost，第二行显示card name
+}
+
+int Game::selectStartingRegion() {
+    // TODO：确定一个起始的Region，需要查看游戏规则
+    return 13;
+}
+
+void Game::bid() {
+    int winnerID = BidingFacility::bid(players);
+    cout << "The bidding winner is player " << winnerID << "!\n" << endl;
+    order.emplace_back(winnerID);
+    vector<int> otherPlayerIDs;
+    for (auto & player : players) {
+        if (player->getId() != winnerID) {
+            otherPlayerIDs.emplace_back(player->getId());
+        }
+    }
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(otherPlayerIDs.begin(), otherPlayerIDs.end(), g);
+    for (auto & otherPlayerID : otherPlayerIDs) {
+        order.emplace_back(otherPlayerID);
+    }
+    cout << "The order of players' move is:" << endl;
+    for (int i : order) {
+        cout << i << " ";
     }
 }

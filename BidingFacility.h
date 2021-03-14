@@ -18,5 +18,5 @@ public:
     BidingFacility& operator=(const BidingFacility& secondBidingFacility);
     friend ostream& operator<<(ostream& out, const BidingFacility& bidingFacility);
 
-    Player* bid(vector<Player*> players);
+    static int bid(vector<Player*>& players);
 };

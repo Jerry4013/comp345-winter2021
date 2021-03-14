@@ -9,8 +9,6 @@
 #include <algorithm>
 #include <cctype>
 #include <random>
-#include <filesystem>
-namespace fs = std::filesystem;
 
 using namespace std;
 

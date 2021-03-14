@@ -500,7 +500,6 @@ Deck::Deck() {
 Deck::Deck(int number_of_player) {
     deckVector = new std::vector<Card*>();
     if (number_of_player == 2) {
-        cout << "Two players deck:" << endl;
         //27 for two players:
         //ancient
         deckVector->emplace_back(
@@ -598,8 +597,7 @@ Deck::Deck(int number_of_player) {
                                       false, false, false, false, false, false, 0));
     }
     if (number_of_player == 3) {
-        cout << "Three players deck:" << endl;
-        //27 for two players:
+        //32 for two players:
         //ancient
         deckVector->emplace_back(
                 new Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
@@ -715,11 +713,8 @@ Deck::Deck(int number_of_player) {
                 new Card(mountain, "Mountain Treasury", 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
                      false,
                      false, false, false, false, false, false, 1));
-
-
     }
     if (number_of_player == 4) {
-        cout << "Four players deck:" << endl;
         //27 for two players:
         //ancient
         deckVector->emplace_back(

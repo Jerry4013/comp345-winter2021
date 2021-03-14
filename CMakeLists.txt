@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.8)
 project(comp345_winter2021)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -12,8 +12,8 @@ add_executable(comp345_winter2021
         Player.cpp
         BidingFacility.h
         BidingFacility.cpp
-#        MapLoader.cpp
-#        MapLoader.h
+        MapLoader.cpp
+        MapLoader.h
         PlayerDriver.h
         PlayerDriver.cpp
 #        MapLoaderMain.h
@@ -26,5 +26,7 @@ add_executable(comp345_winter2021
         MapDriver.cpp
         Game.cpp
         Game.h
+#        GameStart.cpp
+#        GameStart.h
         MainDriver.cpp
         )

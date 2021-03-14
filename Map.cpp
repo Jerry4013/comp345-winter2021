@@ -343,7 +343,7 @@ ostream &operator<<(ostream &out, const Map &outputMap) {
         }
         out << "]" << endl;
     }
-    out << "\n\n";
+    out << "\n";
     return out;
 }
 

@@ -167,7 +167,7 @@ ostream &operator<<(ostream &out, const Player &player) {
             out << ", ";
         }
     }
-    out << "]\n; cards=[";
+    out << "]\ncards=[";
     for (int i = 0; i < player.cards.size(); i++) {
         out << player.cards[i]->getName();
         if (i < player.cards.size() - 1) {
