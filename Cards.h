@@ -205,6 +205,7 @@ public:
     std::vector<Card*>* getDeckVector();
     //draw method
     Card* draw();
+    void shuffleDeck();
 
 private:
     vector<Card*>* deckVector;

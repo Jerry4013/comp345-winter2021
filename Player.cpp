@@ -48,6 +48,10 @@ Player::~Player() {
 }
 
 void Player::PayCoin(int costOfCard) {
+    if (coins < costOfCard) {
+        cout << "ERROR! You don't have enough coin to buy this card!" << endl;
+        return;
+    }
     coins -= costOfCard;
     cout << "Player " << id << " paid " << costOfCard << " coins. Coins left: " << coins << endl;
 }
@@ -264,4 +268,9 @@ vector<Card *> Player::getCards() const {
 
 void Player::setCards(vector<Card *> &cards) {
     this->cards = cards;
+}
+
+void Player::exchange(Card *card) {
+    cards.emplace_back(card);
+    // TODO 把这张牌的good加到玩家的abilities中
 }

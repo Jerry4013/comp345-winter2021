@@ -396,10 +396,7 @@ Deck::Deck() {
     cout << "default 2 players deck:" << endl;
     deckVector = new std::vector<Card*>();
     initializeDeckOfTwoPlayers();
-    // using built-in random generator:
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(deckVector->begin(), deckVector->end(), g);
+    shuffleDeck();
 }
 
 Deck::Deck(int number_of_player) {
@@ -435,10 +432,7 @@ Deck::Deck(int number_of_player) {
                 new Card(emptyKind, "Castle 2", 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, false, false, false, false, false,
                      false, false, false, false, false, false, 0));
     }
-    // using built-in random generator:
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(deckVector->begin(), deckVector->end(), g);
+    shuffleDeck();
 }
 
 Deck::~Deck() {
@@ -484,6 +478,12 @@ Card *Deck::draw() {
                                   false, false, false, false, 0);
         return lastcard;
     }
+}
+
+void Deck::shuffleDeck() {
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(deckVector->begin(), deckVector->end(), g);
 }
 
 void Deck::initializeDeckOfTwoPlayers() {
@@ -634,6 +634,7 @@ Card *Hand::exchange(int card_number, Deck *deck) {
         if (card_number - 1 == i) {
             Card* card = new Card(*handVector->at(i));
 
+            // TODO: 这个指针不能删除，只是换到玩家手里了，后面还需要
             //std::cout << **(handVector->begin() + i)<<endl;
             //delete the ptr , avoid memory leak
             delete *(handVector->begin() + i);

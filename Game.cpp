@@ -44,7 +44,7 @@ bool Game::start() {
 }
 
 void Game::startup() {
-    //Shuffling the cards: the deck is already shuffled when creating.
+    deck->shuffleDeck();
     hand = new Hand(deck); // draw six cards
     printSixCards();
     createArmiesAndCities();
@@ -56,19 +56,38 @@ void Game::play() {
     cout << "     Main Game starts!" << endl;
     cout << "****************************" << endl;
     bool gameEnd = players[0]->getCards().size() == 13;
+    int cardIndex;
     while (!gameEnd) {
         for (int i : order) {
-            cout << "It's player " << i << "'s turn:" << endl;
+            cout << "It's player " << i << "'s turn:\n" << endl;
             Player* currentPlayer = getPlayerById(i);
-        }
+            printSixCards();
+            while (true) {
+                cout << "Please select a card (1-6):" << endl;
+                cout << ">> ";
+                cin >> cardIndex;
+                cardIndex--;
+                if (currentPlayer->getCoins() < CARD_COSTS[cardIndex]) {
+                    cout << "ERROR! You don't have enough coin to buy this card!" << endl;
+                    cout << "Try again." << endl;
+                } else {
+                    break;
+                }
+            }
+            currentPlayer->PayCoin(CARD_COSTS[cardIndex]);
+            currentPlayer->exchange((*hand->getHandVector())[cardIndex]);
+            // TODO 玩家得到good, 然后action
 
+            // Part 5
+            hand->exchange(cardIndex + 1, deck);
+            printSixCards();
+        }
         gameEnd = players[0]->getCards().size() == 13;
-        gameEnd = true;
     }
 }
 
 void Game::computeScore() {
-
+    // TODO
 }
 
 
@@ -89,7 +108,7 @@ bool Game::selectMap() {
                 cout << i + 1 << ". " << mapFiles[i] << endl;
             }
             cout << mapFiles.size() + 1 << ". Exit" << endl;
-            cout << ">>";
+            cout << ">> ";
             cin >> filePathOption;
             if(filePathOption < 1 || filePathOption > (mapFiles.size() + 1)) {
                 throw string("Unknown option, please chose again!");
@@ -112,7 +131,7 @@ bool Game::selectMap() {
 void Game::selectNumberOfPlayers() {
     int numberOfPlayers;
     cout << "Please select the number of players: (2, 3, 4)" << endl;
-    cout << ">>";
+    cout << ">> ";
     cin >> numberOfPlayers;
     this->numOfPlayer = numberOfPlayers;
 }
@@ -132,17 +151,15 @@ void Game::createPlayers() {
     string color;
     int bidding;
     for (int i = 0; i < numOfPlayer; ++i) {
-        cout << "Please enter the first name of player " << i + 1 << ":" << endl;
-        cout << ">>";
+        cout << "Please enter the full name of player " << i + 1 << ": (separate by space)" << endl;
+        cout << ">> ";
         cin >> firstName;
-        cout << "Please enter the last name of player " << i + 1 << ":" << endl;
-        cout << ">>";
         cin >> lastName;
         cout << "Please enter the color of player " << i + 1 << ": (purple, white, green, grey) " << endl;
-        cout << ">>";
+        cout << ">> ";
         cin >> color;
         cout << "Please enter the bidding of player " << i + 1 << ":" << endl;
-        cout << ">>";
+        cout << ">> ";
         cin >> bidding;
         coinSupply -= coins;
         players.emplace_back(new Player(i + 1, firstName, lastName, color, bidding, coins));
