@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(){
+int main() {
     Game* game = new Game();
     bool gameStartSucceed = game->start();
     if (!gameStartSucceed) {
@@ -16,7 +16,6 @@ int main(){
     game->startup();
     game->play();
     game->computeScore();
-
 }
 
 

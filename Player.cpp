@@ -49,7 +49,7 @@ Player::~Player() {
 
 void Player::PayCoin(int costOfCard) {
     coins -= costOfCard;
-    cout << "Player " + this->firstName + " paid " << costOfCard << endl;
+    cout << "Player " << id << " paid " << costOfCard << " coins. Coins left: " << coins << endl;
 }
 
 void Player::PlaceNewArmies(int numberOfNewArmies, Territory &territory) {

@@ -6,13 +6,15 @@
 #include <filesystem>
 #include <algorithm>
 #include <random>
+#include <string>
+#include <iomanip>
 #include "Game.h"
 #include "MapLoader.h"
 #include "BidingFacility.h"
 
 using namespace std;
 
-const vector<int> Game::CARD_COSTS = {0, 0, 1, 1, 2, 2, 3};
+const vector<int> Game::CARD_COSTS = {0, 1, 1, 2, 2, 3};
 const vector<string> Game::COLORS = {"purple", "white", "green", "grey"};
 
 Game::Game() {
@@ -50,7 +52,19 @@ void Game::startup() {
 }
 
 void Game::play() {
+    cout << "****************************" << endl;
+    cout << "     Main Game starts!" << endl;
+    cout << "****************************" << endl;
+    bool gameEnd = players[0]->getCards().size() == 13;
+    while (!gameEnd) {
+        for (int i : order) {
+            cout << "It's player " << i << "'s turn:" << endl;
+            Player* currentPlayer = getPlayerById(i);
+        }
 
+        gameEnd = players[0]->getCards().size() == 13;
+        gameEnd = true;
+    }
 }
 
 void Game::computeScore() {
@@ -70,7 +84,7 @@ bool Game::selectMap() {
     //Map selection
     while (true) {
         try{
-            cout << "Please chose your game map"<<endl;
+            cout << "Please chose your game map"<< endl;
             for(int i = 0; i < mapFiles.size(); i++) {
                 cout << i + 1 << ". " << mapFiles[i] << endl;
             }
@@ -139,7 +153,6 @@ void Game::createPlayers() {
 
 void Game::createDeck() {
     deck = new Deck(numOfPlayer);
-
     // TODO: deckVector最好能改成不是指针
 }
 
@@ -152,7 +165,17 @@ void Game::createArmiesAndCities() {
 }
 
 void Game::printSixCards() {
-    // TODO: 第一行是card cost，第二行显示card name
+    cout << "The six cards:" << endl;
+    cout << "Cost:";
+    for (int cost : CARD_COSTS) {
+        cout << setw(17) <<  to_string(cost) + "        ";
+    }
+    cout << endl;
+    cout << "Card:";
+    for (auto & card : *hand->getHandVector()) {
+        cout << setw(17) << card->getName();
+    }
+    cout << "\n" << endl;
 }
 
 int Game::selectStartingRegion() {
@@ -163,6 +186,8 @@ int Game::selectStartingRegion() {
 void Game::bid() {
     int winnerID = BidingFacility::bid(players);
     cout << "The bidding winner is player " << winnerID << "!\n" << endl;
+    Player* winner = getPlayerById(winnerID);
+    winner->PayCoin(winner->getBiding());
     order.emplace_back(winnerID);
     vector<int> otherPlayerIDs;
     for (auto & player : players) {
@@ -180,4 +205,18 @@ void Game::bid() {
     for (int i : order) {
         cout << i << " ";
     }
+    cout << "\n\n";
 }
+
+Player* Game::getPlayerById(int id) {
+    for (auto & player : players) {
+        if (player->getId() == id) {
+            return player;
+        }
+    }
+    cout << "ERROR! No player has this id.";
+    return nullptr;
+}
+
+
+

@@ -9,14 +9,14 @@ int BidingFacility::bid(vector<Player *>& players) {
     int bidding;
     int highestBidding = -1;
     vector<Player*> highestPlayers;
-    for (int i = 0; i < players.size(); ++i) {
-        bidding = players[i]->getBiding();
+    for (auto & player : players) {
+        bidding = player->getBiding();
         if (bidding > highestBidding) {
             highestBidding = bidding;
             highestPlayers.clear();
-            highestPlayers.emplace_back(players[i]);
+            highestPlayers.emplace_back(player);
         } else if (bidding == highestBidding) {
-            highestPlayers.emplace_back(players[i]);
+            highestPlayers.emplace_back(player);
         }
     }
     if (highestPlayers.size() == 1) {
@@ -46,4 +46,22 @@ int BidingFacility::bid(vector<Player *>& players) {
         }
     }
     return winner->getId();
+}
+
+BidingFacility::BidingFacility() {
+    // BidingFacility has no member variable.
+}
+
+BidingFacility::BidingFacility(const BidingFacility &) {
+    // BidingFacility has no member variable.
+}
+
+BidingFacility &BidingFacility::operator=(const BidingFacility &secondBidingFacility) {
+    // BidingFacility has no member variable.
+    return *this;
+}
+
+ostream &operator<<(ostream &out, const BidingFacility &bidingFacility) {
+    // BidingFacility has no member variable.
+    return out;
 }

@@ -39,6 +39,7 @@ private:
     void printSixCards();
     int selectStartingRegion();
     void bid();
+    Player* getPlayerById(int id);
 };
 
 

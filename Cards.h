@@ -207,7 +207,8 @@ public:
     Card* draw();
 
 private:
-    std::vector<Card*>* deckVector;
+    vector<Card*>* deckVector;
+    void initializeDeckOfTwoPlayers();
 };
 
 
