@@ -1,0 +1,20 @@
+numberofmapboards=1
+numberofcontinents=2
+numberofregions=7
+//shape=rect
+shape=L
+[map]
+1 volcano
+//id, name, map_id
+[continents]
+1 volcano1 1
+2 volcano2 1
+//id, name, continent_id, connection, map_id
+[regions]
+1 volcano1_upper1 1 2 1
+2 volcano1_upper2 1 1,5
+3 volcano2_upper 2 4,5
+4 volcano2_middle1 2 3,5 1
+5 volcano2_middle2 2 2,3,4,6
+6 volcano2_bottom1 2 5,7 1
+7 volcano2_bottom2 2 6 1

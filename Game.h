@@ -26,10 +26,11 @@ private:
     Deck* deck;
     Hand* hand;
     int coinSupply;
+    int startregionid;
     unordered_map<string, int> armies; // color -> the number of armies supplied on the table
     unordered_map<string, int> cities; // color -> the number of cities supplied on the table
     static const vector<int> CARD_COSTS;
-    static const vector<string> COLORS;
+    static vector<string> COLORS;
     vector<int> order;   // [2, 3, 1] means player with id 2 move first, then player with id 3, then id 1;
     void createPlayers();
     bool selectMap();
@@ -40,6 +41,7 @@ private:
     int selectStartingRegion();
     void bid();
     Player* getPlayerById(int id);
+    bool neighbor_is_connected(int);
 };
 
 

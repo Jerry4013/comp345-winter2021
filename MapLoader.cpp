@@ -73,7 +73,7 @@ Map* MapLoader::loadMap(string filePath){
 
             }
             else if(line.find("shape=")!=string::npos){
-                lshape=line.substr(6,line.size()).compare("l")==0;
+                lshape=line.substr(6,line.size());
             }
             else if(line.find("[continents]")!=string::npos){
                 //Look for the contents, should be continents or regions
@@ -133,7 +133,7 @@ Map* MapLoader::loadMap(string filePath){
         split(temp,deliminater,vector_temp);
         mapid = stoi(vector_temp[0], nullptr,10);
 
-        //mapid must be from 1 to number of map board (4 in GAME1.map).
+        //mapid must be from 1 to number of map board (4 in Lshape.map).
         if(mapid<0 || mapid>number_of_mapboard)
             throw std::string("map board id is invalid");
         vector_temp.clear();

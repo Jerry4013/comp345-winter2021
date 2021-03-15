@@ -57,8 +57,9 @@ void Player::PayCoin(int costOfCard) {
 }
 
 void Player::PlaceNewArmies(int numberOfNewArmies, Territory &territory) {
-    // TODO: 更新自己的territory
     territory.placeNewArmiesOfPlayer(id, numberOfNewArmies);
+    territories.push_back(&territory);
+    this->remainingCubes-=numberOfNewArmies;
     cout << numberOfNewArmies << " new armies are placed on territory " + territory.getName() << endl;
 }
 
