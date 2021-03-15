@@ -14,8 +14,8 @@ int main() {
         return 0;
     }
     game->startup();
-    game->play();
-    game->computeScore();
+    //game->play();
+    //game->computeScore();
 }
 
 

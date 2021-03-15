@@ -15,7 +15,7 @@
 using namespace std;
 
 const vector<int> Game::CARD_COSTS = {0, 1, 1, 2, 2, 3};
-const vector<string> Game::COLORS = {"purple", "white", "green", "grey"};
+vector<string> Game::COLORS = {"purple", "white", "green", "grey"};
 
 Game::Game() {
 }
@@ -40,6 +40,7 @@ bool Game::start() {
         armies[color] = 18;
         cities[color] = 3;
     }
+
     return true;
 }
 
@@ -127,6 +128,7 @@ bool Game::selectMap() {
             cout << e << endl;
         }
     }
+    this->startregionid = selectStartingRegion();
     return true;
 }
 
@@ -152,14 +154,32 @@ void Game::createPlayers() {
     string lastName;
     string color;
     int bidding;
+
     for (int i = 0; i < numOfPlayer; ++i) {
         cout << "Please enter the full name of player " << i + 1 << ": (separate by space)" << endl;
         cout << ">> ";
         cin >> firstName;
         cin >> lastName;
-        cout << "Please enter the color of player " << i + 1 << ": (purple, white, green, grey) " << endl;
-        cout << ">> ";
-        cin >> color;
+
+        while(true){
+            cout << "Please enter the color of player " << i + 1 << ": (";
+            //purple, white, green, grey) " << endl;
+            for(auto item:COLORS){
+                cout << item <<",";
+            }
+            cout << ")"<<endl;
+            cout << ">> ";
+            cin >> color;
+            vector<string>::iterator itr = std::find(COLORS.begin(), COLORS.end(), color);
+            if (itr != COLORS.end()){
+                COLORS.erase(itr);
+                break;
+            }
+            else{
+                cout << "ERROR! Please type the correct color name"<<endl;
+            }
+        }
+
         cout << "Please enter the bidding of player " << i + 1 << ":" << endl;
         cout << ">> ";
         cin >> bidding;
@@ -176,11 +196,33 @@ void Game::createDeck() {
 }
 
 void Game::createArmiesAndCities() {
-    int startingRegion = selectStartingRegion();
 
-    // TODO: 在Map和Player里都需要初始化军队 (Part 2, 第2)
-    // TODO：根据游戏规则，如果是两个玩家，需要有nonPlayerArmy
-    // TODO: 最后要print player
+    Territory *starting_Territory = map->getTerritoryById(startregionid);
+    cout << "Start region is" <<(*starting_Territory).getName()<<endl;
+    for(auto player:this->players){
+        //(*starting_Territory).placeNewArmiesOfPlayer(player->getId(),4);
+        player->PlaceNewArmies(4,(*starting_Territory));
+    }
+
+    if(players.size()==2){
+        int territoryid=-1;
+        //Assume local army has playerid of 0
+        int i=0;
+        while(i<10){
+            cout << "Player "<<players[i%2]->getId()<<", please select a territory from 1-"<<map->getTerritories().size()<<endl;
+            cin >>territoryid;
+            if(territoryid<1 || territoryid>map->getTerritories().size())
+                cout << "Invalid territory ID! Please input another one"<<endl;
+            else
+                i++;
+            map->getTerritoryById(startregionid)->placeNewArmiesOfPlayer(0,1);
+        }
+    }
+
+    for(auto player:this->players){
+        cout << *player;
+    }
+
 }
 
 void Game::printSixCards() {
@@ -197,9 +239,56 @@ void Game::printSixCards() {
     cout << "\n" << endl;
 }
 
+bool Game::neighbor_is_connected(int neighbor){
+    vector<int> neighbors = map->getTerritoryNeighborsById(neighbor);
+    for(int i = 0;i<neighbors.size();i++)
+        if(map->getDistance(neighbor,neighbors[i])==3)
+            return true;
+    return false;
+}
+
 int Game::selectStartingRegion() {
-    // TODO：确定一个起始的Region，需要查看游戏规则
-    return 13;
+    map->printTerritoryAdjacencyList();
+    int size = map->getTerritories().size();
+
+    std::random_device rd;
+    std::seed_seq seed{rd(),rd(),rd(),rd(),rd(),rd(),rd(),rd()};
+    std::mt19937 mt(seed);
+
+    std::uniform_int_distribution<int> dist_map(1,size);
+    vector<int> neighbors;
+    int temp_result=-1;
+
+    vector<int> searched_id;
+    std::vector<int>::iterator it;
+    bool found=false;
+    while(true){
+        if(searched_id.size()==size){
+            temp_result=-1;
+            break;
+        }
+        temp_result=dist_map(mt);
+        it = find (searched_id.begin(), searched_id.end(), temp_result);
+        while(it!=searched_id.end()){
+            temp_result=dist_map(mt);
+            it = find (searched_id.begin(), searched_id.end(), temp_result);
+        }
+
+        neighbors=map->getTerritoryNeighborsById(temp_result);
+        for(int i = 0;i<neighbors.size();i++){
+            if(map->getDistance(temp_result,neighbors[i])==3
+                || neighbor_is_connected(neighbors[i])) {
+                found = true;
+                break;
+            }
+        }
+        if(found)
+            break;
+        else
+            searched_id.push_back(temp_result);
+
+    }
+    return temp_result;
 }
 
 void Game::bid() {
