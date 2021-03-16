@@ -40,14 +40,13 @@ bool Game::start() {
         armies[color] = 18;
         cities[color] = 3;
     }
-
     return true;
 }
 
 void Game::startup() {
     deck->shuffleDeck();
     hand = new Hand(deck); // draw six cards
-    printSixCards();
+    //printSixCards();
     createArmiesAndCities();
     bid();
 }
@@ -93,7 +92,6 @@ void Game::computeScore() {
     // TODO
 }
 
-
 bool Game::selectMap() {
     string filePath;
     string path = "../Maps/";
@@ -102,7 +100,6 @@ bool Game::selectMap() {
         mapFiles.push_back(entry.path().string().erase(entry.path().string().find(path), path.size()));
     }
     int filePathOption = -1;
-
     //Map selection
     while (true) {
         try{
@@ -154,32 +151,30 @@ void Game::createPlayers() {
     string lastName;
     string color;
     int bidding;
-
+    vector<string> colorsCopy = COLORS;
     for (int i = 0; i < numOfPlayer; ++i) {
         cout << "Please enter the full name of player " << i + 1 << ": (separate by space)" << endl;
         cout << ">> ";
         cin >> firstName;
         cin >> lastName;
-
         while(true){
             cout << "Please enter the color of player " << i + 1 << ": (";
             //purple, white, green, grey) " << endl;
-            for(auto item:COLORS){
+            for(auto item:colorsCopy){
                 cout << item <<",";
             }
             cout << ")"<<endl;
             cout << ">> ";
             cin >> color;
-            vector<string>::iterator itr = std::find(COLORS.begin(), COLORS.end(), color);
-            if (itr != COLORS.end()){
-                COLORS.erase(itr);
+            vector<string>::iterator itr = std::find(colorsCopy.begin(), colorsCopy.end(), color);
+            if (itr != colorsCopy.end()){
+                colorsCopy.erase(itr);
                 break;
             }
             else{
                 cout << "ERROR! Please type the correct color name"<<endl;
             }
         }
-
         cout << "Please enter the bidding of player " << i + 1 << ":" << endl;
         cout << ">> ";
         cin >> bidding;
@@ -196,25 +191,24 @@ void Game::createDeck() {
 }
 
 void Game::createArmiesAndCities() {
-
     Territory *starting_Territory = map->getTerritoryById(startregionid);
-    cout << "Start region is" <<(*starting_Territory).getName()<<endl;
-    for(auto player:this->players){
+    cout << "Start region is" << (*starting_Territory).getName() <<endl;
+    for ( auto player : this->players ){
         //(*starting_Territory).placeNewArmiesOfPlayer(player->getId(),4);
         player->PlaceNewArmies(4,(*starting_Territory));
     }
-
-    if(players.size()==2){
+    if ( players.size() ==2 ){
         int territoryid=-1;
         //Assume local army has playerid of 0
-        int i=0;
-        while(i<10){
-            cout << "Player "<<players[i%2]->getId()<<", please select a territory from 1-"<<map->getTerritories().size()<<endl;
-            cin >>territoryid;
-            if(territoryid<1 || territoryid>map->getTerritories().size())
-                cout << "Invalid territory ID! Please input another one"<<endl;
-            else
-                i++;
+        int i = 0;
+        while( i < 10 ){
+            cout << "Player " << players[i%2]->getId() << ", please select a territory from 1-";
+            cout << map->getTerritories().size() << endl;
+            cin >> territoryid;
+            if ( territoryid<1
+                || territoryid>map->getTerritories().size() )
+                cout << "Invalid territory ID! Please input another one" << endl;
+            else  i++;
             map->getTerritoryById(startregionid)->placeNewArmiesOfPlayer(0,1);
         }
     }
@@ -239,54 +233,36 @@ void Game::printSixCards() {
     cout << "\n" << endl;
 }
 
-bool Game::neighbor_is_connected(int neighbor){
-    vector<int> neighbors = map->getTerritoryNeighborsById(neighbor);
-    for(int i = 0;i<neighbors.size();i++)
-        if(map->getDistance(neighbor,neighbors[i])==3)
-            return true;
+bool Game::criteriaB(vector<int> neighbors){
+    vector<int> neighborsOfNeighbor;
+    for ( int neighbor = 0; neighbor < neighbors.size(); ++neighbor ) {
+        neighborsOfNeighbor = map->getTerritoryNeighborsById(neighbors[neighbor]);
+        for ( int i = 0; i < neighborsOfNeighbor.size(); ++i ) {
+            if( map->getDistance(neighbors[neighbor], neighborsOfNeighbor[i]) == 3)  return true;
+        }
+    }
     return false;
 }
 
 int Game::selectStartingRegion() {
-    map->printTerritoryAdjacencyList();
     int size = map->getTerritories().size();
-
-    std::random_device rd;
-    std::seed_seq seed{rd(),rd(),rd(),rd(),rd(),rd(),rd(),rd()};
-    std::mt19937 mt(seed);
-
-    std::uniform_int_distribution<int> dist_map(1,size);
+    vector<int> TerritoryId(size);
     vector<int> neighbors;
-    int temp_result=-1;
-
-    vector<int> searched_id;
-    std::vector<int>::iterator it;
-    bool found=false;
-    while(true){
-        if(searched_id.size()==size){
-            temp_result=-1;
-            break;
+    //Creating a vector of 1-size
+    iota(TerritoryId.begin(), TerritoryId.end(),1);
+    //Random shuffle territory IDs
+    random_shuffle(TerritoryId.begin(), TerritoryId.end());
+    int temp_result = 0;
+    int counter = 0;
+    for (int regionIndex = 0; regionIndex <= size; ++regionIndex){
+        neighbors = map->getTerritoryNeighborsById(TerritoryId[regionIndex]);
+        for (int neighbor = 0; neighbor < neighbors.size(); ++neighbor){
+            //Criteria A and B's second condition
+            if ( map->getDistance(TerritoryId[regionIndex],neighbors[neighbor])==3 )  counter++;
         }
-        temp_result=dist_map(mt);
-        it = find (searched_id.begin(), searched_id.end(), temp_result);
-        while(it!=searched_id.end()){
-            temp_result=dist_map(mt);
-            it = find (searched_id.begin(), searched_id.end(), temp_result);
-        }
-
-        neighbors=map->getTerritoryNeighborsById(temp_result);
-        for(int i = 0;i<neighbors.size();i++){
-            if(map->getDistance(temp_result,neighbors[i])==3
-                || neighbor_is_connected(neighbors[i])) {
-                found = true;
-                break;
-            }
-        }
-        if(found)
-            break;
-        else
-            searched_id.push_back(temp_result);
-
+        if ( counter >= 2 )  temp_result=TerritoryId[regionIndex];
+        else if ( criteriaB(neighbors) )  temp_result=TerritoryId[regionIndex];
+        if ( temp_result )  return temp_result;
     }
     return temp_result;
 }
