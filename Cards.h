@@ -3,140 +3,68 @@
 //
 #pragma once
 
-
 #include <iostream>
 #include <vector>
 #include <string>
 
 using namespace std;
 
-//use enum to set card type
+// TODO: 写toString，否则没办法显示。
 enum CardType{
     night, cursed, arcane, ancient, dire, forest, noble, mountain, emptyKind
 };
+
 enum AbilityType {
-    move, army, flying, elixir, gainCoins, VP
-};
-enum ActionType {
-    placeArmy, moveArmy, buildCity, destroyArmy, immuneAttack
-};
-enum vpType {
-    cardType, cardSet, coinsLeft
+    moving, army, flying, elixir, gainCoins, VP, immuneAttack
 };
 
-class Deck;
+enum ActionType {
+    placeArmy, moveArmy, buildCity, destroyArmy
+};
+
+enum VPType {
+    nullVpType, cardType, cardSet, coinsLeft, vpPerFlying
+};
+
+struct Ability {
+    AbilityType abilityType;
+    int amount;
+    VPType vpType;          // if abilityType == VP, then there is a vpType
+    CardType cardTypeForVP; // If the VP type is cardType or cardSet, cardTypeForVP is used to specify the type.
+};
+
+struct Action {
+    ActionType actionType;
+    int amount;
+};
+
 class Card{
 public:
-
     Card();
-    //constructor with parameter
-    Card(CardType t,std::string name,int number_of_army,int number_of_movement,int buildCity,int elixers,int
-    kill_army,int fly_ability,int victory_point,int build_ability,int move_ability,int immune_to_attack,bool
-    one_vp_for_night,bool one_vp_for_cursed,bool one_vp_for_arcane,bool one_vp_for_ancient,bool one_vp_for_dire,bool
-    one_vp_for_forest,bool one_vp_3_coins,bool one_vp_for_fly,bool three_vp_have_two_mountain ,bool three_vp_four_noble ,bool OR_CARD,int money);
-    //constructor
-
-    //copy constructor
-    Card(const Card &c);
+    Card(CardType cardType, string name, vector<Ability> abilities, vector<Action> actions, bool isAndCard,
+         bool isOrCard);
+    Card(const Card&);
     ~Card();
-    //stream insertion operator "to string"
     friend ostream& operator<<(ostream& output, const Card& card);
-    //assignment operator
-    Card& operator = (const Card& card);
+    Card& operator=(const Card& card);
 
     //getters and setters:
     CardType getType() const;
-    void setType(CardType type);
-    const string &getName() const;
-    void setName(const string &name);
-    int getNumberOfArmy() const;
-    void setNumberOfArmy(int numberOfArmy);
-    int getNumberOfMovement() const;
-    void setNumberOfMovement(int numberOfMovement);
-    int getBuildCity() const;
-    void setBuildCity(int buildCity);
-    int getKillArmy() const;
-    void setKillArmy(int killArmy);
-    int getElixers() const;
-    void setElixers(int elixers);
-    int getFlyAbility() const;
-    void setFlyAbility(int flyAbility);
-    int getVictoryPoint() const;
-    void setVictoryPoint(int victoryPoint);
-    int getBuildAbility() const;
-    void setBuildAbility(int buildAbility);
-    int getMoveAbility() const;
-    void setMoveAbility(int moveAbility);
-    int getImmuneToAttack() const;
-    void setImmuneToAttack(int immuneToAttack);
-    bool isOneVpForNight() const;
-    void setOneVpForNight(bool oneVpForNight);
-    bool isOneVpForCursed() const;
-    void setOneVpForCursed(bool oneVpForCursed);
-    bool isOneVpForArcane() const;
-    void setOneVpForArcane(bool oneVpForArcane);
-    bool isOneVpForAncient() const;
-    void setOneVpForAncient(bool oneVpForAncient);
-    bool isOneVpForDire() const;
-    void setOneVpForDire(bool oneVpForDire);
-    bool isOneVpForForest() const;
-    void setOneVpForForest(bool oneVpForForest);
-    bool isOneVp3Coins() const;
-    void setOneVp3Coins(bool oneVp3Coins);
-    bool isOneVpForFly() const;
-    void setOneVpForFly(bool oneVpForFly);
-    bool isThreeVpHaveTwoMountain() const;
-    void setThreeVpHaveTwoMountain(bool threeVpHaveTwoMountain);
-    bool isThreeVpFourNoble() const;
-    void setThreeVpFourNoble(bool threeVpFourNoble);
-    bool isOrCard() const;
-    void setOrCard(bool orCard);
-    int getMoney() const;
-    void setMoney(int money);
+    void setType(CardType newCardType);
+    string getName() const;
+    void setName(string& newName);
+    vector<Ability> getAbilities();
+    vector<Action> getActions();
+    bool getAnd();
+    bool getOr();
 
 private:
-    CardType type;
-    std::string name;
-    //actions:
-    int number_of_army;
-    int number_of_movement;
-    int buildCity;
-    int kill_army;
-    //goods:
-    //top functions
-    int elixirs;
-    int fly_ability;
-    int victory_point;
-    int build_ability;
-    int move_ability;
-    int immune_to_attack;
-    //for victory point counting
-    bool one_vp_for_night;
-    bool one_vp_for_cursed;
-    bool one_vp_for_arcane;
-    bool one_vp_for_ancient;
-    bool one_vp_for_dire;
-    bool one_vp_for_forest;
-    bool one_vp_3_coins;
-    bool one_vp_for_fly;
-    bool three_vp_have_two_mountain;
-    bool three_vp_four_noble;
-    bool OR_CARD;
-    int money;
-};
-
-class Hand {
-public:
-    Hand();
-    explicit Hand(Deck* deck);
-    ~Hand();
-    Hand(const Hand& obj);
-    Hand& operator= (const Hand& obj);
-    friend ostream& operator<<(ostream& output, const Hand& hand);
-    std::vector<Card*>* getHandVector();
-    Card* exchange(int card_number, Deck* deck);
-private:
-    std::vector<Card*>* handVector;
+    CardType cardType;
+    string name;
+    vector<Ability> abilities;
+    vector<Action> actions;
+    bool isAndCard;
+    bool isOrCard;
 };
 
 class Deck{
@@ -144,27 +72,40 @@ public:
     //default constructor
     Deck();
     //parameter constructor
-    Deck(int number_of_players);
+    Deck(int numberOfPlayers);
     //destructor
     ~Deck();
     //copy constructor
-    Deck(const Deck& obj);
+    Deck(const Deck&);
     //assignment operator
-    Deck& operator= (const Deck& obj);
+    Deck& operator=(const Deck& obj);
     //stream insertion operator
     friend ostream& operator<<(ostream& output, const Deck& deck);
     //get method
-    std::vector<Card*>* getDeckVector();
+    vector<Card*> getCards();
     //draw method
     Card* draw();
     void shuffleDeck();
 
 private:
-    vector<Card*>* deckVector;
+    vector<Card*> cards;
     void initializeDeckOfTwoPlayers();
 };
 
-
+class Hand {
+public:
+    Hand();
+    Hand(Deck *deck);
+    ~Hand();
+    Hand(const Hand& obj);
+    Hand& operator= (const Hand& obj);
+    friend ostream& operator<<(ostream& output, const Hand& hand);
+    vector<Card*> getHandCards();
+    Card* exchange(int cardNumber, Deck* deck);
+private:
+    vector<Card*> handCards;
+    static const vector<int> CARD_COSTS;
+};
 
 
 

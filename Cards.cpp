@@ -7,632 +7,370 @@
 #include <vector>       // std::vector
 #include <random>
 #include <iterator>
-#include <map>
+#include <iomanip>
 #include "Cards.h"
 
 using namespace std;
 
-Card::Card(CardType type, string name, int number_of_army, int number_of_movement, int buildCity, int elixers, int
-kill_army, int fly_ability, int victory_point, int build_ability, int move_ability, int immune_to_attack, bool
-           one_vp_for_night, bool one_vp_for_cursed, bool one_vp_for_arcane, bool one_vp_for_ancient,
-           bool one_vp_for_dire, bool
-           one_vp_for_forest, bool one_vp_3_coins, bool one_vp_for_fly, bool three_vp_have_two_mountain, bool
-           three_vp_four_noble, bool OR_CARD, int money) : type(type), name(name),
-                                                           number_of_army
-                                                                   (number_of_army),
-                                                           number_of_movement(number_of_movement), buildCity(buildCity),
-                                                           elixirs(elixers), kill_army(kill_army),
-                                                           fly_ability(fly_ability), victory_point(victory_point),
-                                                           build_ability(build_ability), move_ability
-                                                                   (move_ability), immune_to_attack(immune_to_attack),
-                                                           one_vp_for_night(one_vp_for_night), one_vp_for_cursed
-                                                                   (one_vp_for_cursed),
-                                                           one_vp_for_arcane(one_vp_for_arcane),
-                                                           one_vp_for_ancient(one_vp_for_ancient),
-                                                           one_vp_for_dire(one_vp_for_dire),
-                                                           one_vp_for_forest(one_vp_for_forest),
-                                                           one_vp_3_coins(one_vp_3_coins),
-                                                           one_vp_for_fly(one_vp_for_fly),
-                                                           three_vp_have_two_mountain(three_vp_have_two_mountain),
-                                                           three_vp_four_noble
-                                                                   (three_vp_four_noble), OR_CARD(OR_CARD),
-                                                           money(money) {
+const vector<int> Hand::CARD_COSTS = {0, 1, 1, 2, 2, 3};
+
+Card::Card() {
+    cardType = emptyKind;
+    name = "none";
+    isAndCard = false;
+    isOrCard = false;
+}
+
+Card::Card(CardType type, string name, vector<Ability> abilities, vector<Action> actions, bool isAndCard, bool isOrCard) {
+    this->cardType = type;
+    this->name = name;
+    this->abilities = abilities;
+    this->actions = actions;
+    this->isAndCard = isAndCard;
+    this->isOrCard = isOrCard;
 }
 
 Card::Card(const Card &card) {
-    type = card.type;
+    cardType = card.cardType;
     name = card.name;
-    number_of_army = card.number_of_army;
-    number_of_movement = card.number_of_movement;
-    buildCity = card.buildCity;
-    elixirs = card.elixirs;
-    kill_army = card.kill_army;
-    fly_ability = card.fly_ability;
-    victory_point = card.victory_point;
-    build_ability = card.build_ability;
-    move_ability = card.move_ability;
-    immune_to_attack = card.immune_to_attack;
-    one_vp_for_night = card.one_vp_for_night;
-    one_vp_for_cursed = card.one_vp_for_cursed;
-    one_vp_for_arcane = card.one_vp_for_arcane;
-    one_vp_for_ancient = card.one_vp_for_ancient;
-    one_vp_for_dire = card.one_vp_for_dire;
-    one_vp_for_forest = card.one_vp_for_forest;
-    one_vp_3_coins = card.one_vp_3_coins;
-    one_vp_for_fly = card.one_vp_for_fly;
-    three_vp_have_two_mountain = card.three_vp_have_two_mountain;
-    three_vp_four_noble = card.three_vp_four_noble;
-    OR_CARD = card.OR_CARD;
-    money = card.money;
+    abilities = card.abilities;
+    actions = card.actions;
+    isAndCard = card.isAndCard;
+    isOrCard = card.isOrCard;
 }
 
-//to string method
 std::ostream &operator<<(std::ostream &output, const Card &card) {
+    // TODO
     output << "card name: " + card.name << endl;
-    output << "Action: " << endl;
-    if (card.number_of_army > 0) {
-        output << "can build armies: " << card.number_of_army << endl;
+    if (card.abilities.size() == 2) {
+
+    } else {
+
     }
-    if (card.number_of_movement > 0) {
-        output << "can move: " << card.number_of_movement << endl;
-    }
-    if (card.buildCity > 0) {
-        output << "build one city" << endl;
-    }
-    if (card.kill_army > 0) {
-        output << "can kill armies: " << card.kill_army << endl;
+    output << "Action: ";
+    if (!card.isAndCard && !card.isOrCard) {
+        Action action = card.actions[0];
+        // output << action.actionType;
+
     }
 
-    output << "Goods: " << endl;
-    if (card.elixirs > 0) {
-        output << "elixirs: " << card.elixirs << endl;
-    }
-    if (card.fly_ability > 0) {
-        output << "wings" << endl;
-    }
-    if (card.victory_point > 0) {
-        output << "has victory point: " << card.victory_point << endl;
-    }
-    if (card.build_ability > 0) {
-        output << "build one more armies when build armies" << endl;
-    }
-    if (card.move_ability > 0) {
-        output << "one more movement when move" << endl;
-    }
-    if (card.immune_to_attack > 0) {
-        output << "immune to attack" << endl;
-    }
-    if (card.one_vp_for_night) {
-        output << "one victory point for each night card" << endl;
-    }
-    if (card.one_vp_for_cursed) {
-        output << "one victory point for each cursed card" << endl;
-    }
-    if (card.one_vp_for_arcane) {
-        output << "one victory point for each arcane card" << endl;
-    }
-    if (card.one_vp_for_ancient) {
-        output << "one victory point for each ancient card" << endl;
-    }
-    if (card.one_vp_for_dire) {
-        output << "one victory point for dire night card" << endl;
-    }
-    if (card.one_vp_for_forest) {
-        output << "one victory point for each forest card" << endl;
-    }
-    if (card.one_vp_3_coins) {
-        output << "one victory point for every 3 coinSupply" << endl;
-    }
-    if (card.one_vp_for_fly) {
-        output << "one victory point for each wing" << endl;
-    }
-    if (card.OR_CARD) {
-        output << "This is a card with OR, you need to choose the action later." << endl;
-    }
-    if (card.money != 0) {
-        output << "This card have 2 more coinSupply" << endl;
-    }
-    if (card.three_vp_have_two_mountain) {
-        output << "+3vp if you have two Mountain cards" << endl;
-    }
-    if (card.three_vp_four_noble) {
-        output << "Three noble cards=4vp" << endl;
-    }
+
     return output;
 }
 
-Card::Card() {
-    type = emptyKind;
-    name = "none";
-    number_of_army = 0;
-    number_of_movement = 0;
-    buildCity = 0;
-    elixirs = 0;
-    kill_army = 0;
-    fly_ability = 0;
-    victory_point = 0;
-    build_ability = 0;
-    move_ability = 0;
-    immune_to_attack = 0;
-    one_vp_for_night = false;
-    one_vp_for_cursed = false;
-    one_vp_for_arcane = false;
-    one_vp_for_ancient = false;
-    one_vp_for_dire = false;
-    one_vp_for_forest = false;
-    one_vp_3_coins = false;
-    one_vp_for_fly = false;
-    three_vp_four_noble = false;
-    three_vp_have_two_mountain = false;
-    OR_CARD = false;
-    money = 0;
-}
-
 Card &Card::operator=(const Card &card) {
-    this->type = card.type;
-    this->name = card.name;
-    this->number_of_army = card.number_of_army;
-    this->number_of_movement = card.number_of_movement;
-    this->buildCity = card.buildCity;
-    this->elixirs = card.elixirs;
-    this->kill_army = card.kill_army;
-    this->fly_ability = card.fly_ability;
-    this->victory_point = card.victory_point;
-    this->build_ability = card.build_ability;
-    this->move_ability = card.move_ability;
-    this->immune_to_attack = card.immune_to_attack;
-    this->one_vp_for_night = card.one_vp_for_night;
-    this->one_vp_for_cursed = card.one_vp_for_cursed;
-    this->one_vp_for_arcane = card.one_vp_for_arcane;
-    this->one_vp_for_ancient = card.one_vp_for_ancient;
-    this->one_vp_for_dire = card.one_vp_for_dire;
-    this->one_vp_for_forest = card.one_vp_for_forest;
-    this->one_vp_3_coins = card.one_vp_3_coins;
-    this->one_vp_for_fly = card.one_vp_for_fly;
-    this->three_vp_have_two_mountain = card.three_vp_have_two_mountain;
-    this->three_vp_four_noble = card.three_vp_four_noble;
-    this->OR_CARD = card.OR_CARD;
-    this->money = card.money;
+    cardType = card.cardType;
+    name = card.name;
+    abilities = card.abilities;
+    actions = card.actions;
+    isAndCard = card.isAndCard;
+    isOrCard = card.isOrCard;
     return *this;
 }
 
 CardType Card::getType() const {
-    return type;
+    return cardType;
 }
 
-void Card::setType(CardType type) {
-    Card::type = type;
+void Card::setType(CardType newCardType) {
+    cardType = newCardType;
 }
 
-const string &Card::getName() const {
+string Card::getName() const {
     return name;
 }
 
-void Card::setName(const string &name) {
-    Card::name = name;
-}
-
-int Card::getNumberOfArmy() const {
-    return number_of_army;
-}
-
-void Card::setNumberOfArmy(int numberOfArmy) {
-    number_of_army = numberOfArmy;
-}
-
-int Card::getNumberOfMovement() const {
-    return number_of_movement;
-}
-
-void Card::setNumberOfMovement(int numberOfMovement) {
-    number_of_movement = numberOfMovement;
-}
-
-int Card::getBuildCity() const {
-    return buildCity;
-}
-
-void Card::setBuildCity(int buildCity) {
-    Card::buildCity = buildCity;
-}
-
-int Card::getKillArmy() const {
-    return kill_army;
-}
-
-void Card::setKillArmy(int killArmy) {
-    kill_army = killArmy;
-}
-
-int Card::getElixers() const {
-    return elixirs;
-}
-
-void Card::setElixers(int elixers) {
-    Card::elixirs = elixers;
-}
-
-int Card::getFlyAbility() const {
-    return fly_ability;
-}
-
-void Card::setFlyAbility(int flyAbility) {
-    fly_ability = flyAbility;
-}
-
-int Card::getVictoryPoint() const {
-    return victory_point;
-}
-
-void Card::setVictoryPoint(int victoryPoint) {
-    victory_point = victoryPoint;
-}
-
-int Card::getBuildAbility() const {
-    return build_ability;
-}
-
-void Card::setBuildAbility(int buildAbility) {
-    build_ability = buildAbility;
-}
-
-int Card::getMoveAbility() const {
-    return move_ability;
-}
-
-void Card::setMoveAbility(int moveAbility) {
-    move_ability = moveAbility;
-}
-
-int Card::getImmuneToAttack() const {
-    return immune_to_attack;
-}
-
-void Card::setImmuneToAttack(int immuneToAttack) {
-    immune_to_attack = immuneToAttack;
-}
-
-bool Card::isOneVpForNight() const {
-    return one_vp_for_night;
-}
-
-void Card::setOneVpForNight(bool oneVpForNight) {
-    one_vp_for_night = oneVpForNight;
-}
-
-bool Card::isOneVpForCursed() const {
-    return one_vp_for_cursed;
-}
-
-void Card::setOneVpForCursed(bool oneVpForCursed) {
-    one_vp_for_cursed = oneVpForCursed;
-}
-
-bool Card::isOneVpForArcane() const {
-    return one_vp_for_arcane;
-}
-
-void Card::setOneVpForArcane(bool oneVpForArcane) {
-    one_vp_for_arcane = oneVpForArcane;
-}
-
-bool Card::isOneVpForAncient() const {
-    return one_vp_for_ancient;
-}
-
-void Card::setOneVpForAncient(bool oneVpForAncient) {
-    one_vp_for_ancient = oneVpForAncient;
-}
-
-bool Card::isOneVpForDire() const {
-    return one_vp_for_dire;
-}
-
-void Card::setOneVpForDire(bool oneVpForDire) {
-    one_vp_for_dire = oneVpForDire;
-}
-
-bool Card::isOneVpForForest() const {
-    return one_vp_for_forest;
-}
-
-void Card::setOneVpForForest(bool oneVpForForest) {
-    one_vp_for_forest = oneVpForForest;
-}
-
-bool Card::isOneVp3Coins() const {
-    return one_vp_3_coins;
-}
-
-void Card::setOneVp3Coins(bool oneVp3Coins) {
-    one_vp_3_coins = oneVp3Coins;
-}
-
-bool Card::isOneVpForFly() const {
-    return one_vp_for_fly;
-}
-
-void Card::setOneVpForFly(bool oneVpForFly) {
-    one_vp_for_fly = oneVpForFly;
-}
-
-bool Card::isThreeVpHaveTwoMountain() const {
-    return three_vp_have_two_mountain;
-}
-
-void Card::setThreeVpHaveTwoMountain(bool threeVpHaveTwoMountain) {
-    three_vp_have_two_mountain = threeVpHaveTwoMountain;
-}
-
-bool Card::isThreeVpFourNoble() const {
-    return three_vp_four_noble;
-}
-
-void Card::setThreeVpFourNoble(bool threeVpFourNoble) {
-    three_vp_four_noble = threeVpFourNoble;
-}
-
-bool Card::isOrCard() const {
-    return OR_CARD;
-}
-
-void Card::setOrCard(bool orCard) {
-    OR_CARD = orCard;
-}
-
-int Card::getMoney() const {
-    return money;
-}
-
-void Card::setMoney(int money) {
-    Card::money = money;
+void Card::setName(string& newName) {
+    name = newName;
 }
 
 Card::~Card() {
+    // did not use new in the constructor.
+}
 
+vector<Ability> Card::getAbilities() {
+    return abilities;
+}
+
+vector<Action> Card::getActions() {
+    return actions;
+}
+
+bool Card::getAnd() {
+    return isAndCard;
+}
+
+bool Card::getOr() {
+    return isOrCard;
 }
 
 Deck::Deck() {
     cout << "default 2 players deck:" << endl;
-    deckVector = new std::vector<Card*>();
     initializeDeckOfTwoPlayers();
     shuffleDeck();
-}
-
-Deck::Deck(int number_of_player) {
-    deckVector = new std::vector<Card*>();
-    if (number_of_player >= 2) {
-        initializeDeckOfTwoPlayers();
-    }
-    if (number_of_player >= 3) {
-        //32 for two players, 5 more for three players
-        deckVector->emplace_back(
-                new Card(arcane, "Arcane Sphinx", 3, 4, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
-                     false, false, false, false, false, true, 0));
-        deckVector->emplace_back(
-                new Card(arcane, "Arcane Manticore", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false, false,
-                     false, false, false, false, false, false, 0));
-        deckVector->emplace_back(
-                new Card(arcane, "Arcane Temple", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, true, false, false,
-                     false, false, false, false, false, false, 0));
-        deckVector->emplace_back(
-                new Card(mountain, "Mountain Dwarf", 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, false, false, false, false, false,
-                     false, false, false, true, false, false, 0));
-        deckVector->emplace_back(
-                new Card(mountain, "Mountain Treasury", 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                     false,
-                     false, false, false, false, false, false, 1));
-    }
-    if (number_of_player == 4) {
-        //34 for two players, 2 more for 4 players:
-        deckVector->emplace_back(
-                new Card(emptyKind, "Castle 1", 3, 0, 1, 1, 0, 0, 0, 0, 0, 0, false, false, false, false, false,
-                     false, false, false, false, false, true, 0));
-        deckVector->emplace_back(
-                new Card(emptyKind, "Castle 2", 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, false, false, false, false, false,
-                     false, false, false, false, false, false, 0));
-    }
-    shuffleDeck();
-}
-
-Deck::~Deck() {
-    for (unsigned i=0; i<deckVector->size(); i++) {
-        delete deckVector->at(i);
-        deckVector->at(i) = nullptr;
-    }
-    delete deckVector;
-    deckVector = nullptr;
-}
-
-Deck::Deck(const Deck &deck) {
-    this->deckVector = new vector<Card*>(*(deck.deckVector));
-}
-
-Deck &Deck::operator=(const Deck &deck) {
-    this->deckVector = new std::vector<Card*>(*(deck.deckVector));
-    return *this;
-}
-
-
-std::ostream &operator<<(std::ostream &output, const Deck &deck) {
-    for (int i = 0; i < deck.deckVector->size(); i++) {
-        output << *deck.deckVector->at(i) << endl;
-    }
-    return output;
-}
-
-std::vector<Card*>* Deck::getDeckVector() {
-    return deckVector;
-}
-
-Card *Deck::draw() {
-    if (!(getDeckVector()->empty())) {
-        Card* card = getDeckVector()->back();
-        getDeckVector()->pop_back();
-        return card;
-    } else {
-        //cout<<"no more card in the Deck!"<<endl;
-        Card *lastcard = new Card(emptyKind, "NoMoreCards", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                  false, false,
-                                  false,
-                                  false, false, false, false, 0);
-        return lastcard;
-    }
-}
-
-void Deck::shuffleDeck() {
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(deckVector->begin(), deckVector->end(), g);
 }
 
 void Deck::initializeDeckOfTwoPlayers() {
     //27 for two players:
     //ancient
-    deckVector->emplace_back(new Card(ancient, "Ancient Phoenix", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false, false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(
-            new Card(ancient, "Ancient Sage", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, true, false,
-                     false, false, false, false, false, false, 0));
-    deckVector->emplace_back(
-            new Card(ancient, "Ancient Tree Spirit", 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                     false,
-                     false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(ancient, "Ancient Woods", 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
+    cards.emplace_back(new Card(ancient, "Ancient Phoenix",
+                                {{flying, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 5}}, false, false));
+    cards.emplace_back(new Card(ancient, "Ancient Tree Spirit",
+                                {{elixir, 3, nullVpType, emptyKind}},
+                                {{placeArmy, 4}}, false, false));
+    cards.emplace_back(new Card(ancient, "Ancient Woods",
+                                {{army, 1, nullVpType, emptyKind}},
+                                {{buildCity, 1}, {placeArmy, 1}},
+                                true, false));
+    cards.emplace_back(new Card(ancient, "Ancient Sage",
+                                {{VP, 1, cardType, ancient}},
+                                {{moveArmy, 3}}, false, false));
+
     //cursed
-    deckVector->emplace_back(new Card(cursed, "Cursed Banshee", 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(cursed, "Cursed Gargoyles", 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(cursed, "Cursed King", 3, 4, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, true, 0));
-    deckVector->emplace_back(new Card(cursed, "Cursed Mausoleum", 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(cursed, "Cursed Tower", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, true, false, false, false, 0));
+    cards.emplace_back(new Card(cursed, "Cursed Banshee",
+                                {{elixir, 2, nullVpType, emptyKind}},
+                                {{moveArmy, 6}}, false, false));
+    cards.emplace_back(new Card(cursed, "Cursed Gargoyles",
+                                {{flying, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 5}}, false, false));
+    cards.emplace_back(new Card(cursed, "Cursed King",
+                                {{elixir, 1, nullVpType, emptyKind}},
+                                {{placeArmy, 3}, {moveArmy, 4}},
+                                false, true));
+    cards.emplace_back(new Card(cursed, "Cursed Mausoleum",
+                                {{moving, 1, nullVpType, emptyKind}},
+                                {{buildCity, 1}}, false, false));
+    cards.emplace_back(new Card(cursed, "Cursed Tower",
+                                {{VP, 1, vpPerFlying, emptyKind}},
+                                {{buildCity, 1}}, false, false));
+    cards.emplace_back(new Card(emptyKind, "Graveyard",
+                                {{VP, 1, cardType, cursed}},
+                                {{placeArmy, 2}}, false, false));
+
     //dire
-    deckVector->emplace_back(new Card(dire, "Dire Dragon", 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(dire, "Dire Eye", 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(dire, "Dire Giant", 3, 0, 0, 0, 1, 0, 0, 0, 0, 1, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(dire, "Dire Goblin", 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(dire, "Dire Ogre", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, true, false, false, false, false, 0));
+    cards.emplace_back(new Card(dire, "Dire Dragon",
+                                {{flying, 1, nullVpType, emptyKind}},
+                                {{placeArmy, 3}, {destroyArmy, 1}},
+                                true, false));
+    cards.emplace_back(new Card(dire, "Dire Giant",
+                                {{immuneAttack, 0, nullVpType, emptyKind}},
+                                {{placeArmy, 3}, {destroyArmy, 1}},
+                                true, false));
+    cards.emplace_back(new Card(dire, "Dire Eye",
+                                {{flying, 1, nullVpType, emptyKind}},
+                                {{placeArmy, 4}}, false, false));
+    cards.emplace_back(new Card(dire, "Dire Goblin",
+                                {{elixir, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 5}}, false, false));
+    cards.emplace_back(new Card(dire, "Dire Ogre",
+                                {{VP, 1, coinsLeft, emptyKind}},
+                                {{moveArmy, 2}}, false, false));
+    cards.emplace_back(new Card(emptyKind, "Stronghold",
+                                {{VP, 1, cardType, dire}},
+                                {{buildCity, 1}}, false, false));
+
     //forest
-    deckVector->emplace_back(new Card(forest, "Forest Elf", 3, 2, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, true, 0));
-    deckVector->emplace_back(new Card(forest, "Forest Gnome", 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(forest, "Forest Pixie", 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(forest, "Forest Tree Town", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    //empty kind
-    deckVector->emplace_back(new Card(emptyKind, "Graveyard", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, true, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(emptyKind, "Lake", 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      true, false, false, false, false, true, 0));
-    deckVector->emplace_back(new Card(emptyKind, "Stronghold", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      true,
-                                      false, false, false, false, false, false, 0));
-    //Night
-    deckVector->emplace_back(new Card(night, "Night Hydra", 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(night, "Night Village", 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(night, "Night Wizard", 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
+    cards.emplace_back(new Card(emptyKind, "Lake",
+                                {{VP, 1, cardType, forest}},
+                                {{placeArmy, 2}, {moveArmy, 3}},
+                                false, true));
+    cards.emplace_back(new Card(forest, "Forest Elf",
+                                {{army, 1, nullVpType, emptyKind}},
+                                {{placeArmy, 3}, {moveArmy, 2}},
+                                false, true));
+    cards.emplace_back(new Card(forest, "Forest Gnome",
+                                {{elixir, 3, nullVpType, emptyKind}},
+                                {{moveArmy, 2}},
+                                false, false));
+    cards.emplace_back(new Card(forest, "Forest Tree Town",
+                                {{moving, 1, nullVpType, emptyKind}},
+                                {{buildCity, 1}}, false, false));
+    cards.emplace_back(new Card(forest, "Forest Pixie",
+                                {{army, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 4}},
+                                false, false));
+
     //noble
-    deckVector->emplace_back(new Card(noble, "Noble Hills", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, true, false, 0));
-    deckVector->emplace_back(new Card(noble, "Noble Knight", 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
-    deckVector->emplace_back(new Card(noble, "Noble Unicorn", 1, 4, 0, 0, 0, 0, 0, 0, 1, 0, false, false, false, false,
-                                      false,
-                                      false, false, false, false, false, false, 0));
+    cards.emplace_back(new Card(noble, "Noble Hills",
+                                {{VP, 4, cardSet, noble}},
+                                {{placeArmy, 3}},
+                                false, false));
+    cards.emplace_back(new Card(noble, "Noble Knight",
+                                {{moving, 1, nullVpType, emptyKind}},
+                                {{placeArmy, 4}, {destroyArmy, 1}},
+                                true, false));
+    cards.emplace_back(new Card(noble, "Noble Unicorn",
+                                {{moving, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 4}, {placeArmy, 1}},
+                                true, false));
+
+    //Night
+    cards.emplace_back(new Card(night, "Night Hydra",
+                                {{army, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 5}, {destroyArmy, 1}},
+                                true, false));
+    cards.emplace_back(new Card(night, "Night Village",
+                                {{army, 1, nullVpType, emptyKind}},
+                                {{buildCity, 1}}, false, false));
+    cards.emplace_back(new Card(night, "Night Wizard",
+                                {{VP, 1, cardType, night}},
+                                {{placeArmy, 3}, {destroyArmy, 1}},
+                                true, false));
 }
 
-Hand::Hand() {
-    handVector = new std::vector<Card*>();
-}
-
-Hand::Hand(Deck *deck) {
-    handVector = new std::vector<Card*>();
-    //draw 6 cards in the beginning of the game
-    handVector->emplace_back(deck->draw());
-    handVector->emplace_back(deck->draw());
-    handVector->emplace_back(deck->draw());
-    handVector->emplace_back(deck->draw());
-    handVector->emplace_back(deck->draw());
-    handVector->emplace_back(deck->draw());
-}
-
-Hand::~Hand() {
-    for (unsigned i=0; i<handVector->size(); i++) {
-        delete handVector->at(i);
-        handVector->at(i) = nullptr;
+Deck::Deck(int numberOfPlayers) {
+    if (numberOfPlayers >= 2) {
+        initializeDeckOfTwoPlayers();
     }
-    delete handVector;
-    handVector = nullptr;
+    if (numberOfPlayers >= 3) {
+        //32 for two players, 5 more for three players
+        // arcane
+        cards.emplace_back(new Card(arcane, "Arcane Sphinx",
+                                    {{flying, 1, nullVpType, emptyKind}},
+                                    {{placeArmy, 3}, {moveArmy, 4}},
+                                    false, true));
+        cards.emplace_back(new Card(arcane, "Arcane Manticore",
+                                    {{moving, 1, nullVpType, emptyKind}},
+                                    {{placeArmy, 4}, {destroyArmy, 1}},
+                                    true, false));
+        cards.emplace_back(new Card(arcane, "Arcane Temple",
+                                    {{VP, 1, cardType, arcane}},
+                                    {{moveArmy, 3}}, false, false));
+
+        // mountain
+        cards.emplace_back(new Card(mountain, "Mountain Dwarf",
+                                    {{VP, 3, cardSet, mountain}},
+                                    {{placeArmy, 2}, {destroyArmy, 1}},
+                                    true, false));
+        cards.emplace_back(new Card(mountain, "Mountain Treasury",
+                                    {{elixir, 1, nullVpType, emptyKind},
+                                     {gainCoins, 2}},
+                                    {{moveArmy, 3}},
+                                    false, false));
+    }
+    if (numberOfPlayers == 4) {
+        //34 for two players, 2 more for 4 players:
+        cards.emplace_back(new Card(emptyKind, "Castle 1",
+                                    {{elixir, 1, nullVpType, emptyKind}},
+                                    {{placeArmy, 3}, {buildCity, 1}},
+                                    false, true));
+        cards.emplace_back(new Card(emptyKind, "Castle 2",
+                                    {{elixir, 1, nullVpType, emptyKind}},
+                                    {{moveArmy, 3}, {buildCity, 1}},
+                                    true, false));
+    }
+    shuffleDeck();
 }
 
-Hand::Hand(const Hand &hand) {
-    this->handVector = new std::vector<Card*>(*(hand.handVector));
+Deck::~Deck() {
+    for (auto & card : cards) {
+        delete card;
+        card = nullptr;
+    }
 }
 
-Hand &Hand::operator=(const Hand &hand) {
-    this->handVector = new std::vector<Card*>(*(hand.handVector));
+Deck::Deck(const Deck &deck) {
+    for (auto & card : deck.cards) {
+        cards.emplace_back(new Card(*card));
+    }
+}
+
+Deck &Deck::operator=(const Deck &deck) {
+    cards.clear();
+    for (auto & card : deck.cards) {
+        cards.emplace_back(new Card(*card));
+    }
     return *this;
 }
 
-std::ostream &operator<<(std::ostream &output, const Hand &hand) {
-    map<int, int> moneyMap{{0, 0},
-                           {1, 1},
-                           {2, 1},
-                           {3, 2},
-                           {4, 2},
-                           {5, 3}};
-    for (int i = 0; i < hand.handVector->size(); i++) {
-        output << "Card " << i + 1 << " this card takes " << moneyMap[i] << " coins " << endl;
-        output << *hand.handVector->at(i) << endl;
+
+ostream &operator<<(std::ostream &output, const Deck &deck) {
+    int size = deck.cards.size();
+    output << "The top 3 cards on the deck is:" << endl;
+    for (int i = 0; i < 3; ++i) {
+        output << deck.cards[size - 1 - i]->getName() << ", ";
     }
     return output;
 }
 
-std::vector<Card*> *Hand::getHandVector() {
-    return handVector;
+vector<Card*> Deck::getCards() {
+    return cards;
 }
 
-Card *Hand::exchange(int card_number, Deck *deck) {
-    Card* card = (*handVector)[card_number - 1];
-    handVector->erase(handVector->begin() + card_number - 1);
-    handVector->emplace_back(deck->draw());
+Card* Deck::draw() {
+    Card* card;
+    if (!cards.empty()) {
+        card = cards.back();
+    } else {
+        card = nullptr;
+    }
+    cards.pop_back();
+    return card;
+}
+
+void Deck::shuffleDeck() {
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(cards.begin(), cards.end(), g);
+}
+
+Hand::Hand() {
+    for (int i = 0; i < 6; ++i) {
+        handCards.emplace_back(new Card());
+    }
+}
+
+Hand::Hand(Deck *deck) {
+    for (int i = 0; i < 6; ++i) {
+        handCards.emplace_back(deck->draw());
+    }
+}
+
+Hand::~Hand() {
+    for (auto & card : handCards) {
+        delete card;
+        card = nullptr;
+    }
+}
+
+Hand::Hand(const Hand &hand) {
+    for (auto & card : hand.handCards) {
+        handCards.emplace_back(new Card(*card));
+    }
+}
+
+Hand &Hand::operator=(const Hand &hand) {
+    handCards.clear();
+    for (auto & card : hand.handCards) {
+        handCards.emplace_back(new Card(*card));
+    }
+    return *this;
+}
+
+std::ostream &operator<<(ostream &output, const Hand &hand) {
+    output << "The six cards:" << endl;
+    output << "Cost:";
+    for (int cost : Hand::CARD_COSTS) {
+        output << setw(17) <<  to_string(cost) + "        ";
+    }
+    output << endl;
+    output << "Card:";
+    for (auto & card : hand.handCards) {
+        output << setw(17) << card->getName();
+    }
+    output << "\n" << endl;
+    return output;
+}
+
+vector<Card*> Hand::getHandCards() {
+    return handCards;
+}
+
+Card *Hand::exchange(int cardNumber, Deck *deck) {
+    Card* card = handCards[cardNumber - 1];
+    handCards.erase(handCards.begin() + cardNumber - 1);
+    handCards.emplace_back(deck->draw());
     return card;
 }
 
