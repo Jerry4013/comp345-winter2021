@@ -254,7 +254,7 @@ int Game::selectStartingRegion() {
     random_shuffle(TerritoryId.begin(), TerritoryId.end());
     int temp_result = 0;
     int counter = 0;
-    for (int regionIndex = 0; regionIndex <= size; ++regionIndex){
+    for (int regionIndex = 0; regionIndex < size; ++regionIndex){
         neighbors = map->getTerritoryNeighborsById(TerritoryId[regionIndex]);
         for (int neighbor = 0; neighbor < neighbors.size(); ++neighbor){
             //Criteria A and B's second condition
