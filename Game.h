@@ -41,7 +41,7 @@ private:
     int selectStartingRegion();
     void bid();
     Player* getPlayerById(int id);
-    bool neighbor_is_connected(int);
+    bool criteriaB(vector<int>);
 };
 
 
