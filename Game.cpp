@@ -76,7 +76,7 @@ void Game::play() {
                 }
             }
             currentPlayer->PayCoin(CARD_COSTS[cardIndex]);
-            currentPlayer->exchange(hand->getHandCards()[cardIndex]);
+            currentPlayer->exchange((*hand->getHandVector())[cardIndex]);
             // TODO 玩家得到good, 然后action
 
             // Part 5
@@ -191,7 +191,7 @@ void Game::printSixCards() {
     }
     cout << endl;
     cout << "Card:";
-    for (auto & card : hand->getHandCards()) {
+    for (auto & card : *hand->getHandVector()) {
         cout << setw(17) << card->getName();
     }
     cout << "\n" << endl;
