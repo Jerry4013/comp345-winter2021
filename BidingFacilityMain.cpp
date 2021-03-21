@@ -14,8 +14,9 @@ int biding::main () {
     vector<string> lastNames{"Smith", "Brown", "Miller"};
     const vector<string> COLORS{"purple", "white", "green"};
     players.reserve(3);
+    vector<Territory *> territories;
     for (int i = 0; i < 3; ++i) {
-        players.emplace_back(new Player(i + 1, firstNames[i], lastNames[i], COLORS[i], 0, 14));
+        players.emplace_back(new Player(i + 1, firstNames[i], lastNames[i], COLORS[i], 0, 14, territories));
     }
     players[0]->setBidding(2);
     players[1]->setBidding(1);

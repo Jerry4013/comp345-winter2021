@@ -79,9 +79,13 @@ void Game::play() {
             // TODO: 给玩家一些行动选择，比如查看地图以及其他各种信息
             printSixCards();
             Card* card = selectCard(currentPlayer);
-            // TODO 执行卡牌上的action
-            
-            // Part 5
+            // TODO 提示玩家在行动之前查看相关信息，进入方法后就无法查看了。
+            if (card->getAnd() || card->getOr()) {
+                currentPlayer->AndOrAction(card);
+            } else {
+                currentPlayer->takeAction(card->getActions()[0]);
+            }
+            map->printForce(numOfPlayer);
             cout << "****************************" << endl;
             cout << "****************************" << endl;
         }
@@ -204,14 +208,19 @@ void Game::createPlayers() {
             }
         }
         cout << "Please enter the bidding of player " << i + 1 << ":" << endl;
+        cout << "(The coins will be deducted only if you win the bidding later.)" << endl;
         cout << ">> ";
         cin >> bidding;
         coinSupply -= coins;
         cities[color] -= 3;
         armies[color] -= 18;
-        players.emplace_back(new Player(i + 1, firstName, lastName, color, bidding, coins));
+        players.emplace_back(new Player(i + 1, firstName, lastName, color, bidding, coins,
+                                        map->getTerritories()));
         cout << *players[i];
         cout << "Player " << i + 1 << " is created successfully!\n" << endl;
+    }
+    for (auto & player : players) {
+        player->setPlayers(players);
     }
 }
 
@@ -310,6 +319,7 @@ bool Game::selectStartingRegion() {
         int regionId = tempRegion->getId();
         if (criteriaA(regionId) && criteriaB(regionId)) {
             startRegionId = regionId;
+            tempRegion->setIsStartingRegion(true);
             cout << "\n\nStart region is " << startRegionId << "!\n" << endl;
             return true;
         }

@@ -1,6 +1,5 @@
 #include "Player.h"
 #include <sstream>
-#include <iomanip>
 
 Player::Player() {
     firstName = "Alice";
@@ -16,7 +15,8 @@ Player::Player() {
     abilities[immuneAttack] = 0;
 }
 
-Player::Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins) {
+Player::Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins,
+               vector<Territory *> territories) {
     this->id = id;
     this->firstName = firstName;
     this->lastName = lastName;
@@ -31,6 +31,7 @@ Player::Player(int id, const string& firstName, const string& lastName, const st
     abilities[flying] = 0;
     abilities[elixir] = 0;
     abilities[immuneAttack] = 0;
+    this->territories = territories;
 }
 
 Player::Player(const Player& player) {
@@ -50,11 +51,15 @@ Player::Player(const Player& player) {
     cardSetVp = player.cardSetVp;
     oneVpPer3Coins = player.oneVpPer3Coins;
     oneVpPerFlying = player.oneVpPerFlying;
+    players = player.players;
 }
 
 Player::~Player() {
     for (auto & territory : territories) {
         territory = nullptr;
+    }
+    for (auto & player : players) {
+        player = nullptr;
     }
     for (auto & card : cards) {
         card = nullptr;
@@ -72,20 +77,30 @@ void Player::PayCoin(int costOfCard) {
 
 void Player::PlaceNewArmies(int numberOfNewArmies, Territory* territory) {
     territory->placeNewArmiesOfPlayer(id, numberOfNewArmies);
-    for (auto & playerTerritory : territories) {
-        if (playerTerritory->getId() == territory->getId()) {
-            return;
-        }
-    }
-    territories.push_back(territory);
+
     remainingCubes -= numberOfNewArmies;
-    cout << numberOfNewArmies << " new armies are placed on territory " << territory->getId() << endl;
+    cout << numberOfNewArmies << " new armies are placed in territory " << territory->getId() << endl;
 }
 
-int Player::MoveOverLand(int numberOfArmies, Territory &from, Territory &to, int movingPoints) {
-    int troopsAtSourceTerritory = from.getArmiesOfPlayer(id);
+int Player::MoveArmies(int numberOfArmies, Territory *from, Territory *to, int movingPoints) {
+    int troopsAtSourceTerritory = from->getArmiesOfPlayer(id);
     if (troopsAtSourceTerritory < numberOfArmies) {
-        // throw an exception
+        cout << "There is not enough troop to move!";
+        return movingPoints;
+    }
+    if (numberOfArmies > movingPoints) {
+        cout << "ERROR! You don't have enough moving points. Try again.";
+        return movingPoints;
+    }
+    from->removeArmiesOfPlayer(id, numberOfArmies);
+    to->placeNewArmiesOfPlayer(id, numberOfArmies);
+    cout << numberOfArmies << " armies were moved from " << from->getId() << " to " << to->getId() << endl;
+    return movingPoints - numberOfArmies;
+}
+
+int Player::MoveOverLand(int numberOfArmies, Territory* from, Territory* to, int movingPoints) {
+    int troopsAtSourceTerritory = from->getArmiesOfPlayer(id);
+    if (troopsAtSourceTerritory < numberOfArmies) {
         cout << "There is not enough troop to move!";
         return movingPoints;
     }
@@ -95,46 +110,224 @@ int Player::MoveOverLand(int numberOfArmies, Territory &from, Territory &to, int
     } else if (abilities[flying] >= 2) {
         cost = 1;
     }
-    from.removeArmiesOfPlayer(id, numberOfArmies);
-    to.placeNewArmiesOfPlayer(id, numberOfArmies);
-    cout << numberOfArmies << " armies were moved from " << from.getId() << " to " << to.getId() << endl;
+    if (numberOfArmies * cost > movingPoints) {
+        cout << "ERROR! You don't have enough moving points. Try again.";
+        return movingPoints;
+    }
+    from->removeArmiesOfPlayer(id, numberOfArmies);
+    to->placeNewArmiesOfPlayer(id, numberOfArmies);
+    cout << numberOfArmies << " armies were moved from " << from->getId() << " to " << to->getId() << endl;
     return movingPoints - numberOfArmies * cost;
 }
 
-int Player::MoveArmies(int numberOfArmies, Territory &from, Territory &to, int movingPoints) {
-    int troopsAtSourceTerritory = from.getArmiesOfPlayer(id);
-    if (troopsAtSourceTerritory < numberOfArmies) {
-        // throw an exception
-        cout << "There is not enough troop to move!";
-        return movingPoints;
-    }
-    from.removeArmiesOfPlayer(id, numberOfArmies);
-    to.placeNewArmiesOfPlayer(id, numberOfArmies);
-    cout << numberOfArmies << " armies were moved from " << from.getId() << " to " << to.getId() << endl;
-    return movingPoints - numberOfArmies;
-}
-
-void Player::BuildCity(Territory &territory) {
+void Player::BuildCity(Territory* territory) {
     if (remainingCity == 0) {
         cout << "You have no city in hand!";
         return;
     }
     remainingCity--;
-    territory.buildCity(id);
+    territory->buildCity(id);
 }
 
-int Player::DestroyArmy(int numberOfArmies, int playerId, Territory &territory, int destroyPoints) {
-    int currTroops = territory.getArmiesOfPlayer(playerId);
+int Player::DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* territory, int destroyPoints) {
+    if (otherPlayer->abilities[immuneAttack] == 1) {
+        cout << "This player is immune to attack!";
+        return destroyPoints;
+    }
+    int currTroops = territory->getArmiesOfPlayer(otherPlayer->getId());
     if (currTroops < numberOfArmies) {
-        // throw an exception
         cout << "There is not enough troop to destroy!";
         return destroyPoints;
     }
-    territory.removeArmiesOfPlayer(playerId, numberOfArmies);
-    cout << numberOfArmies << " armies are destroyed on territory " << territory.getId() << endl;
+    otherPlayer->remainingCubes += numberOfArmies;
+    territory->removeArmiesOfPlayer(otherPlayer->getId(), numberOfArmies);
+    cout << numberOfArmies << " armies are destroyed on territory " << territory->getId() << endl;
     return destroyPoints - numberOfArmies;
 }
 
+bool Player::AndOrAction(Card *card) {
+    if (!card->getOr() && !card->getOr()) {
+        cout << "ERROR! This is neither an And card nor an Or card." << endl;
+        return false;
+    }
+    if (card->getAnd() && card->getOr()) {
+        cout << "ERROR! A card cannot be both And card and Or card." << endl;
+        return false;
+    }
+    if (card->getAnd()) {
+        bool result1 = takeAction(card->getActions()[0]);
+        bool result2 = takeAction(card->getActions()[1]);
+        return result1 && result2;
+    }
+    // It must be an "Or card" now.
+    int option;
+    cout << "You may choose one action below: " << endl;
+    cout << "1. " << card->getActions()[0] << endl;
+    cout << "2. " << card->getActions()[1] << endl;
+    cout << ">>";
+    cin >> option;
+    return takeAction(card->getActions()[option - 1]);
+}
+
+bool Player::takeAction(Action action) {
+    while (action.amount > 0) {
+        char ans;
+        cout << "You can " << action << endl;
+        cout << "Enter q to exit, any other key to continue..." << endl;
+        cin >> ans;
+        if (ans == 'q') {
+            break;
+        }
+        if (action.actionType == placeArmy) {
+            int remainingPoints = placeNewArmiesPrompt(action.amount);
+            if (remainingPoints == action.amount) {
+                continue;
+            }
+            action.amount = remainingPoints;
+        } else if (action.actionType == moveArmy) {
+            int remainingPoints = moveArmiesPrompt(action.amount);
+            if (remainingPoints == action.amount) {
+                continue;
+            }
+            action.amount = remainingPoints;
+        } else if (action.actionType == buildCity) {
+            int territoryId;
+            cout << "Please choose a territory ID to build a city: " << endl;
+            cout << ">>";
+            cin >> territoryId;
+            Territory* territory = getTerritoryById(territoryId);
+            BuildCity(territory);
+            action.amount -= 1;
+        } else if (action.actionType == destroyArmy) {
+            int remainingPoints = destroyArmyPrompt(action.amount);
+            if (remainingPoints == action.amount) {
+                continue;
+            }
+            action.amount = remainingPoints;
+        }
+    }
+    return true;
+}
+
+int Player::placeNewArmiesPrompt(int movingPoints) {
+    int territoryId, numberOfArmies;
+    cout << "Please choose a territory ID to place the new armies: " << endl;
+    cout << ">>";
+    cin >> territoryId;
+
+    // You may place new armies only on the starting region or on a region where you have a city.
+    Territory* territory = getTerritoryById(territoryId);
+    if (!territory->getIsStartingRegion() && territory->getCities()[id] == 0) {
+        cout << "ERROR! You may place new armies only on the starting region or on a region where"
+                " you have a city." << endl;
+        return movingPoints;
+    }
+
+    cout << "Please enter the number of armies to place: " << endl;
+    cout << ">>";
+    cin >> numberOfArmies;
+    if (numberOfArmies > movingPoints) {
+        cout << "ERROR! You can place " << movingPoints << " new armies at most." << endl;
+        return movingPoints;
+    } else if (numberOfArmies < 1) {
+        cout << "ERROR! Please select a valid number." << endl;
+    } else {
+        PlaceNewArmies(numberOfArmies, territory);
+        movingPoints -= numberOfArmies;
+    }
+    return movingPoints;
+}
+
+int Player::moveArmiesPrompt(int movingPoints) {
+    int fromTerritoryId, toTerritoryId, numberOfArmies;
+    cout << "Please choose a territory ID as starting point: " << endl;
+    cout << ">>";
+    cin >> fromTerritoryId;
+    cout << "Please choose a territory ID as target: " << endl;
+    cout << ">>";
+    cin >> toTerritoryId;
+    cout << "Please choose the number of armies you want to move: " << endl;
+    cout << ">>";
+    cin >> numberOfArmies;
+    Territory* fromTerritory = getTerritoryById(fromTerritoryId);
+    Territory* toTerritory = getTerritoryById(toTerritoryId);
+    if (fromTerritory->getContinentId() == toTerritory->getContinentId()) {
+        int remainingMovingPoints = MoveArmies(numberOfArmies, fromTerritory, toTerritory, movingPoints);
+        if (remainingMovingPoints == movingPoints) {
+            cout << "ERROR! Please try again." << endl;
+        } else {
+            movingPoints = remainingMovingPoints;
+        }
+    } else {
+        int remainingMovingPoints = MoveOverLand(numberOfArmies, fromTerritory, toTerritory, movingPoints);
+        if (remainingMovingPoints == movingPoints) {
+            cout << "ERROR! Please try again." << endl;
+        } else {
+            movingPoints = remainingMovingPoints;
+        }
+    }
+    return movingPoints;
+}
+
+int Player::destroyArmyPrompt(int destroyPoints) {
+    int playerId, territoryId;
+    cout << "Please choose a player ID to destroy army: " << endl;
+    cout << ">>";
+    cin >> playerId;
+    cout << "Please choose a territory ID to destroy the army: " << endl;
+    cout << ">>";
+    cin >> territoryId;
+    Player* otherPlayer = getPlayerById(playerId);
+    Territory* territory = getTerritoryById(territoryId);
+    int remainingMovingPoints = DestroyArmy(1, otherPlayer, territory, destroyPoints);
+    return remainingMovingPoints;
+}
+
+void Player::exchange(Card *card) {
+    cards.emplace_back(card);
+    for (int i = 0; i < card->getAbilities().size(); ++i) {
+        AbilityType abilityType = card->getAbilities()[i].abilityType;
+        if (abilityType == gainCoins) {
+            coins += card->getAbilities()[i].amount;
+        } else if (abilityType == VP) {
+            if (card->getAbilities()[i].vpType == cardType) {
+                cardTypeVp.emplace_back(card->getAbilities()[i].cardTypeForVP);
+            } else if (card->getAbilities()[i].vpType == cardSet) {
+                cardSetVp.emplace_back(card->getAbilities()[i].cardTypeForVP);
+            } else if (card->getAbilities()[i].vpType == coinsLeft) {
+                oneVpPer3Coins = true;
+            } else if (card->getAbilities()[i].vpType == vpPerFlying) {
+                oneVpPerFlying = true;
+            }
+        } else {
+            abilities[abilityType] += card->getAbilities()[i].amount;
+        }
+    }
+}
+
+Territory *Player::getTerritoryById(int territoryId) {
+    for (auto & territory : territories) {
+        if (territory->getId() == territoryId) {
+            return territory;
+        }
+    }
+    cout << "ERROR! There is no territory with this ID." << endl;
+    return nullptr;
+}
+
+Player* Player::getPlayerById(int playerId) {
+    for (auto & player : players) {
+        if (player->getId() == playerId) {
+            return player;
+        }
+    }
+    cout << "ERROR! There is no player with this ID." << endl;
+    return nullptr;
+}
+
+map<AbilityType, int> Player::getAbilities() const {
+    return abilities;
+}
 
 Player &Player::operator=(const Player &player) {
     firstName = player.firstName;
@@ -184,9 +377,16 @@ ostream &operator<<(ostream &out, const Player &player) {
     out << "remainingCity: " << player.remainingCity << "; ";
     out << "remainingCubes: " << player.remainingCubes << "; \n";
     out << "territories=[";
+    vector<int> hasForceInTerritory;
     for (int i = 0; i < player.territories.size(); i++) {
-        out << player.territories[i]->getId();
-        if (i < player.territories.size() - 1) {
+        if (player.territories[i]->getArmies()[player.getId()] > 0 ||
+            player.territories[i]->getCities()[player.getId()] > 0) {
+            hasForceInTerritory.emplace_back(player.territories[i]->getId());
+        }
+    }
+    for (int i = 0; i < hasForceInTerritory.size(); i++) {
+        out << hasForceInTerritory[i];
+        if (i < hasForceInTerritory.size() - 1) {
             out << ", ";
         }
     }
@@ -289,24 +489,6 @@ void Player::setCards(vector<Card *> &cards) {
     this->cards = cards;
 }
 
-void Player::exchange(Card *card) {
-    cards.emplace_back(card);
-    for (int i = 0; i < card->getAbilities().size(); ++i) {
-        AbilityType abilityType = card->getAbilities()[i].abilityType;
-        if (abilityType == gainCoins) {
-            coins += card->getAbilities()[i].amount;
-        } else if (abilityType == VP) {
-            if (card->getAbilities()[i].vpType == cardType) {
-                cardTypeVp.emplace_back(card->getAbilities()[i].cardTypeForVP);
-            } else if (card->getAbilities()[i].vpType == cardSet) {
-                cardSetVp.emplace_back(card->getAbilities()[i].cardTypeForVP);
-            } else if (card->getAbilities()[i].vpType == coinsLeft) {
-                oneVpPer3Coins = true;
-            } else if (card->getAbilities()[i].vpType == vpPerFlying) {
-                oneVpPerFlying = true;
-            }
-        } else {
-            abilities[abilityType] += card->getAbilities()[i].amount;
-        }
-    }
+void Player::setPlayers(vector<Player*> newPlayers) {
+    this->players = newPlayers;
 }

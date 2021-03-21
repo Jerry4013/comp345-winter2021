@@ -7,7 +7,8 @@
 class Player {
 public:
     Player();
-    Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins);
+    Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins,
+           vector<Territory *> territories);
     Player(const Player&);
     Player& operator=(const Player& secondPlayer);
     friend ostream& operator<<(ostream& out, const Player& player);
@@ -17,10 +18,15 @@ public:
     void exchange(Card* card);
     void PayCoin(int costOfCard);
     void PlaceNewArmies(int numberOfNewArmies, Territory* territory);
-    int MoveArmies(int numberOfArmies, Territory& from, Territory& to, int movingPoints);
-    int MoveOverLand(int numberOfArmies, Territory& from, Territory& to, int movingPoints);
-    void BuildCity(Territory& territory);
-    int DestroyArmy(int numberOfArmies, int playerId, Territory& territory, int destroyPoints);
+    // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
+    int MoveArmies(int numberOfArmies, Territory* from, Territory* to, int movingPoints);
+    // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
+    int MoveOverLand(int numberOfArmies, Territory* from, Territory* to, int movingPoints);
+    void BuildCity(Territory* territory);
+    // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
+    int DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* territory, int destroyPoints);
+    bool AndOrAction(Card* card);
+    bool takeAction(Action action);
 
     // Getters and Setters
     int getId() const;
@@ -45,6 +51,8 @@ public:
     void setTerritories(vector<Territory*>& territories);
     vector<Card*> getCards() const;
     void setCards(vector<Card*>& cards);
+    map<AbilityType, int> getAbilities() const;
+    void setPlayers(vector<Player*> players);
 
 private:
     int id;
@@ -56,11 +64,18 @@ private:
     int score;
     int remainingCity;
     int remainingCubes;
-    vector<Territory*> territories;
+    vector<Territory*> territories; // all the territories in the game.
+    vector<Player*> players; // All the players in the game. Used when destroying other player's army.
     vector<Card*> cards;
     map<AbilityType, int> abilities; // only handle non-VP abilities: moving, army, flying, elixir, immuneAttack
     vector<CardType> cardTypeVp;
     vector<CardType> cardSetVp;
     bool oneVpPer3Coins;
     bool oneVpPerFlying;
+
+    Territory* getTerritoryById(int territoryId);
+    Player* getPlayerById(int playerId);
+    int placeNewArmiesPrompt(int movingPoints);
+    int moveArmiesPrompt(int movingPoints);
+    int destroyArmyPrompt(int destroyPoints);
 };

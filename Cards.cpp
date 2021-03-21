@@ -14,6 +14,24 @@ using namespace std;
 
 const vector<int> Hand::CARD_COSTS = {0, 1, 1, 2, 2, 3};
 
+ostream &operator<<(ostream &output, const Action &action) {
+    switch (action.actionType) {
+        case placeArmy:
+            output << "place " << action.amount << " armies";
+            break;
+        case moveArmy:
+            output << "move " << action.amount << " armies";
+            break;
+        case buildCity:
+            output << "build a city";
+            break;
+        case destroyArmy:
+            output << "destroy " << action.amount << " armies";
+            break;
+    }
+    return output;
+}
+
 Card::Card() {
     cardType = emptyKind;
     name = "none";

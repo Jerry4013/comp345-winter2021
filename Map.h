@@ -25,6 +25,8 @@ public:
     void setName(const string& name);
     int getContinentId() const;
     void setContinentId(int newContinentId);
+    bool getIsStartingRegion() const;
+    void setIsStartingRegion(bool);
 
     int getArmiesOfPlayer(int playerId);
     void placeNewArmiesOfPlayer(int playerId, int numOfNewArmies);
@@ -39,6 +41,7 @@ private:
     int id;
     string name;
     int continentId;
+    bool isStartingRegion;
     map<int, int> armies; // playerId -> number of armies
     map<int, int> cities; // playerId -> whether this player has built city here
 };

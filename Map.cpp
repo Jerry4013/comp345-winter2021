@@ -16,6 +16,7 @@ Territory::Territory(int id, string& newName, int continentId) {
     this->id = id;
     this->name = newName;
     this->continentId = continentId;
+    this->isStartingRegion = false;
     for (int i = 0; i <= 4; ++i) {
         armies[i] = 0;
         cities[i] = 0;
@@ -78,6 +79,14 @@ int Territory::getContinentId() const {
 
 void Territory::setContinentId(const int newContinentId) {
     this->continentId = newContinentId;
+}
+
+bool Territory::getIsStartingRegion() const {
+    return isStartingRegion;
+}
+
+void Territory::setIsStartingRegion(bool newIsStartingRegion) {
+    isStartingRegion = newIsStartingRegion;
 }
 
 int Territory::getArmiesOfPlayer(int playerId) {

@@ -36,6 +36,7 @@ struct Ability {
 struct Action {
     ActionType actionType;
     int amount;
+    friend ostream& operator<<(ostream& output, const Action& action);
 };
 
 class Card{
