@@ -42,7 +42,5 @@ int mapDriver::main() {
     }
     cout << *testMap1 << endl;
     testMap1->validate();
-    // TODO: need more tests
     return 0;
-
 }

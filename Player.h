@@ -51,12 +51,16 @@ private:
     string firstName;
     string lastName;
     string color;
-    int biding;
+    int bidding;
     int coins;
     int score;
     int remainingCity;
     int remainingCubes;
     vector<Territory*> territories;
     vector<Card*> cards;
-    map<string, int> abilities;
+    map<AbilityType, int> abilities; // only handle non-VP abilities: moving, army, flying, elixir, immuneAttack
+    vector<CardType> cardTypeVp;
+    vector<CardType> cardSetVp;
+    bool oneVpPer3Coins;
+    bool oneVpPerFlying;
 };

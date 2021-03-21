@@ -1,5 +1,5 @@
 //
-// Created by jerry on 2/26/2021.
+// Created by Jingchao Zhang on 2/26/2021.
 //
 
 #ifndef COMP345_WINTER2021_GAME_H
@@ -43,7 +43,7 @@ private:
     Player* getPlayerById(int id);
     bool criteriaA(int regionId);
     bool criteriaB(int regionId);
-    void selectCard(Player* currentPlayer);
+    Card* selectCard(Player* currentPlayer);
 };
 
 

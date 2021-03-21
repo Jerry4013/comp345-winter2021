@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-//    biding::main();
+//    bidding::main();
     Game* game = new Game();
 
     if (!game->start()) {

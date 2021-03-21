@@ -154,7 +154,7 @@ void Deck::initializeDeckOfTwoPlayers() {
                                 {{placeArmy, 3}, {destroyArmy, 1}},
                                 true, false));
     cards.emplace_back(new Card(dire, "Dire Giant",
-                                {{immuneAttack, 0, nullVpType, emptyKind}},
+                                {{immuneAttack, 1, nullVpType, emptyKind}},
                                 {{placeArmy, 3}, {destroyArmy, 1}},
                                 true, false));
     cards.emplace_back(new Card(dire, "Dire Eye",

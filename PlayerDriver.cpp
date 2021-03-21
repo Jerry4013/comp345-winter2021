@@ -14,20 +14,20 @@ int player::main() {
 //    Player defaultPlayer;
 //    cout << "A default player is created: " << endl << defaultPlayer << endl << endl;
 //    string name;
-//    int biding;
+//    int bidding;
 //    int coinSupply;
 //    Territory territory1("territory1", 1, 1);
 //    Territory territory2("territory2", 2, 2);
 //    cout << "Enter player firstName: ";
 //    cin >> name;
-//    cout << "Enter biding coinSupply: ";
-//    cin >> biding;
+//    cout << "Enter bidding coinSupply: ";
+//    cin >> bidding;
 //    cout << "Enter initial coinSupply: ";
 //    cin >> coinSupply;
 //    vector<Territory*> territories;
 //    territories.push_back(&territory1);
 //    territories.push_back(&territory2);
-//    Player userCreatedPlayer(name, biding, coinSupply, territories);
+//    Player userCreatedPlayer(name, bidding, coinSupply, territories);
 //    cout << "A customized player is created: " << endl << userCreatedPlayer.toString() << endl << endl;
 //    Player player1(userCreatedPlayer);
 //    cout << "player1 is created by copy constructor. firstName is " + player1.getName() << endl;
@@ -59,8 +59,8 @@ int player::main() {
 //        cout << * cardsOfPlayer1[i] << endl;
 //    }
 //
-//    // 3. Player2 has his own biding facility object (see Part 5)
-//    cout << endl << "Player2 has his own biding facility object: " << player2.getBiding() << endl;
+//    // 3. Player2 has his own bidding facility object (see Part 5)
+//    cout << endl << "Player2 has his own bidding facility object: " << player2.getBiding() << endl;
 //
 //    // 4. PayCoin(), PlaceNewArmies(), MoveArmies(), MoveOverLand(). BuildCity(), and DestroyArmy().
 //    cout << endl << "Player2 has coinSupply: " << player2.getCoins() << endl;

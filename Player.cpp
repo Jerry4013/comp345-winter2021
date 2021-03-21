@@ -4,11 +4,16 @@
 
 Player::Player() {
     firstName = "Alice";
-    biding = 1;
+    bidding = 1;
     coins = 12;
     score = 0;
     remainingCity = 3;
     remainingCubes = 18;
+    abilities[moving] = 0;
+    abilities[army] = 0;
+    abilities[flying] = 0;
+    abilities[elixir] = 0;
+    abilities[immuneAttack] = 0;
 }
 
 Player::Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins) {
@@ -16,11 +21,16 @@ Player::Player(int id, const string& firstName, const string& lastName, const st
     this->firstName = firstName;
     this->lastName = lastName;
     this->color = color;
-    this->biding = bidding;
+    this->bidding = bidding;
     this->coins = coins;
     score = 0;
     remainingCity = 3;
     remainingCubes = 18;
+    abilities[moving] = 0;
+    abilities[army] = 0;
+    abilities[flying] = 0;
+    abilities[elixir] = 0;
+    abilities[immuneAttack] = 0;
 }
 
 Player::Player(const Player& player) {
@@ -28,7 +38,7 @@ Player::Player(const Player& player) {
     firstName = player.firstName;
     lastName = player.lastName;
     color = player.color;
-    biding = player.biding;
+    bidding = player.bidding;
     coins = player.coins;
     score = player.score;
     remainingCity = player.remainingCity;
@@ -36,6 +46,10 @@ Player::Player(const Player& player) {
     territories = player.territories;
     cards = player.cards;
     abilities = player.abilities;
+    cardTypeVp = player.cardTypeVp;
+    cardSetVp = player.cardSetVp;
+    oneVpPer3Coins = player.oneVpPer3Coins;
+    oneVpPerFlying = player.oneVpPerFlying;
 }
 
 Player::~Player() {
@@ -76,10 +90,9 @@ int Player::MoveOverLand(int numberOfArmies, Territory &from, Territory &to, int
         return movingPoints;
     }
     int cost = 3;
-    // TODO 各种abilities要初始化为0
-    if (abilities["flying"] == 1) {
+    if (abilities[flying] == 1) {
         cost = 2;
-    } else if (abilities["flying"] >= 2) {
+    } else if (abilities[flying] >= 2) {
         cost = 1;
     }
     from.removeArmiesOfPlayer(id, numberOfArmies);
@@ -125,7 +138,7 @@ int Player::DestroyArmy(int numberOfArmies, int playerId, Territory &territory, 
 
 Player &Player::operator=(const Player &player) {
     firstName = player.firstName;
-    biding = player.biding;
+    bidding = player.bidding;
     coins = player.coins;
     score = player.score;
     remainingCity = player.remainingCity;
@@ -138,7 +151,7 @@ Player &Player::operator=(const Player &player) {
 string Player::toString() const {
     stringstream ss;
     ss << "Player{ firstName=" << firstName << "; ";
-    ss << "biding=" << biding << "; ";
+    ss << "bidding=" << bidding << "; ";
     ss << "coinSupply=" << coins << "; ";
     ss << "score=" << score << "; ";
     ss << "remainingCity=" << remainingCity << "; ";
@@ -165,7 +178,7 @@ ostream &operator<<(ostream &out, const Player &player) {
     out << "Player " << player.id << ": " << player.firstName << " " << player.lastName
         << " (" << player.color << ")" << endl;
     out << "------------------------------------------" << endl;
-    out << "biding: " << player.biding << "; ";
+    out << "bidding: " << player.bidding << "; ";
     out << "coins: " << player.coins << "; ";
     out << "score: " << player.score << "; \n";
     out << "remainingCity: " << player.remainingCity << "; ";
@@ -221,11 +234,11 @@ void Player::setColor(string &newColor) {
 }
 
 int Player::getBiding() const {
-    return biding;
+    return bidding;
 }
 
 void Player::setBidding(int newBiding) {
-    biding = newBiding;
+    bidding = newBiding;
 }
 
 int Player::getCoins() const {
@@ -278,5 +291,22 @@ void Player::setCards(vector<Card *> &cards) {
 
 void Player::exchange(Card *card) {
     cards.emplace_back(card);
-    // TODO 把这张牌的good加到玩家的abilities中
+    for (int i = 0; i < card->getAbilities().size(); ++i) {
+        AbilityType abilityType = card->getAbilities()[i].abilityType;
+        if (abilityType == gainCoins) {
+            coins += card->getAbilities()[i].amount;
+        } else if (abilityType == VP) {
+            if (card->getAbilities()[i].vpType == cardType) {
+                cardTypeVp.emplace_back(card->getAbilities()[i].cardTypeForVP);
+            } else if (card->getAbilities()[i].vpType == cardSet) {
+                cardSetVp.emplace_back(card->getAbilities()[i].cardTypeForVP);
+            } else if (card->getAbilities()[i].vpType == coinsLeft) {
+                oneVpPer3Coins = true;
+            } else if (card->getAbilities()[i].vpType == vpPerFlying) {
+                oneVpPerFlying = true;
+            }
+        } else {
+            abilities[abilityType] += card->getAbilities()[i].amount;
+        }
+    }
 }

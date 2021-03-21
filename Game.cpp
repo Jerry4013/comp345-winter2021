@@ -1,5 +1,5 @@
 //
-// Created by jerry on 2/26/2021.
+// Created by Jingchao Zhang on 2/26/2021.
 //
 
 #include <random>
@@ -78,11 +78,10 @@ void Game::play() {
             Player* currentPlayer = getPlayerById(i);
             // TODO: 给玩家一些行动选择，比如查看地图以及其他各种信息
             printSixCards();
-            selectCard(currentPlayer);
-            // TODO 玩家得到good, 然后action
-
+            Card* card = selectCard(currentPlayer);
+            // TODO 执行卡牌上的action
+            
             // Part 5
-            printSixCards();
             cout << "****************************" << endl;
             cout << "****************************" << endl;
         }
@@ -91,7 +90,7 @@ void Game::play() {
     }
 }
 
-void Game::selectCard(Player* currentPlayer) {
+Card* Game::selectCard(Player* currentPlayer) {
     int cardIndex;
     while (true) {
         cout << "Please select a card index (1-6):" << endl;
@@ -111,8 +110,10 @@ void Game::selectCard(Player* currentPlayer) {
         break;
     }
     currentPlayer->PayCoin(CARD_COSTS[cardIndex]);
-    currentPlayer->exchange(hand->getHandCards()[cardIndex]);
+    Card* card = hand->getHandCards()[cardIndex];
+    currentPlayer->exchange(card);
     hand->exchange(cardIndex + 1, deck);
+    return card;
 }
 
 void Game::computeScore() {
