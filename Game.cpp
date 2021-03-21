@@ -50,11 +50,11 @@ bool Game::startup() {
     cout << "****************************" << endl;
     cout << "\nShuffling deck..." << endl;
     deck->shuffleDeck();
-    cout << "There are " << deck->getDeckVector()->size() << " cards in the deck." << endl;
+    cout << "There are " << deck->getCards().size() << " cards in the deck." << endl;
     cout << "\nDrawing six cards..." << endl;
     hand = new Hand(deck); // draw six cards
     printSixCards();
-    cout << "\nThere are " << deck->getDeckVector()->size() << " cards in the deck." << endl;
+    cout << "\nThere are " << deck->getCards().size() << " cards in the deck." << endl;
     cout << "\nSelecting starting region..." << endl;
     if (!selectStartingRegion()) {
         return false;
@@ -83,11 +83,11 @@ void Game::play() {
 
             // Part 5
             printSixCards();
+            cout << "****************************" << endl;
+            cout << "****************************" << endl;
         }
         // TODO： 暂时把回合数改成2,记得改回13
         gameEnd = players[0]->getCards().size() == 2;
-        cout << "****************************" << endl;
-        cout << "****************************" << endl;
     }
 }
 
@@ -111,7 +111,7 @@ void Game::selectCard(Player* currentPlayer) {
         break;
     }
     currentPlayer->PayCoin(CARD_COSTS[cardIndex]);
-    currentPlayer->exchange((*hand->getHandVector())[cardIndex]);
+    currentPlayer->exchange(hand->getHandCards()[cardIndex]);
     hand->exchange(cardIndex + 1, deck);
 }
 
@@ -265,7 +265,7 @@ void Game::printSixCards() {
     }
     cout << endl;
     cout << "Card: ";
-    for (auto & card : *hand->getHandVector()) {
+    for (auto & card : hand->getHandCards()) {
         cout << setw(17) << card->getName();
     }
     cout << "\n" << endl;
