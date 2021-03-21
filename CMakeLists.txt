@@ -26,7 +26,5 @@ add_executable(comp345_winter2021
         MapDriver.cpp
         Game.cpp
         Game.h
-#        GameStart.cpp
-#        GameStart.h
-#        MainDriver.cpp
+        MainDriver.cpp
         )

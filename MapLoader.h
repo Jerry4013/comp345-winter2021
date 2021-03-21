@@ -21,7 +21,6 @@ public:
     static Map* loadMap(string filePath);
     static int counter;
     static string lshape;
-    // TODO: 需要两个map文件，一个叫lshape.map,另一个叫rectangular.map
 private:
     static void validateMapFile(vector<string>,vector<string>,vector<string>,int, int,int);
     static void split(string,const string&, vector<string>&);

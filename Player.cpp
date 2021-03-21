@@ -39,11 +39,11 @@ Player::Player(const Player& player) {
 }
 
 Player::~Player() {
-    for (int i = 0; i < territories.size(); ++i) {
-        territories[i] = nullptr;
+    for (auto & territory : territories) {
+        territory = nullptr;
     }
-    for (int i = 0; i < cards.size(); ++i) {
-        cards[i] = nullptr;
+    for (auto & card : cards) {
+        card = nullptr;
     }
 }
 
@@ -56,11 +56,16 @@ void Player::PayCoin(int costOfCard) {
     cout << "Player " << id << " paid " << costOfCard << " coins. Coins left: " << coins << endl;
 }
 
-void Player::PlaceNewArmies(int numberOfNewArmies, Territory &territory) {
-    territory.placeNewArmiesOfPlayer(id, numberOfNewArmies);
-    territories.push_back(&territory);
-    this->remainingCubes-=numberOfNewArmies;
-    cout << numberOfNewArmies << " new armies are placed on territory " + territory.getName() << endl;
+void Player::PlaceNewArmies(int numberOfNewArmies, Territory* territory) {
+    territory->placeNewArmiesOfPlayer(id, numberOfNewArmies);
+    for (auto & playerTerritory : territories) {
+        if (playerTerritory->getId() == territory->getId()) {
+            return;
+        }
+    }
+    territories.push_back(territory);
+    remainingCubes -= numberOfNewArmies;
+    cout << numberOfNewArmies << " new armies are placed on territory " << territory->getId() << endl;
 }
 
 int Player::MoveOverLand(int numberOfArmies, Territory &from, Territory &to, int movingPoints) {

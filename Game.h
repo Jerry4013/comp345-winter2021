@@ -15,7 +15,7 @@ public:
     Game();
     ~Game();
     bool start();
-    void startup();
+    bool startup();
     void play();
     void computeScore();
 
@@ -26,11 +26,11 @@ private:
     Deck* deck;
     Hand* hand;
     int coinSupply;
-    int startregionid;
+    int startRegionId;
     unordered_map<string, int> armies; // color -> the number of armies supplied on the table
     unordered_map<string, int> cities; // color -> the number of cities supplied on the table
-    static const vector<int> CARD_COSTS;
-    static vector<string> COLORS;
+    static const int CARD_COSTS[6];
+    vector<string> COLORS;
     vector<int> order;   // [2, 3, 1] means player with id 2 move first, then player with id 3, then id 1;
     void createPlayers();
     bool selectMap();
@@ -38,10 +38,12 @@ private:
     void createDeck();
     void createArmiesAndCities();
     void printSixCards();
-    int selectStartingRegion();
+    bool selectStartingRegion();
     void bid();
     Player* getPlayerById(int id);
-    bool criteriaB(vector<int>);
+    bool criteriaA(int regionId);
+    bool criteriaB(int regionId);
+    void selectCard(Player* currentPlayer);
 };
 
 

@@ -13,7 +13,7 @@ using namespace std;
 
 class Territory {
 public:
-    Territory(int id, string& newName, int continentId, int numOfPlayers);
+    Territory(int id, string& newName, int continentId);
     ~Territory();
     Territory(const Territory&);
     Territory& operator=(const Territory& secondTerritory);
@@ -35,7 +35,6 @@ public:
     map<int, int>& getArmies();
     map<int, int>& getCities();
     void printTerritory();
-    string toString() const;
 private:
     int id;
     string name;
@@ -94,13 +93,12 @@ public:
     vector<int>& getContinentNeighborsById(int continentId);
     bool edgeExists(int territoryId1, int territoryId2);
     void addTerritoryEdges(int territoryId1, int territoryId2);
-    void addMultiEdges(int territoryId1, vector<int>& neighbors);
     int getDistance(int territoryId1, int territoryId2); // return -1 if no edge between them.
     void printTerritoryAdjacencyList();
     void printContinentAdjacencyList();
     bool validate();
     bool checkTerritoryBelongsToOneContinent();
-    Map* extend(Map* secondMap, int port1, int port2, int newId, string& newName);
+    void printForce(int numOfPlayers); // print all army and city information of each play in all territories;
 private:
     int id;
     string name;

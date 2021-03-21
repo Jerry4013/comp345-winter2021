@@ -209,7 +209,7 @@ Map* MapLoader::loadMap(string filePath){
         * for each connected nodes, add edges and 
         */
 
-        GameMap->addTerritory(new Territory(regionid, vector_temp[1], continentid, 2));
+        GameMap->addTerritory(new Territory(regionid, vector_temp[1], continentid));
 
 
         //Fifth entry, if out nodes

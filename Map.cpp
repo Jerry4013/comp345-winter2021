@@ -4,7 +4,6 @@
 
 #include "Map.h"
 #include "iostream"
-#include <sstream>
 #include <unordered_map>
 #include <map>
 #include <unordered_set>
@@ -13,13 +12,13 @@
 using namespace std;
 
 
-Territory::Territory(int id, string& newName, int continentId, int numOfPlayers) {
+Territory::Territory(int id, string& newName, int continentId) {
     this->id = id;
     this->name = newName;
     this->continentId = continentId;
-    for (int i = 0; i < numOfPlayers; ++i) {
-        armies[i + 1] = 0;
-        cities[i + 1] = 0;
+    for (int i = 0; i <= 4; ++i) {
+        armies[i] = 0;
+        cities[i] = 0;
     }
 }
 
@@ -477,10 +476,6 @@ void Map::addContinentEdges(int territoryId1, int territoryId2) {
     }
 }
 
-void Map::addMultiEdges(int territoryId1, vector<int> &neighbors) {
-    //TODO: 方便给一个territory一次性添加多条边
-}
-
 int Map::getDistance(int territoryId1, int territoryId2) {
     if (territoryAdjacencyList.find(territoryId1) == territoryAdjacencyList.end()) {
         return -1;
@@ -619,12 +614,35 @@ void Map::dfsContinents(unordered_map<int, bool> &visited, int continentId) {
     }
 }
 
-Map* Map::extend(Map* secondMap, int port1, int port2, int newId, string& newName) {
-    // TODO 没写完
-    Map* largerMap = new Map(newId, newName);
-    largerMap->territories = territories;
-    for (auto & territory : secondMap->getTerritories()) {
-        largerMap->territories.emplace_back(territory);
+void Map::printForce(int numOfPlayers) {
+    cout << "Territory ID";
+    for (int i = 0; i <= numOfPlayers; ++i) {
+        cout << "   Player " << i << "    ";
     }
-    return largerMap;
+    cout << "\n            ";
+    for (int i = 0; i <= numOfPlayers; ++i) {
+        cout << "Armies  Cities ";
+    }
+    cout << "\n--------------------------------------------------------\n";
+    int army, city;
+    string armyString, cityString;
+    for (auto & territory : territories) {
+        cout << setw(6) << territory->getId() << "        ";
+        for (int j = 0; j <= numOfPlayers; ++j) {
+            army = territory->getArmies()[j];
+            city = territory->getCities()[j];
+            if (army > 0) {
+                armyString = to_string(army);
+            } else {
+                armyString = "";
+            }
+            if (city > 0) {
+                cityString = to_string(city);
+            } else {
+                cityString = "";
+            }
+            cout << setw(2) << armyString << "      " << setw(2) << cityString << "     ";
+        }
+        cout << endl;
+    }
 }

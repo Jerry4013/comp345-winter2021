@@ -16,7 +16,7 @@ public:
 
     void exchange(Card* card);
     void PayCoin(int costOfCard);
-    void PlaceNewArmies(int numberOfNewArmies, Territory& territory);
+    void PlaceNewArmies(int numberOfNewArmies, Territory* territory);
     int MoveArmies(int numberOfArmies, Territory& from, Territory& to, int movingPoints);
     int MoveOverLand(int numberOfArmies, Territory& from, Territory& to, int movingPoints);
     void BuildCity(Territory& territory);

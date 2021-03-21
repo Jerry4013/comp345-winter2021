@@ -56,10 +56,7 @@ BidingFacility::BidingFacility(const BidingFacility &) {
     // BidingFacility has no member variable.
 }
 
-BidingFacility &BidingFacility::operator=(const BidingFacility &secondBidingFacility) {
-    // BidingFacility has no member variable.
-    return *this;
-}
+BidingFacility &BidingFacility::operator=(const BidingFacility &secondBidingFacility) = default;
 
 ostream &operator<<(ostream &out, const BidingFacility &bidingFacility) {
     // BidingFacility has no member variable.

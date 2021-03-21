@@ -34,7 +34,7 @@ int mapDriver::main() {
 
     vector<Territory*> territories(territoryNames.size());
     for (int i = 0; i < territories.size(); i++) {
-        territories[i] = new Territory(i + 1, territoryNames[i], belongsToContinentId[i], 2);
+        territories[i] = new Territory(i + 1, territoryNames[i], belongsToContinentId[i]);
         testMap1->addTerritory(territories[i]);
     }
     for (auto & edge : edges) {
