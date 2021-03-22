@@ -89,7 +89,8 @@ void Game::play() {
             cout << "****************************" << endl;
             cout << "****************************" << endl;
         }
-        gameEnd = players[0]->getCards().size() == 13;
+        // TODO 为测试改为3回合结束游戏，将来要改回13。
+        gameEnd = players[0]->getCards().size() == 3;
     }
 }
 
@@ -120,11 +121,128 @@ Card* Game::selectCard(Player* currentPlayer) {
 }
 
 void Game::computeScore() {
-    // TODO
+    // TODO compute lands score
     unordered_map<int, int> playerScores;
     for (auto & territory : map->getTerritories()) {
         int playerId = territory->getControllingPlayerId();
         playerScores[playerId]++;
+    }
+
+    unordered_map<int, int> playerElixirMap;
+    for (auto & player : players) {
+        //for one player, get the cards vector
+        vector<Card *> cards = player->getCards();
+        //初始总分为0 init score=0
+        int totalScoreForCards = 0;
+        //首先计算集合中各类卡牌的数量，初始为0 count different cards
+        int nightNum = 0;
+        int cursedNum = 0;
+        int arcaneNum = 0;
+        int ancientNum = 0;
+        int direNum = 0;
+        int forestNum = 0;
+        int nobleNum = 0;
+        int mountainNum = 0;
+        int wings = 0;
+        int playerElixir = 0;
+        //这个for就是为了计算各类卡牌各有多少张
+        for (auto &card : cards) {
+            if (card->getType() == night) {
+                nightNum++;
+            }
+            if (card->getType() == cursed) {
+                cursedNum++;
+            }
+            if (card->getType() == arcane) {
+                arcaneNum++;
+            }
+            if (card->getType() == ancient) {
+                ancientNum++;
+            }
+            if (card->getType() == dire) {
+                direNum++;
+            }
+            if (card->getType() == forest) {
+                forestNum++;
+            }
+            if (card->getType() == noble) {
+                nobleNum++;
+            }
+            if (card->getType() == mountain) {
+                mountainNum++;
+            }
+            if (card->getAbilities().at(0).abilityType == flying) {
+                wings++;
+            }
+            if (card->getAbilities().at(0).abilityType == elixir) {
+                playerElixir = playerElixir + card->getAbilities().at(0).amount;
+            }
+        }
+        playerElixirMap[player->getId()]=playerElixir;
+        //count scores
+        for (auto &card : cards) {
+            //功能1：玩家最后剩下钱，剩下3块给1分，每剩3块1分，比如剩下6块钱给两分
+            //coinsLeft
+            if (card->getAbilities()[0].vpType == coinsLeft) {
+                int money = player->getCoins();
+                int score = money / 3;
+                totalScoreForCards = totalScoreForCards + score;
+            }
+            //功能2-7：每有一张Ancient给1分。功能3-8是不同的类别。这里放在一个loop里不会重复计算的原因是，所有加分的功能的牌都只有一张，不会出现第二张一样的牌。
+            if (card->getAbilities().at(0).cardTypeForVP == ancient) {
+                totalScoreForCards = totalScoreForCards + ancientNum;
+            }
+            if (card->getAbilities().at(0).cardTypeForVP == arcane) {
+                totalScoreForCards = totalScoreForCards + arcaneNum;
+            }
+            if (card->getAbilities().at(0).cardTypeForVP == cursed) {
+                totalScoreForCards = totalScoreForCards + cursedNum;
+            }
+            if (card->getAbilities().at(0).cardTypeForVP == dire) {
+                totalScoreForCards = totalScoreForCards + direNum;
+            }
+            if (card->getAbilities().at(0).cardTypeForVP == forest) {
+                totalScoreForCards = totalScoreForCards + forestNum;
+            }
+            if (card->getAbilities().at(0).cardTypeForVP == night) {
+                totalScoreForCards = totalScoreForCards + nightNum;
+            }
+            //功能8：每有一张翅膀给1分。这里放在一个loop里不会重复计算的原因是，所有加分的功能的牌都只有一张，不会出现第二张一样的牌。就是只有一张One Vp per Fly
+            if (card->getAbilities().at(0).vpType == vpPerFlying) {
+                totalScoreForCards = totalScoreForCards + wings;
+            }
+            //功能9：如果有4张Noble，多给3分。只有一次3分。因为没有1 vp per noble，所以无需判断条件
+            if (card->getAbilities().at(0).cardTypeForVP == noble) {
+                if (nobleNum >= 4) {
+                    totalScoreForCards = totalScoreForCards + 3;
+                }
+            }
+            //功能10：如果有2张Mountain，多给3分。只有一次3分。
+            if (card->getAbilities().at(0).cardTypeForVP == mountain) {
+                if (mountainNum >= 2) {
+                    totalScoreForCards = totalScoreForCards + 3;
+                }
+            }
+        }
+        //add cards socre for current player
+        player->setScore((player->getScore())+totalScoreForCards);
+    }
+    int playerID = -1;
+    int maxElixir = -1;
+    //find the one who has most elixirs and add 2 points
+    unordered_map<int, int>::iterator iter;
+    for(iter = playerElixirMap.begin(); iter != playerElixirMap.end(); iter++) {
+        int temp=iter->second;
+        if (temp > maxElixir) {
+            maxElixir=temp;
+            playerID=iter->first;
+        }
+    }
+    for (auto & player : players) {
+        if (player->getId() == playerID){
+            player->setScore((player->getScore()) + 2);
+
+        }
     }
 }
 
@@ -289,6 +407,11 @@ void Game::printSixCards() {
     cout << "Card: ";
     for (auto & card : hand->getHandCards()) {
         cout << setw(17) << card->getName();
+    }
+    cout << "\n" << endl;
+    cout << "Card: ";
+    for (auto & card : hand->getHandCards()) {
+        cout << *card << endl;
     }
     cout << "\n" << endl;
 }

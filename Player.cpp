@@ -191,7 +191,7 @@ bool Player::takeAction(Action action) {
             }
             action.amount = remainingPoints;
         } else if (action.actionType == buildCity) {
-            cout << "You may place a city anywhere on the board where you have an army." << endl;
+            cout << "Game rule: You may place a city anywhere on the board where you have an army." << endl;
             printMyTerritoriesWithArmies();
             int territoryId;
             cout << "Please choose a territory ID to build a city: " << endl;
@@ -212,6 +212,8 @@ bool Player::takeAction(Action action) {
 }
 
 int Player::placeNewArmiesPrompt(int movingPoints) {
+    cout << "Game rule: You may place new armies only on the starting region or on a region where you have a city."
+        << endl;
     printTerritoriesForNewArmies();
     int territoryId, numberOfArmies;
     cout << "Please choose a territory ID to place the new armies: " << endl;
@@ -291,9 +293,10 @@ int Player::destroyArmyPrompt(int destroyPoints) {
 void Player::exchange(Card *card) {
     cards.emplace_back(card);
     for (int i = 0; i < card->getAbilities().size(); ++i) {
+        cout << "You gain a new ability: " << endl;
+        cout << card->getAbilities()[i] << "\n";
         AbilityType abilityType = card->getAbilities()[i].abilityType;
         if (abilityType == gainCoins) {
-            cout << "You gain " << card->getAbilities()[i].amount << " coins.\n" << endl;
             coins += card->getAbilities()[i].amount;
         } else if (abilityType == VP) {
             if (card->getAbilities()[i].vpType == cardType) {
@@ -306,7 +309,6 @@ void Player::exchange(Card *card) {
                 oneVpPerFlying = true;
             }
         } else {
-            // TODO: display the abilities.
             abilities[abilityType] += card->getAbilities()[i].amount;
         }
     }

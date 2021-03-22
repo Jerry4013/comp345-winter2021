@@ -9,7 +9,6 @@
 
 using namespace std;
 
-// TODO: 写toString，否则没办法显示。
 enum CardType{
     night, cursed, arcane, ancient, dire, forest, noble, mountain, emptyKind
 };

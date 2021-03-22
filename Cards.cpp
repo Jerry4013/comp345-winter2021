@@ -35,26 +35,51 @@ ostream &operator<<(ostream &output, const Action &action) {
 ostream &operator<<(ostream &output, const Ability &ability) {
     switch (ability.abilityType) {
         case moving:
-            output << ability.amount << " moving";
+            output << ability.amount << " moving" << endl;
             break;
         case army:
-            output << ability.amount << " armies";
+            output << ability.amount << " armies" << endl;
             break;
         case flying:
-            output << ability.amount << " flying";
+            output << ability.amount << " flying" << endl;
             break;
         case elixir:
-            output << ability.amount << " elixir";
+            output << ability.amount << " elixir" << endl;
             break;
         case gainCoins:
-            output << "gain " << ability.amount << " coins";
+            output << "gain " << ability.amount << " coins" << endl;
             break;
         case immuneAttack:
-            output << "immune attack ";
+            output << "immune attack "<<endl;
             break;
         case VP:
-            // TODO
-            output << "VP";
+            if (ability.cardTypeForVP == mountain){
+                output<< "+3 vp if you have two mountain cards" << endl;
+            }
+            if (ability.cardTypeForVP == noble){
+                output<< "Three noble cards = 4 vp" << endl;
+            }
+            if (ability.cardTypeForVP == ancient){
+                output<< "1 vp per ancient card" << endl;
+            }
+            if (ability.cardTypeForVP == arcane){
+                output<< "1 vp per arcane card" << endl;
+            }
+            if (ability.cardTypeForVP == cursed){
+                output<< "1 vp per cursed card" << endl;
+            }
+            if (ability.cardTypeForVP == dire) {
+                output<< "1 vp per dire card" << endl;
+            }
+            if (ability.cardTypeForVP == forest){
+                output<< "1 vp per forest card" << endl;
+            }
+            if (ability.cardTypeForVP == night){
+                output<< "1 vp per night card" << endl;
+            }
+            if (ability.vpType == coinsLeft){
+                output<< "+1 vp per 3 coins" << endl;
+            }
             break;
     }
     return output;
@@ -86,21 +111,21 @@ Card::Card(const Card &card) {
 }
 
 std::ostream &operator<<(std::ostream &output, const Card &card) {
-    // TODO
     output << "card name: " + card.name << endl;
     if (card.abilities.size() == 2) {
-
+        output << "Goods: gain 1 elixir and 2 coins"<<endl;
     } else {
-
+        output << card.abilities[0];
     }
-    output << "Action: ";
-    if (!card.isAndCard && !card.isOrCard) {
-        Action action = card.actions[0];
-        // output << action.actionType;
-
+    output << "Action: " << endl;
+    if (card.isOrCard) {
+        output << "OR card:" << endl;
+    } else if (card.isAndCard) {
+        output <<"AND card:"<< endl;
     }
-
-
+    for (auto action : card.actions) {
+        output << action << endl;
+    }
     return output;
 }
 
