@@ -102,6 +102,7 @@ public:
     bool validate();
     bool checkTerritoryBelongsToOneContinent();
     void printForce(int numOfPlayers); // print all army and city information of each play in all territories;
+    map<int, vector<int>> getTerritoryAdjacencyList();
 private:
     int id;
     string name;

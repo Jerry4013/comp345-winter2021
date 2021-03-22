@@ -146,7 +146,7 @@ int Player::DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* terr
 }
 
 bool Player::AndOrAction(Card *card) {
-    if (!card->getOr() && !card->getOr()) {
+    if (!card->getAnd() && !card->getOr()) {
         cout << "ERROR! This is neither an And card nor an Or card." << endl;
         return false;
     }
@@ -191,6 +191,8 @@ bool Player::takeAction(Action action) {
             }
             action.amount = remainingPoints;
         } else if (action.actionType == buildCity) {
+            cout << "You may place a city anywhere on the board where you have an army." << endl;
+            printMyTerritoriesWithArmies();
             int territoryId;
             cout << "Please choose a territory ID to build a city: " << endl;
             cout << ">>";
@@ -210,6 +212,7 @@ bool Player::takeAction(Action action) {
 }
 
 int Player::placeNewArmiesPrompt(int movingPoints) {
+    printTerritoriesForNewArmies();
     int territoryId, numberOfArmies;
     cout << "Please choose a territory ID to place the new armies: " << endl;
     cout << ">>";
@@ -239,6 +242,8 @@ int Player::placeNewArmiesPrompt(int movingPoints) {
 }
 
 int Player::moveArmiesPrompt(int movingPoints) {
+    printMyTerritoriesWithArmies();
+    printNeighborsOfTerritoriesWithArmies();
     int fromTerritoryId, toTerritoryId, numberOfArmies;
     cout << "Please choose a territory ID as starting point: " << endl;
     cout << ">>";
@@ -492,3 +497,47 @@ void Player::setCards(vector<Card *> &cards) {
 void Player::setPlayers(vector<Player*> newPlayers) {
     this->players = newPlayers;
 }
+
+void Player::setTerritoryAdjacencyList(map<int, vector<int>> territoryAdjacencyList) {
+    this->territoryAdjacencyList = territoryAdjacencyList;
+}
+
+void Player::printMyTerritoriesWithArmies() {
+    cout << "My Territories With Armies (format: <territoryId>:<numberOfArmies>):" << endl;
+    for (auto & territory : territories) {
+        if (territory->getArmies()[id] > 0) {
+            cout << territory->getId() << ":" << territory->getArmies()[id] << "; ";
+        }
+    }
+    cout << endl;
+}
+
+void Player::printNeighborsOfTerritoriesWithArmies() {
+    cout << "Neighbors of these territories: (territoryId -> neighborId:distance, neighborId:distance...)" << endl;
+    for (auto & territory : territories) {
+        if (territory->getArmies()[id] > 0) {
+            cout << territory->getId() << " -> ";
+            vector<int> neighbors = territoryAdjacencyList[territory->getId()];
+            for (int neighbor : neighbors) {
+                int distance = 1;
+                if (territory->getContinentId() != getTerritoryById(neighbor)->getContinentId()) {
+                    distance = 3;
+                }
+                cout << neighbor << ":" << distance << ", ";
+            }
+            cout << endl;
+        }
+    }
+}
+
+void Player::printTerritoriesForNewArmies() {
+    cout << "You may place new armies in these territories: ";
+    for (auto & territory : territories) {
+        if (territory->getIsStartingRegion() || territory->getCities()[id] > 0) {
+            cout << territory->getId() << ", ";
+        }
+    }
+    cout << endl;
+}
+
+

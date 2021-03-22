@@ -497,6 +497,10 @@ int Map::getDistance(int territoryId1, int territoryId2) {
     return 3;
 }
 
+map<int, vector<int>> Map::getTerritoryAdjacencyList() {
+    return territoryAdjacencyList;
+}
+
 void Map::printTerritoryAdjacencyList() {
     cout << "Territory neighbors:" << endl;
     cout << "------------------------------------------" << endl;

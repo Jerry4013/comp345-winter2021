@@ -53,6 +53,7 @@ public:
     void setCards(vector<Card*>& cards);
     map<AbilityType, int> getAbilities() const;
     void setPlayers(vector<Player*> players);
+    void setTerritoryAdjacencyList(map<int, vector<int>> territoryAdjacencyList);
 
 private:
     int id;
@@ -72,10 +73,14 @@ private:
     vector<CardType> cardSetVp;
     bool oneVpPer3Coins;
     bool oneVpPerFlying;
+    map<int, vector<int>> territoryAdjacencyList;
 
     Territory* getTerritoryById(int territoryId);
     Player* getPlayerById(int playerId);
     int placeNewArmiesPrompt(int movingPoints);
     int moveArmiesPrompt(int movingPoints);
     int destroyArmyPrompt(int destroyPoints);
+    void printMyTerritoriesWithArmies();
+    void printNeighborsOfTerritoriesWithArmies();
+    void printTerritoriesForNewArmies();
 };

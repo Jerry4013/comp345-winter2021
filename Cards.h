@@ -31,6 +31,7 @@ struct Ability {
     int amount;
     VPType vpType;          // if abilityType == VP, then there is a vpType
     CardType cardTypeForVP; // If the VP type is cardType or cardSet, cardTypeForVP is used to specify the type.
+    friend ostream& operator<<(ostream& output, const Ability& action);
 };
 
 struct Action {
@@ -56,8 +57,9 @@ public:
     void setName(string& newName);
     vector<Ability> getAbilities();
     vector<Action> getActions();
-    bool getAnd();
-    bool getOr();
+    bool getAnd() const;
+    bool getOr() const;
+    static string cardTypeToString(CardType cardTypeToString);
 
 private:
     CardType cardType;

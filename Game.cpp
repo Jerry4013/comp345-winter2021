@@ -77,9 +77,9 @@ void Game::play() {
             cout << "It's player " << i << "'s turn:\n" << endl;
             Player* currentPlayer = getPlayerById(i);
             // TODO: 给玩家一些行动选择，比如查看地图以及其他各种信息
+            // TODO 提示玩家在行动之前查看相关信息，进入方法后就无法查看了。
             printSixCards();
             Card* card = selectCard(currentPlayer);
-            // TODO 提示玩家在行动之前查看相关信息，进入方法后就无法查看了。
             if (card->getAnd() || card->getOr()) {
                 currentPlayer->AndOrAction(card);
             } else {
@@ -89,8 +89,7 @@ void Game::play() {
             cout << "****************************" << endl;
             cout << "****************************" << endl;
         }
-        // TODO： 暂时把回合数改成2,记得改回13
-        gameEnd = players[0]->getCards().size() == 2;
+        gameEnd = players[0]->getCards().size() == 13;
     }
 }
 
@@ -122,6 +121,12 @@ Card* Game::selectCard(Player* currentPlayer) {
 
 void Game::computeScore() {
     // TODO
+    unordered_map<int, int> playerScores;
+    for (int i = 0; i < map->getTerritories().size(); ++i) {
+        int playerId = map->getTerritories()[i]->getControllingPlayerId();
+        playerScores[playerId]++;
+    }
+
 }
 
 bool Game::selectMap() {
@@ -162,9 +167,16 @@ bool Game::selectMap() {
 
 void Game::selectNumberOfPlayers() {
     int numberOfPlayers;
-    cout << "Please select the number of players: (2, 3, 4)" << endl;
-    cout << ">> ";
-    cin >> numberOfPlayers;
+    while (true) {
+        cout << "Please select the number of players: (2, 3, 4)" << endl;
+        cout << ">> ";
+        cin >> numberOfPlayers;
+        if (numberOfPlayers < 2 || numberOfPlayers > 4) {
+            cout << "Error! Please select a valid number." << endl;
+        } else {
+            break;
+        }
+    }
     this->numOfPlayer = numberOfPlayers;
 }
 
@@ -207,7 +219,7 @@ void Game::createPlayers() {
                 cout << "ERROR! Please type a correct color name." << endl;
             }
         }
-        cout << "Please enter the bidding of player " << i + 1 << ":" << endl;
+        cout << "Please enter the bidding of player " << i + 1 << ": (0-" << coins << ")" << endl;
         cout << "(The coins will be deducted only if you win the bidding later.)" << endl;
         cout << ">> ";
         cin >> bidding;
@@ -221,6 +233,7 @@ void Game::createPlayers() {
     }
     for (auto & player : players) {
         player->setPlayers(players);
+        player->setTerritoryAdjacencyList(map->getTerritoryAdjacencyList());
     }
 }
 

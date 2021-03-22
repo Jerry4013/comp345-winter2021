@@ -32,6 +32,34 @@ ostream &operator<<(ostream &output, const Action &action) {
     return output;
 }
 
+ostream &operator<<(ostream &output, const Ability &ability) {
+    switch (ability.abilityType) {
+        case moving:
+            output << ability.amount << " moving";
+            break;
+        case army:
+            output << ability.amount << " armies";
+            break;
+        case flying:
+            output << ability.amount << " flying";
+            break;
+        case elixir:
+            output << ability.amount << " elixir";
+            break;
+        case gainCoins:
+            output << "gain " << ability.amount << " coins";
+            break;
+        case immuneAttack:
+            output << "immune attack ";
+            break;
+        case VP:
+            // TODO
+            output << "VP";
+            break;
+    }
+    return output;
+}
+
 Card::Card() {
     cardType = emptyKind;
     name = "none";
@@ -114,12 +142,36 @@ vector<Action> Card::getActions() {
     return actions;
 }
 
-bool Card::getAnd() {
+bool Card::getAnd() const {
     return isAndCard;
 }
 
-bool Card::getOr() {
+bool Card::getOr() const {
     return isOrCard;
+}
+
+string cardTypeToString(CardType cardTypeToString) {
+    switch (cardTypeToString) {
+        case night:
+            return "night";
+        case cursed:
+            return "cursed";
+        case arcane:
+            return "arcane";
+        case ancient:
+            return "ancient";
+        case dire:
+            return "dire";
+        case forest:
+            return "forest";
+        case noble:
+            return "noble";
+        case mountain:
+            return "mountain";
+        case emptyKind:
+            return "emptyKind";
+    }
+    return "";
 }
 
 Deck::Deck() {
@@ -391,4 +443,5 @@ Card *Hand::exchange(int cardNumber, Deck *deck) {
     handCards.emplace_back(deck->draw());
     return card;
 }
+
 
