@@ -279,6 +279,10 @@ int Continent::getControllingPlayerId() const {
     return playerId;
 }
 
+vector<Territory *> Continent::getTerritories() {
+    return territories;
+}
+
 
 Map::Map(int id, string& name) {
     this->id = id;
@@ -351,7 +355,14 @@ ostream &operator<<(ostream &out, const Map &outputMap) {
         }
         out << "]" << endl;
     }
-    out << "\n";
+    out << "\nTerritories in each continent:\n";
+    for (auto continent : outputMap.continents) {
+        out << "Continent " << continent->getId() << ": ";
+        for (int i = 0; i < continent->getTerritories().size(); ++i) {
+            out << continent->getTerritories()[i]->getId() << ", ";
+        }
+        out << "\n";
+    }
     return out;
 }
 

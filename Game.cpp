@@ -122,11 +122,10 @@ Card* Game::selectCard(Player* currentPlayer) {
 void Game::computeScore() {
     // TODO
     unordered_map<int, int> playerScores;
-    for (int i = 0; i < map->getTerritories().size(); ++i) {
-        int playerId = map->getTerritories()[i]->getControllingPlayerId();
+    for (auto & territory : map->getTerritories()) {
+        int playerId = territory->getControllingPlayerId();
         playerScores[playerId]++;
     }
-
 }
 
 bool Game::selectMap() {

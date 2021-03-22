@@ -77,9 +77,9 @@ void Player::PayCoin(int costOfCard) {
 
 void Player::PlaceNewArmies(int numberOfNewArmies, Territory* territory) {
     territory->placeNewArmiesOfPlayer(id, numberOfNewArmies);
-
     remainingCubes -= numberOfNewArmies;
-    cout << numberOfNewArmies << " new armies are placed in territory " << territory->getId() << endl;
+    cout << "Player " << id << " place " << numberOfNewArmies << " new armies in territory " << territory->getId()
+        << endl;
 }
 
 int Player::MoveArmies(int numberOfArmies, Territory *from, Territory *to, int movingPoints) {
@@ -171,11 +171,11 @@ bool Player::AndOrAction(Card *card) {
 
 bool Player::takeAction(Action action) {
     while (action.amount > 0) {
-        char ans;
+        string ans;
         cout << "You can " << action << endl;
         cout << "Enter q to exit, any other key to continue..." << endl;
         cin >> ans;
-        if (ans == 'q') {
+        if (ans == "q") {
             break;
         }
         if (action.actionType == placeArmy) {
@@ -293,6 +293,7 @@ void Player::exchange(Card *card) {
     for (int i = 0; i < card->getAbilities().size(); ++i) {
         AbilityType abilityType = card->getAbilities()[i].abilityType;
         if (abilityType == gainCoins) {
+            cout << "You gain " << card->getAbilities()[i].amount << " coins.\n" << endl;
             coins += card->getAbilities()[i].amount;
         } else if (abilityType == VP) {
             if (card->getAbilities()[i].vpType == cardType) {
@@ -305,6 +306,7 @@ void Player::exchange(Card *card) {
                 oneVpPerFlying = true;
             }
         } else {
+            // TODO: display the abilities.
             abilities[abilityType] += card->getAbilities()[i].amount;
         }
     }

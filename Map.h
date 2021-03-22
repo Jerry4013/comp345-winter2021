@@ -66,6 +66,7 @@ public:
     void printContinent();
     Territory* getTerritoryById(int territoryId) const;
     int getControllingPlayerId() const; // If this continent is not owned by anyone, return 0;
+    vector<Territory*> getTerritories();
 private:
     int id;
     string name;
