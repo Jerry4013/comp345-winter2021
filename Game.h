@@ -44,6 +44,7 @@ private:
     bool criteriaA(int regionId);
     bool criteriaB(int regionId);
     Card* selectCard(Player* currentPlayer);
+    int claimWinner(std::map<int, int> map1);
 };
 
 

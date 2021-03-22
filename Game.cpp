@@ -122,12 +122,34 @@ Card* Game::selectCard(Player* currentPlayer) {
 
 void Game::computeScore() {
     // TODO compute lands score
-    unordered_map<int, int> playerScores;
+
+    cout << "****************************"  << endl;
+    cout << "        Game Ended"            << endl;
+    cout << "****************************"  << endl;
+    cout << endl;
+
+    int winnerID;
+
+    bool scoreTied = false;
+    bool coinTied = false;
+    bool armyTied = false;
+
+    std::map<int, int> playerScores;
+
+    // Territory
     for (auto & territory : map->getTerritories()) {
         int playerId = territory->getControllingPlayerId();
         playerScores[playerId]++;
     }
 
+
+    // Continent
+    for(auto continent: map->getContinents()){
+        int playerId = continent->getControllingPlayerId();
+        playerScores[playerId]++;
+    }
+
+    // Card
     unordered_map<int, int> playerElixirMap;
     for (auto & player : players) {
         //for one player, get the cards vector
@@ -244,6 +266,61 @@ void Game::computeScore() {
 
         }
     }
+
+    if(playerScores.find(0) == playerScores.find(1)) scoreTied = true;
+    else winnerID = claimWinner(playerScores);
+
+    // if scores are tied, the player with the most coins wins.
+    if(scoreTied){
+        std::map<int, int> coinList;
+
+        for (auto player : players)
+            coinList[player->getId()] += player->getCoins();
+
+        if(coinList.find(0) == coinList.find(1)) coinTied = true;
+        else winnerID = claimWinner(coinList);
+    }
+
+    // if coins are tied, the player with the most armies wins.
+    if(coinTied){
+        std::map<int, int> armyList;
+
+        for (auto player : players)
+            armyList[player->getId()] += player->getRemainingCubes();
+
+        if(armyList.find(0) == armyList.find(1)) armyTied = true;
+        else winnerID = claimWinner(armyList);
+    }
+
+    // if armies are tie, the player with the most controlled regions wins
+    if(armyTied){
+        std::map<int, int> regList;
+
+        for(auto territory: map->getTerritories()){
+            regList[territory->getControllingPlayerId()]++;
+        }
+
+        if(regList.find(0) == regList.find(1)) cout << "TIE!" << endl;
+        else winnerID = claimWinner(regList);
+    }
+
+    for(Player *player : players){
+        if(player->getId() == winnerID){
+            cout << "****************************"  << endl;
+            cout << "       WINNER is " << player->getFirstName() << " " << player->getLastName() << endl;
+            cout << "****************************"  << endl;
+            cout << endl;
+        }
+    }
+
+}
+
+int Game::claimWinner(std::map<int, int> map1) {
+    int max = 0;
+    for (auto const& [key, val] : map1) {
+        if(val>max) max = val;
+    }
+    return map1.at(max);
 }
 
 bool Game::selectMap() {
