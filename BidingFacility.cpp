@@ -6,11 +6,10 @@ using namespace std;
 
 
 int BidingFacility::bid(vector<Player *>& players) {
-    int bidding;
     int highestBidding = -1;
     vector<Player*> highestPlayers;
     for (auto & player : players) {
-        bidding = player->getBiding();
+        int bidding = player->getBiding();
         if (bidding > highestBidding) {
             highestBidding = bidding;
             highestPlayers.clear();

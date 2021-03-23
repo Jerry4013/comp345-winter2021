@@ -33,7 +33,7 @@ public:
     void removeArmiesOfPlayer(int playerId, int numOfArmiesToRemove);
     void displayCityInfo();
     void buildCity(int playerId);
-    int getControllingPlayerId(); // If this territory is not owned by anyone, return 0;
+    int getControllingPlayerId(); // If this territory is not owned by anyone, return -1;
     map<int, int>& getArmies();
     map<int, int>& getCities();
     void printTerritory();
@@ -65,7 +65,7 @@ public:
     vector<int> getTerritoryIdList();
     void printContinent();
     Territory* getTerritoryById(int territoryId) const;
-    int getControllingPlayerId() const; // If this continent is not owned by anyone, return 0;
+    int getControllingPlayerId() const; // If this continent is not owned by anyone, return -1;
     vector<Territory*> getTerritories();
 private:
     int id;

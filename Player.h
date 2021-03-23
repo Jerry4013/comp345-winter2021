@@ -27,6 +27,7 @@ public:
     int DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* territory, int destroyPoints);
     bool AndOrAction(Card* card);
     bool takeAction(Action action);
+    void addScore(int newScore);
 
     // Getters and Setters
     int getId() const;
@@ -54,6 +55,11 @@ public:
     map<AbilityType, int> getAbilities() const;
     void setPlayers(vector<Player*> players);
     void setTerritoryAdjacencyList(map<int, vector<int>> territoryAdjacencyList);
+    vector<CardType> getCardTypeVp();
+    vector<CardType> getCardSetVp();
+    unordered_map<CardType, int> getNumberOfCardsOfEachType();
+    bool hasOneVpPer3Coins();
+    bool hasOneVpPerFlying();
 
 private:
     int id;
@@ -74,6 +80,7 @@ private:
     bool oneVpPer3Coins;
     bool oneVpPerFlying;
     map<int, vector<int>> territoryAdjacencyList;
+    unordered_map<CardType, int> numberOfCardsOfEachType;
 
     Territory* getTerritoryById(int territoryId);
     Player* getPlayerById(int playerId);

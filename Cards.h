@@ -106,7 +106,7 @@ public:
     Card* exchange(int cardNumber, Deck* deck);
 private:
     vector<Card*> handCards;
-    static const vector<int> CARD_COSTS;
+    static const int CARD_COSTS[6];
 };
 
 

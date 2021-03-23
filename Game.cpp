@@ -121,206 +121,148 @@ Card* Game::selectCard(Player* currentPlayer) {
 }
 
 void Game::computeScore() {
-    // TODO compute lands score
+    computeMapScore();
+    computeAbilityScore();
+    computeElixirScore();
+}
 
-    cout << "****************************"  << endl;
-    cout << "        Game Ended"            << endl;
-    cout << "****************************"  << endl;
-    cout << endl;
-
-    int winnerID;
-
-    bool scoreTied = false;
-    bool coinTied = false;
-    bool armyTied = false;
-
-    std::map<int, int> playerScores;
-
+void Game::computeMapScore() {
     // Territory
     for (auto & territory : map->getTerritories()) {
         int playerId = territory->getControllingPlayerId();
-        playerScores[playerId]++;
+        if (playerId > 0) {
+            Player* player = getPlayerById(playerId);
+            player->addScore(1);
+        }
     }
-
-
     // Continent
     for(auto continent: map->getContinents()){
         int playerId = continent->getControllingPlayerId();
-        playerScores[playerId]++;
-    }
-
-    // Card
-    unordered_map<int, int> playerElixirMap;
-    for (auto & player : players) {
-        //for one player, get the cards vector
-        vector<Card *> cards = player->getCards();
-        //初始总分为0 init score=0
-        int totalScoreForCards = 0;
-        //首先计算集合中各类卡牌的数量，初始为0 count different cards
-        int nightNum = 0;
-        int cursedNum = 0;
-        int arcaneNum = 0;
-        int ancientNum = 0;
-        int direNum = 0;
-        int forestNum = 0;
-        int nobleNum = 0;
-        int mountainNum = 0;
-        int wings = 0;
-        int playerElixir = 0;
-        //这个for就是为了计算各类卡牌各有多少张
-        for (auto &card : cards) {
-            if (card->getType() == night) {
-                nightNum++;
-            }
-            if (card->getType() == cursed) {
-                cursedNum++;
-            }
-            if (card->getType() == arcane) {
-                arcaneNum++;
-            }
-            if (card->getType() == ancient) {
-                ancientNum++;
-            }
-            if (card->getType() == dire) {
-                direNum++;
-            }
-            if (card->getType() == forest) {
-                forestNum++;
-            }
-            if (card->getType() == noble) {
-                nobleNum++;
-            }
-            if (card->getType() == mountain) {
-                mountainNum++;
-            }
-            if (card->getAbilities().at(0).abilityType == flying) {
-                wings++;
-            }
-            if (card->getAbilities().at(0).abilityType == elixir) {
-                playerElixir = playerElixir + card->getAbilities().at(0).amount;
-            }
-        }
-        playerElixirMap[player->getId()]=playerElixir;
-        //count scores
-        for (auto &card : cards) {
-            //功能1：玩家最后剩下钱，剩下3块给1分，每剩3块1分，比如剩下6块钱给两分
-            //coinsLeft
-            if (card->getAbilities()[0].vpType == coinsLeft) {
-                int money = player->getCoins();
-                int score = money / 3;
-                totalScoreForCards = totalScoreForCards + score;
-            }
-            //功能2-7：每有一张Ancient给1分。功能3-8是不同的类别。这里放在一个loop里不会重复计算的原因是，所有加分的功能的牌都只有一张，不会出现第二张一样的牌。
-            if (card->getAbilities().at(0).cardTypeForVP == ancient) {
-                totalScoreForCards = totalScoreForCards + ancientNum;
-            }
-            if (card->getAbilities().at(0).cardTypeForVP == arcane) {
-                totalScoreForCards = totalScoreForCards + arcaneNum;
-            }
-            if (card->getAbilities().at(0).cardTypeForVP == cursed) {
-                totalScoreForCards = totalScoreForCards + cursedNum;
-            }
-            if (card->getAbilities().at(0).cardTypeForVP == dire) {
-                totalScoreForCards = totalScoreForCards + direNum;
-            }
-            if (card->getAbilities().at(0).cardTypeForVP == forest) {
-                totalScoreForCards = totalScoreForCards + forestNum;
-            }
-            if (card->getAbilities().at(0).cardTypeForVP == night) {
-                totalScoreForCards = totalScoreForCards + nightNum;
-            }
-            //功能8：每有一张翅膀给1分。这里放在一个loop里不会重复计算的原因是，所有加分的功能的牌都只有一张，不会出现第二张一样的牌。就是只有一张One Vp per Fly
-            if (card->getAbilities().at(0).vpType == vpPerFlying) {
-                totalScoreForCards = totalScoreForCards + wings;
-            }
-            //功能9：如果有4张Noble，多给3分。只有一次3分。因为没有1 vp per noble，所以无需判断条件
-            if (card->getAbilities().at(0).cardTypeForVP == noble) {
-                if (nobleNum >= 4) {
-                    totalScoreForCards = totalScoreForCards + 3;
-                }
-            }
-            //功能10：如果有2张Mountain，多给3分。只有一次3分。
-            if (card->getAbilities().at(0).cardTypeForVP == mountain) {
-                if (mountainNum >= 2) {
-                    totalScoreForCards = totalScoreForCards + 3;
-                }
-            }
-        }
-        //add cards socre for current player
-        player->setScore((player->getScore())+totalScoreForCards);
-    }
-    int playerID = -1;
-    int maxElixir = -1;
-    //find the one who has most elixirs and add 2 points
-    unordered_map<int, int>::iterator iter;
-    for(iter = playerElixirMap.begin(); iter != playerElixirMap.end(); iter++) {
-        int temp=iter->second;
-        if (temp > maxElixir) {
-            maxElixir=temp;
-            playerID=iter->first;
+        if (playerId > 0) {
+            Player* player = getPlayerById(playerId);
+            player->addScore(1);
         }
     }
-    for (auto & player : players) {
-        if (player->getId() == playerID){
-            player->setScore((player->getScore()) + 2);
-
-        }
-    }
-
-    if(playerScores.find(0) == playerScores.find(1)) scoreTied = true;
-    else winnerID = claimWinner(playerScores);
-
-    // if scores are tied, the player with the most coins wins.
-    if(scoreTied){
-        std::map<int, int> coinList;
-
-        for (auto player : players)
-            coinList[player->getId()] += player->getCoins();
-
-        if(coinList.find(0) == coinList.find(1)) coinTied = true;
-        else winnerID = claimWinner(coinList);
-    }
-
-    // if coins are tied, the player with the most armies wins.
-    if(coinTied){
-        std::map<int, int> armyList;
-
-        for (auto player : players)
-            armyList[player->getId()] += player->getRemainingCubes();
-
-        if(armyList.find(0) == armyList.find(1)) armyTied = true;
-        else winnerID = claimWinner(armyList);
-    }
-
-    // if armies are tie, the player with the most controlled regions wins
-    if(armyTied){
-        std::map<int, int> regList;
-
-        for(auto territory: map->getTerritories()){
-            regList[territory->getControllingPlayerId()]++;
-        }
-
-        if(regList.find(0) == regList.find(1)) cout << "TIE!" << endl;
-        else winnerID = claimWinner(regList);
-    }
-
-    for(Player *player : players){
-        if(player->getId() == winnerID){
-            cout << "****************************"  << endl;
-            cout << "       WINNER is " << player->getFirstName() << " " << player->getLastName() << endl;
-            cout << "****************************"  << endl;
-            cout << endl;
-        }
-    }
-
 }
 
-int Game::claimWinner(std::map<int, int> map1) {
-    int max = 0;
-    for (auto const& [key, val] : map1) {
-        if(val>max) max = val;
+void Game::computeAbilityScore() {
+    for (auto & player : players) {
+        for (auto type : player->getCardTypeVp()) {
+            player->addScore(player->getNumberOfCardsOfEachType()[type]);
+        }
+        for (auto type : player->getCardSetVp()) {
+            if (type == noble && player->getNumberOfCardsOfEachType()[noble] == 3) {
+                player->addScore(4);
+            } else if (type == mountain && player->getNumberOfCardsOfEachType()[mountain] == 2) {
+                player->addScore(3);
+            }
+        }
+        if (player->hasOneVpPer3Coins()) {
+            player->addScore(player->getCoins() / 3);
+        }
+        if (player->hasOneVpPerFlying()) {
+            player->addScore(player->getAbilities()[AbilityType::flying]);
+        }
     }
-    return map1.at(max);
+}
+
+void Game::computeElixirScore() {
+    vector<Player*> hasMostElixirs;
+    int highest = -1;
+    for (auto & player : players) {
+        int numberOfElixir = player->getAbilities()[AbilityType::elixir];
+        if (numberOfElixir > highest) {
+            highest = numberOfElixir;
+            hasMostElixirs.clear();
+            hasMostElixirs.emplace_back(player);
+        } else if (numberOfElixir == highest) {
+            hasMostElixirs.emplace_back(player);
+        }
+    }
+    if (hasMostElixirs.size() == 1) {
+        hasMostElixirs[0]->addScore(2);
+    } else {
+        for (auto & player : hasMostElixirs) {
+            player->addScore(1);
+        }
+    }
+}
+
+void Game::claimWinner() {
+    vector<Player*> playersWithHighestScore;
+    int highestScore = -1;
+    for (auto & player : players) {
+        if (player->getScore() > highestScore) {
+            highestScore = player->getScore();
+            playersWithHighestScore.clear();
+            playersWithHighestScore.emplace_back(player);
+        } else if (player->getScore() == highestScore) {
+            playersWithHighestScore.emplace_back(player);
+        }
+    }
+    if (playersWithHighestScore.size() == 1) {
+        displayWinner(playersWithHighestScore[0]);
+        return;
+    }
+
+    vector<Player*> playersWithMostCoins;
+    int mostCoins = -1;
+    for (auto & player : playersWithHighestScore) {
+        if (player->getCoins() > mostCoins) {
+            mostCoins = player->getCoins();
+            playersWithMostCoins.clear();
+            playersWithMostCoins.emplace_back(player);
+        } else if (player->getCoins() == mostCoins) {
+            playersWithMostCoins.emplace_back(player);
+        }
+    }
+    if (playersWithMostCoins.size() == 1) {
+        displayWinner(playersWithMostCoins[0]);
+        return;
+    }
+
+    vector<Player*> playersWithMostArmies;
+    int mostArmies = -1;
+    for (auto & player : playersWithMostCoins) {
+        int armiesOnBoard = 0;
+        for (auto & territory : map->getTerritories()) {
+            armiesOnBoard += territory->getArmies()[player->getId()];
+        }
+        if (armiesOnBoard > mostArmies) {
+            mostArmies = armiesOnBoard;
+            playersWithMostArmies.clear();
+            playersWithMostArmies.emplace_back(player);
+        } else if (armiesOnBoard == mostArmies) {
+            playersWithMostArmies.emplace_back(player);
+        }
+    }
+    if (playersWithMostArmies.size() == 1) {
+        displayWinner(playersWithMostArmies[0]);
+        return;
+    }
+
+    Player* playerWithMostControlledRegions;
+    int mostControlledRegions = -1;
+    for (auto & player : playersWithMostArmies) {
+        int numOfControlledRegions = 0;
+        for (auto & territory : map->getTerritories()) {
+            if (territory->getControllingPlayerId() == player->getId()) {
+                numOfControlledRegions++;
+            }
+        }
+        if (numOfControlledRegions > mostControlledRegions) {
+            mostControlledRegions = numOfControlledRegions;
+            playerWithMostControlledRegions = player;
+        }
+    }
+    displayWinner(playerWithMostControlledRegions);
+}
+
+void Game::displayWinner(Player *player) {
+    cout << "********************************************"  << endl;
+    cout << "     WINNER is " << player->getFirstName() << " " << player->getLastName() << "!" << endl;
+    cout << "         CONGRATULATIONS!!!" << endl;
+    cout << "********************************************"  << endl;
 }
 
 bool Game::selectMap() {
@@ -354,6 +296,8 @@ bool Game::selectMap() {
             break;
         } catch (out_of_range& e) {
             cout << e.what() << endl;
+        } catch (const std::string e) {
+            cout << e << endl;
         }
     }
     return true;
@@ -486,7 +430,6 @@ void Game::printSixCards() {
         cout << setw(17) << card->getName();
     }
     cout << "\n" << endl;
-    cout << "Card: ";
     for (auto & card : hand->getHandCards()) {
         cout << *card << endl;
     }

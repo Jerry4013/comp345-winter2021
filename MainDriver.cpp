@@ -22,6 +22,7 @@ int main() {
 
     game->play();
     game->computeScore();
+    game->claimWinner();
 }
 
 

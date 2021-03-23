@@ -13,6 +13,17 @@ Player::Player() {
     abilities[flying] = 0;
     abilities[elixir] = 0;
     abilities[immuneAttack] = 0;
+    numberOfCardsOfEachType[night] = 0;
+    numberOfCardsOfEachType[cursed] = 0;
+    numberOfCardsOfEachType[arcane] = 0;
+    numberOfCardsOfEachType[ancient] = 0;
+    numberOfCardsOfEachType[dire] = 0;
+    numberOfCardsOfEachType[forest] = 0;
+    numberOfCardsOfEachType[noble] = 0;
+    numberOfCardsOfEachType[mountain] = 0;
+    numberOfCardsOfEachType[emptyKind] = 0;
+    oneVpPer3Coins = false;
+    oneVpPerFlying = false;
 }
 
 Player::Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins,
@@ -32,6 +43,17 @@ Player::Player(int id, const string& firstName, const string& lastName, const st
     abilities[elixir] = 0;
     abilities[immuneAttack] = 0;
     this->territories = territories;
+    numberOfCardsOfEachType[night] = 0;
+    numberOfCardsOfEachType[cursed] = 0;
+    numberOfCardsOfEachType[arcane] = 0;
+    numberOfCardsOfEachType[ancient] = 0;
+    numberOfCardsOfEachType[dire] = 0;
+    numberOfCardsOfEachType[forest] = 0;
+    numberOfCardsOfEachType[noble] = 0;
+    numberOfCardsOfEachType[mountain] = 0;
+    numberOfCardsOfEachType[emptyKind] = 0;
+    oneVpPer3Coins = false;
+    oneVpPerFlying = false;
 }
 
 Player::Player(const Player& player) {
@@ -52,6 +74,9 @@ Player::Player(const Player& player) {
     oneVpPer3Coins = player.oneVpPer3Coins;
     oneVpPerFlying = player.oneVpPerFlying;
     players = player.players;
+    numberOfCardsOfEachType = player.numberOfCardsOfEachType;
+    oneVpPer3Coins = player.oneVpPer3Coins;
+    oneVpPerFlying = player.oneVpPerFlying;
 }
 
 Player::~Player() {
@@ -171,11 +196,16 @@ bool Player::AndOrAction(Card *card) {
 
 bool Player::takeAction(Action action) {
     while (action.amount > 0) {
-        string ans;
+        int option;
+        cout << "--------------------------------------" << endl;
         cout << "You can " << action << endl;
-        cout << "Enter q to exit, any other key to continue..." << endl;
-        cin >> ans;
-        if (ans == "q") {
+        cout << "--------------------------------------" << endl;
+        cout << "Please choose one option:" << endl;
+        cout << "1. Take action." << endl;
+        cout << "2. Done." << endl;
+        cout << ">>";
+        cin >> option;
+        if (option == 2) {
             break;
         }
         if (action.actionType == placeArmy) {
@@ -281,6 +311,14 @@ int Player::destroyArmyPrompt(int destroyPoints) {
     cout << "Please choose a player ID to destroy army: " << endl;
     cout << ">>";
     cin >> playerId;
+    cout << "This player has armies in the following regions:" << endl;
+    for (auto & territory : territories) {
+        int numOfArmies = territory->getArmiesOfPlayer(playerId);
+        if (numOfArmies > 0) {
+            cout << "TerritoryId " << territory->getId() << ": " << numOfArmies << " armies; ";
+        }
+    }
+    cout << endl;
     cout << "Please choose a territory ID to destroy the army: " << endl;
     cout << ">>";
     cin >> territoryId;
@@ -292,6 +330,7 @@ int Player::destroyArmyPrompt(int destroyPoints) {
 
 void Player::exchange(Card *card) {
     cards.emplace_back(card);
+    numberOfCardsOfEachType[card->getType()]++;
     for (int i = 0; i < card->getAbilities().size(); ++i) {
         cout << "You gain a new ability: " << endl;
         cout << card->getAbilities()[i] << "\n";
@@ -336,6 +375,10 @@ Player* Player::getPlayerById(int playerId) {
 
 map<AbilityType, int> Player::getAbilities() const {
     return abilities;
+}
+
+void Player::addScore(int newScore) {
+    score += newScore;
 }
 
 Player &Player::operator=(const Player &player) {
@@ -507,27 +550,28 @@ void Player::setTerritoryAdjacencyList(map<int, vector<int>> territoryAdjacencyL
 }
 
 void Player::printMyTerritoriesWithArmies() {
-    cout << "My Territories With Armies (format: <territoryId>:<numberOfArmies>):" << endl;
+    cout << "My Territories With Armies:" << endl;
     for (auto & territory : territories) {
         if (territory->getArmies()[id] > 0) {
-            cout << territory->getId() << ":" << territory->getArmies()[id] << "; ";
+            cout << "Territory" << territory->getId() << " (" << territory->getArmies()[id] << " armies), ";
         }
     }
     cout << endl;
 }
 
 void Player::printNeighborsOfTerritoriesWithArmies() {
-    cout << "Neighbors of these territories: (territoryId -> neighborId:distance, neighborId:distance...)" << endl;
+    cout << "Neighbors of these territories: " << endl;
     for (auto & territory : territories) {
-        if (territory->getArmies()[id] > 0) {
-            cout << territory->getId() << " -> ";
+        int numOfArmies = territory->getArmies()[id];
+        if (numOfArmies > 0) {
+            cout << "Territory" << territory->getId() << " (" << numOfArmies << " armies) -> ";
             vector<int> neighbors = territoryAdjacencyList[territory->getId()];
             for (int neighbor : neighbors) {
                 int distance = 1;
                 if (territory->getContinentId() != getTerritoryById(neighbor)->getContinentId()) {
                     distance = 3;
                 }
-                cout << neighbor << ":" << distance << ", ";
+                cout << "Territory" << neighbor << " (distance " << distance << "), ";
             }
             cout << endl;
         }
@@ -542,6 +586,26 @@ void Player::printTerritoriesForNewArmies() {
         }
     }
     cout << endl;
+}
+
+vector<CardType> Player::getCardTypeVp() {
+    return cardTypeVp;
+}
+
+vector<CardType> Player::getCardSetVp() {
+    return cardSetVp;
+}
+
+unordered_map<CardType, int> Player::getNumberOfCardsOfEachType() {
+    return numberOfCardsOfEachType;
+}
+
+bool Player::hasOneVpPer3Coins() {
+    return oneVpPer3Coins;
+}
+
+bool Player::hasOneVpPerFlying() {
+    return oneVpPerFlying;
 }
 
 

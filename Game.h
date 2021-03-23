@@ -18,6 +18,7 @@ public:
     bool startup();
     void play();
     void computeScore();
+    void claimWinner();
 
 private:
     int numOfPlayer;
@@ -44,7 +45,10 @@ private:
     bool criteriaA(int regionId);
     bool criteriaB(int regionId);
     Card* selectCard(Player* currentPlayer);
-    int claimWinner(std::map<int, int> map1);
+    void computeMapScore();
+    void computeAbilityScore();
+    void computeElixirScore();
+    void displayWinner(Player* player);
 };
 
 

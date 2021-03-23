@@ -128,14 +128,17 @@ int Territory::getControllingPlayerId() {
     int playerId = -1;
     int max = 0;
     for (const auto &[k, v] : armies) {
-        int army = v;
-        if (cities[k]) {
-            army++;
+        if (k <= 0) {
+            continue;
         }
-        if (army > max) {
-            max = army;
+        int armyAnyCity = v;
+        if (cities[k] > 0) {
+            armyAnyCity += cities[k];
+        }
+        if (armyAnyCity > max) {
+            max = armyAnyCity;
             playerId = k;
-        } else if (army == max) {
+        } else if (armyAnyCity == max) {
             playerId = -1;
         }
     }
@@ -259,16 +262,22 @@ Territory *Continent::getTerritoryById(int territoryId) const {
 }
 
 int Continent::getControllingPlayerId() const {
-    unordered_map<int, int> armyAnyCity;
+    unordered_map<int, int> numberOfRegionControlled;
+    for (int i = 0; i <= 4; ++i) {
+        numberOfRegionControlled[i] = 0;
+    }
     for (auto & territory : territories) {
-        for (const auto &[k, v] : territory->getArmies()) {
-            armyAnyCity[k] += v;
-            armyAnyCity[k] += territory->getCities()[k];
+        int controllingPlayerId = territory->getControllingPlayerId();
+        if (controllingPlayerId > 0) {
+            numberOfRegionControlled[controllingPlayerId]++;
         }
     }
     int playerId = -1;
     int max = 0;
-    for (const auto &[k, v] : armyAnyCity) {
+    for (const auto &[k, v] : numberOfRegionControlled) {
+        if (k <= 0) {
+            continue;
+        }
         if (v > max) {
             max = v;
             playerId = k;
