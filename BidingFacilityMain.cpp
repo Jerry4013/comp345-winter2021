@@ -38,5 +38,9 @@ int biding::main () {
     players[2]->setBidding(0);
     players[2]->setLastName(lastNames[1]);
     cout << "The winner is player " << BidingFacility::bid(players) << endl;
+    for (auto & player : players) {
+        delete player;
+        player = nullptr;
+    }
     return 0;
 }

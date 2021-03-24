@@ -1,7 +1,11 @@
 
 #include <iostream>
 #include "Game.h"
-
+#include "MapDriver.h"
+#include "MapLoaderMain.h"
+#include "PlayerDriver.h"
+#include "CardsMain.h"
+#include "BidingFacilityMain.h"
 
 using namespace std;
 
@@ -24,6 +28,12 @@ int main() {
     game->play();
     game->computeScore();
     game->claimWinner();
+
+//    mapDriver::main();
+//    mapLoader::main();
+//    player::main();
+//    cards::main();
+//    biding::main();
 }
 
 

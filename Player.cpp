@@ -1,29 +1,18 @@
 #include "Player.h"
+#include "MapLoader.h"
 #include <sstream>
 
 Player::Player() {
+    id = 0;
     firstName = "Alice";
-    bidding = 1;
+    lastName = "Lee";
+    color = "white";
+    bidding = 0;
     coins = 12;
     score = 0;
     remainingCity = 3;
     remainingCubes = 18;
-    abilities[moving] = 0;
-    abilities[army] = 0;
-    abilities[flying] = 0;
-    abilities[elixir] = 0;
-    abilities[immuneAttack] = 0;
-    numberOfCardsOfEachType[night] = 0;
-    numberOfCardsOfEachType[cursed] = 0;
-    numberOfCardsOfEachType[arcane] = 0;
-    numberOfCardsOfEachType[ancient] = 0;
-    numberOfCardsOfEachType[dire] = 0;
-    numberOfCardsOfEachType[forest] = 0;
-    numberOfCardsOfEachType[noble] = 0;
-    numberOfCardsOfEachType[mountain] = 0;
-    numberOfCardsOfEachType[emptyKind] = 0;
-    oneVpPer3Coins = false;
-    oneVpPerFlying = false;
+    initializeDefaultValues();
 }
 
 Player::Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins,
@@ -37,23 +26,8 @@ Player::Player(int id, const string& firstName, const string& lastName, const st
     score = 0;
     remainingCity = 3;
     remainingCubes = 18;
-    abilities[moving] = 0;
-    abilities[army] = 0;
-    abilities[flying] = 0;
-    abilities[elixir] = 0;
-    abilities[immuneAttack] = 0;
     this->territories = territories;
-    numberOfCardsOfEachType[night] = 0;
-    numberOfCardsOfEachType[cursed] = 0;
-    numberOfCardsOfEachType[arcane] = 0;
-    numberOfCardsOfEachType[ancient] = 0;
-    numberOfCardsOfEachType[dire] = 0;
-    numberOfCardsOfEachType[forest] = 0;
-    numberOfCardsOfEachType[noble] = 0;
-    numberOfCardsOfEachType[mountain] = 0;
-    numberOfCardsOfEachType[emptyKind] = 0;
-    oneVpPer3Coins = false;
-    oneVpPerFlying = false;
+    initializeDefaultValues();
 }
 
 Player::Player(const Player& player) {
@@ -77,6 +51,25 @@ Player::Player(const Player& player) {
     numberOfCardsOfEachType = player.numberOfCardsOfEachType;
     oneVpPer3Coins = player.oneVpPer3Coins;
     oneVpPerFlying = player.oneVpPerFlying;
+}
+
+void Player::initializeDefaultValues() {
+    abilities[moving] = 0;
+    abilities[army] = 0;
+    abilities[flying] = 0;
+    abilities[elixir] = 0;
+    abilities[immuneAttack] = 0;
+    numberOfCardsOfEachType[night] = 0;
+    numberOfCardsOfEachType[cursed] = 0;
+    numberOfCardsOfEachType[arcane] = 0;
+    numberOfCardsOfEachType[ancient] = 0;
+    numberOfCardsOfEachType[dire] = 0;
+    numberOfCardsOfEachType[forest] = 0;
+    numberOfCardsOfEachType[noble] = 0;
+    numberOfCardsOfEachType[mountain] = 0;
+    numberOfCardsOfEachType[emptyKind] = 0;
+    oneVpPer3Coins = false;
+    oneVpPerFlying = false;
 }
 
 Player::~Player() {

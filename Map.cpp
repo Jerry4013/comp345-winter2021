@@ -177,7 +177,12 @@ Continent::Continent(const Continent& continent) {
     territories = continent.territories;
 }
 
-Continent::~Continent() {}
+Continent::~Continent() {
+    for (auto & territory : territories) {
+        delete territory;
+        territory = nullptr;
+    }
+}
 
 Continent &Continent::operator=(const Continent &continent) {
     id = continent.id;
@@ -298,7 +303,14 @@ Map::Map(int id, string& name) {
 }
 
 Map::~Map() {
-    // All the pointers are not created in the constructor.
+    for (auto & territory : territories) {
+        delete territory;
+        territory = nullptr;
+    }
+    for (auto & continent : continents) {
+        delete continent;
+        continent = nullptr;
+    }
 }
 
 

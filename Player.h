@@ -83,6 +83,7 @@ private:
     unordered_map<CardType, int> numberOfCardsOfEachType;
 
     Territory* getTerritoryById(int territoryId);
+    void initializeDefaultValues();
     Player* getPlayerById(int playerId);
     int placeNewArmiesPrompt(int movingPoints);
     int moveArmiesPrompt(int movingPoints);

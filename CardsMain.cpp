@@ -21,6 +21,8 @@ int cards::main(){
 
     cout << "rest of hand:" << endl;
     cout << *hand << endl;
+    delete deck;
+    delete hand;
 
     return 0;
 }

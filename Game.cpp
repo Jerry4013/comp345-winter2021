@@ -23,7 +23,16 @@ Game::Game() {
 }
 
 Game::~Game() {
-
+    delete hand;
+    hand = nullptr;
+    delete deck;
+    deck = nullptr;
+    delete map;
+    map = nullptr;
+    for (auto & player : players) {
+        delete player;
+        player = nullptr;
+    }
 }
 
 bool Game::start() {

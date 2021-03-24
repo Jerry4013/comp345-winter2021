@@ -7,3 +7,8 @@
 * 40072133	Bowen Yang	bowen.yang@mail.concordia.ca
 * 40039979	Luojia Yan	christopher_luojiayan@yahoo.com
 * 40058543	Tianming Chen	tianming.chen0424@gmail.com
+
+## Compiler version
+
+`#include <filesystem>` needs g++ 10 or higher.
+
