@@ -31,6 +31,7 @@ private:
     unordered_map<string, int> armies; // color -> the number of armies supplied on the table
     unordered_map<string, int> cities; // color -> the number of cities supplied on the table
     static const int CARD_COSTS[6];
+    static const int CARD_COSTS_SIZE;
     vector<string> COLORS;
     vector<int> order;   // [2, 3, 1] means player with id 2 move first, then player with id 3, then id 1;
     void createPlayers();
@@ -49,6 +50,7 @@ private:
     void computeAbilityScore();
     void computeElixirScore();
     void displayWinner(Player* player);
+    void printComponents();
 };
 
 

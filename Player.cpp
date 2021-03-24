@@ -263,9 +263,10 @@ int Player::placeNewArmiesPrompt(int movingPoints) {
     cin >> numberOfArmies;
     if (numberOfArmies > movingPoints) {
         cout << "ERROR! You can place " << movingPoints << " new armies at most." << endl;
-        return movingPoints;
     } else if (numberOfArmies < 1) {
         cout << "ERROR! Please select a valid number." << endl;
+    } else if (remainingCubes < numberOfArmies) {
+        cout << "ERROR! You don't have enough cubes in hand!" << endl;
     } else {
         PlaceNewArmies(numberOfArmies, territory);
         movingPoints -= numberOfArmies;

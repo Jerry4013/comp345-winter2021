@@ -13,6 +13,7 @@
 using namespace std;
 
 const int Hand::CARD_COSTS[] = {0, 1, 1, 2, 2, 3};
+const int Hand::CARD_COSTS_SIZE = 6;
 
 ostream &operator<<(ostream &output, const Action &action) {
     switch (action.actionType) {
@@ -443,8 +444,8 @@ Hand &Hand::operator=(const Hand &hand) {
 std::ostream &operator<<(ostream &output, const Hand &hand) {
     output << "The six cards:" << endl;
     output << "Cost:";
-    for (int cost : Hand::CARD_COSTS) {
-        output << setw(17) <<  to_string(cost) + "        ";
+    for (int i = 0; i < Hand::CARD_COSTS_SIZE; i++) {
+        output << setw(17) <<  to_string(Hand::CARD_COSTS[i]) + "        ";
     }
     output << endl;
     output << "Card:";

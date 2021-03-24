@@ -16,6 +16,7 @@
 using namespace std;
 
 const int Game::CARD_COSTS[] = {0, 1, 1, 2, 2, 3};
+const int Game::CARD_COSTS_SIZE = 6;
 
 Game::Game() {
     COLORS = {"purple", "white", "green", "grey"};
@@ -29,18 +30,24 @@ bool Game::start() {
     cout << "****************************" << endl;
     cout << "Eight-Minute_Empire_Legends." << endl;
     cout << "****************************" << endl;
+
+    cout << "Creating game components...\n" << endl;
     coinSupply = 36;
     for (const auto & color : COLORS) {
         armies[color] = 18;
         cities[color] = 3;
     }
+    printComponents();
     bool selectMapSucceed = selectMap();
     if (!selectMapSucceed) {
         return false;
     }
     selectNumberOfPlayers();
     createPlayers();
+    cout << "Creating a deck of cards..." << endl;
     createDeck();
+    cout << "A deck of cards are created! There are " << deck->getCards().size() << " cards in the deck.\n" << endl;
+    printComponents();
     return true;
 }
 
@@ -76,8 +83,6 @@ void Game::play() {
         for (int i : order) {
             cout << "It's player " << i << "'s turn:\n" << endl;
             Player* currentPlayer = getPlayerById(i);
-            // TODO: 给玩家一些行动选择，比如查看地图以及其他各种信息
-            // TODO 提示玩家在行动之前查看相关信息，进入方法后就无法查看了。
             printSixCards();
             Card* card = selectCard(currentPlayer);
             if (card->getAnd() || card->getOr()) {
@@ -100,12 +105,12 @@ Card* Game::selectCard(Player* currentPlayer) {
         cout << "Please select a card index (1-6):" << endl;
         cout << ">> ";
         cin >> cardIndex;
-        if (cardIndex < 1 || cardIndex > 6) {
+        cardIndex--;
+        if (cardIndex < 0 || cardIndex >= CARD_COSTS_SIZE) {
             cout << "ERROR! Please enter a number from range 1-6!" << endl;
             cout << "Try again." << endl;
             continue;
         }
-        cardIndex--;
         if (currentPlayer->getCoins() < CARD_COSTS[cardIndex]) {
             cout << "ERROR! You don't have enough coin to buy this card!" << endl;
             cout << "Try again." << endl;
@@ -128,40 +133,52 @@ void Game::computeScore() {
 
 void Game::computeMapScore() {
     // Territory
+    cout << "Computing Territory scores..." << endl;
     for (auto & territory : map->getTerritories()) {
         int playerId = territory->getControllingPlayerId();
         if (playerId > 0) {
+            cout << "Player " << playerId << " is controlling territory " << territory->getId() << endl;
             Player* player = getPlayerById(playerId);
             player->addScore(1);
         }
     }
     // Continent
+    cout << "\nComputing Continent scores..." << endl;
     for(auto continent: map->getContinents()){
         int playerId = continent->getControllingPlayerId();
         if (playerId > 0) {
+            cout << "Player " << playerId << " is controlling continent " << continent->getId() << endl;
             Player* player = getPlayerById(playerId);
             player->addScore(1);
         }
     }
+    cout << endl;
 }
 
 void Game::computeAbilityScore() {
+    cout << "Computing Ability scores..." << endl;
     for (auto & player : players) {
         for (auto type : player->getCardTypeVp()) {
+            cout << "Player " << player->getId() << " gains 1 VP from each " << Card::cardTypeToString(type) << endl;
             player->addScore(player->getNumberOfCardsOfEachType()[type]);
         }
         for (auto type : player->getCardSetVp()) {
             if (type == noble && player->getNumberOfCardsOfEachType()[noble] == 3) {
+                cout << "Player " << player->getId() << " gains 4 VP from three noble cards." << endl;
                 player->addScore(4);
             } else if (type == mountain && player->getNumberOfCardsOfEachType()[mountain] == 2) {
+                cout << "Player " << player->getId() << " gains 3 VP from two mountain cards." << endl;
                 player->addScore(3);
             }
         }
         if (player->hasOneVpPer3Coins()) {
+            cout << "Player " << player->getId() << " gains " << player->getCoins() / 3 << " VP from coins left." << endl;
             player->addScore(player->getCoins() / 3);
         }
         if (player->hasOneVpPerFlying()) {
-            player->addScore(player->getAbilities()[AbilityType::flying]);
+            int flyingVP = player->getAbilities()[AbilityType::flying];
+            cout << "Player " << player->getId() << " gains " << flyingVP << " VP from flying." << endl;
+            player->addScore(flyingVP);
         }
     }
 }
@@ -180,15 +197,32 @@ void Game::computeElixirScore() {
         }
     }
     if (hasMostElixirs.size() == 1) {
+        cout << "Player " << hasMostElixirs[0]->getId() << " gains 2 VP from Elixirs." << endl;
         hasMostElixirs[0]->addScore(2);
     } else {
         for (auto & player : hasMostElixirs) {
+            cout << "Player " << player->getId() << " gains 1 VP from Elixirs." << endl;
             player->addScore(1);
         }
     }
 }
 
 void Game::claimWinner() {
+    cout << endl;
+    for (auto & player : players) {
+        int armiesOnBoard = 0;
+        for (auto & territory : map->getTerritories()) {
+            armiesOnBoard += territory->getArmies()[player->getId()];
+        }
+        int numOfControlledRegions = 0;
+        for (auto & territory : map->getTerritories()) {
+            if (territory->getControllingPlayerId() == player->getId()) {
+                numOfControlledRegions++;
+            }
+        }
+        cout << "Player " << player->getId() << ":   score: " << player->getScore() << ", coins: " << player->getCoins()
+        << ", armies: " << armiesOnBoard << ", controlled regions: " << numOfControlledRegions << endl;
+    }
     vector<Player*> playersWithHighestScore;
     int highestScore = -1;
     for (auto & player : players) {
@@ -260,7 +294,8 @@ void Game::claimWinner() {
 
 void Game::displayWinner(Player *player) {
     cout << "********************************************"  << endl;
-    cout << "     WINNER is " << player->getFirstName() << " " << player->getLastName() << "!" << endl;
+    cout << "     WINNER is player " << player->getId() << ": " << player->getFirstName() << " " << player->getLastName()
+            << "!" << endl;
     cout << "         CONGRATULATIONS!!!" << endl;
     cout << "********************************************"  << endl;
 }
@@ -291,6 +326,11 @@ bool Game::selectMap() {
             }
             filePath = path + mapFiles[filePathOption - 1];
             map = MapLoader::loadMap(filePath);
+
+            bool validateResult = map->validate();
+            if (!validateResult) {
+                throw logic_error("This is not a valid map! Please choose another one.");
+            }
             cout << *map << endl;
             cout << "The map is created successfully!\n" << endl;
             break;
@@ -298,6 +338,8 @@ bool Game::selectMap() {
             cout << e.what() << endl;
         } catch (const std::string e) {
             cout << e << endl;
+        } catch (logic_error& e) {
+            cout << e.what() << endl;
         }
     }
     return true;
@@ -421,8 +463,8 @@ void Game::printSixCards() {
         cout << setw(17) <<  to_string(i) + "        ";
     }
     cout << "\nCost: ";
-    for (int cost : CARD_COSTS) {
-        cout << setw(17) <<  to_string(cost) + "        ";
+    for (int i = 0; i < CARD_COSTS_SIZE; i++) {
+        cout << setw(17) <<  to_string(CARD_COSTS[i]) + "        ";
     }
     cout << endl;
     cout << "Card: ";
@@ -516,6 +558,26 @@ Player* Game::getPlayerById(int id) {
     }
     cout << "ERROR! No player has this id.";
     return nullptr;
+}
+
+void Game::printComponents() {
+    cout << "Game components..." << endl;
+    cout << "Coins: " << coinSupply << endl;
+    cout << "Armies: ";
+    for (int i = 0; i < COLORS.size(); ++i) {
+        cout << armies[COLORS[i]] << " " << COLORS[i];
+        if (i != COLORS.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << "\nCities: ";
+    for (int i = 0; i < COLORS.size(); ++i) {
+        cout << cities[COLORS[i]] << " " << COLORS[i];
+        if (i != COLORS.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << "\n\n";
 }
 
 

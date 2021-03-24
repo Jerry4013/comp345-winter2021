@@ -1,0 +1,38 @@
+numberofmapboards=4
+numberofcontinents=6
+numberofregions=18
+//shape=rect
+shape=rect
+[map]
+1 volcano
+2 redforest
+3 village
+4 mountain
+//id, name, map_id
+[continents]
+1 volcano1 1
+2 volcano2 1
+3 redforest 2
+4 village 3
+5 mountain1 4
+6 mountain2 4
+//id, name, continent_id, connection, map_id
+[regions]
+1 volcano1_upper1 1 2 1
+2 volcano1_upper2 1 1
+3 volcano2_upper 2 4,5
+4 volcano2_middle1 2 3,5 1
+5 volcano2_middle2 2 3,4,6
+6 volcano2_bottom1 2 5,7 1
+7 volcano2_bottom2 2 6 1
+8 redforest_upper 3 9 2
+9 redforest_middle 3 8,10 2
+10 redforest_bottom 3 9 2,2
+11 village_upper1 4 12,13 3
+12 village_upper2 4 11,13,14
+13 village_middle 4 11,12,14 3
+14 village_bottom1 4 12,13,15 3
+15 village_bottom2 4 14 3
+16 mountain1_upper 5 17 4,4
+17 mountain1_middle 5 16 4,4
+18 mountain2 6 17

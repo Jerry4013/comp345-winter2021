@@ -107,6 +107,7 @@ public:
 private:
     vector<Card*> handCards;
     static const int CARD_COSTS[6];
+    static const int CARD_COSTS_SIZE;
 };
 
 
