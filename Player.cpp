@@ -148,10 +148,6 @@ void Player::BuildCity(Territory* territory) {
 }
 
 int Player::DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* territory, int destroyPoints) {
-    if (otherPlayer->abilities[immuneAttack] == 1) {
-        cout << "This player is immune to attack!";
-        return destroyPoints;
-    }
     int currTroops = territory->getArmiesOfPlayer(otherPlayer->getId());
     if (currTroops < numberOfArmies) {
         cout << "There is not enough troop to destroy!";
@@ -188,6 +184,14 @@ bool Player::AndOrAction(Card *card) {
 }
 
 bool Player::takeAction(Action action) {
+    if (action.actionType == ActionType::placeArmy && abilities[AbilityType::army] > 0) {
+        cout << "Using ability! you can place extra " << abilities[AbilityType::army] << " armies!\n" << endl;
+        action.amount += abilities[AbilityType::army];
+    }
+    if (action.actionType == ActionType::moveArmy && abilities[AbilityType::moving] > 0) {
+        cout << "Using ability! you can move extra " << abilities[AbilityType::moving] << " armies!\n" << endl;
+        action.amount += abilities[AbilityType::moving];
+    }
     while (action.amount > 0) {
         int option;
         cout << "--------------------------------------" << endl;
@@ -305,6 +309,10 @@ int Player::destroyArmyPrompt(int destroyPoints) {
     cout << "Please choose a player ID to destroy army: " << endl;
     cout << ">>";
     cin >> playerId;
+    if (getPlayerById(playerId)->abilities[immuneAttack] > 0) {
+        cout << "This player is immune to attack!";
+        return destroyPoints;
+    }
     cout << "This player has armies in the following regions:" << endl;
     for (auto & territory : territories) {
         int numOfArmies = territory->getArmiesOfPlayer(playerId);
@@ -326,8 +334,8 @@ void Player::exchange(Card *card) {
     cards.emplace_back(card);
     numberOfCardsOfEachType[card->getType()]++;
     for (int i = 0; i < card->getAbilities().size(); ++i) {
-        cout << "You gain a new ability: " << endl;
-        cout << card->getAbilities()[i] << "\n";
+        cout << "You gain a new ability: " << card->getAbilities()[i] << "\n\n";
+        // Add this ability to the player's abilities attribute
         AbilityType abilityType = card->getAbilities()[i].abilityType;
         if (abilityType == gainCoins) {
             coins += card->getAbilities()[i].amount;

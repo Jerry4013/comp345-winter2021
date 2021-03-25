@@ -70,7 +70,7 @@ bool Game::startup() {
     cout << "\nDrawing six cards..." << endl;
     hand = new Hand(deck); // draw six cards
     printSixCards();
-    cout << "\nThere are " << deck->getCards().size() << " cards in the deck." << endl;
+    cout << "There are " << deck->getCards().size() << " cards in the deck." << endl;
     cout << "\nSelecting starting region..." << endl;
     if (!selectStartingRegion()) {
         return false;
@@ -481,10 +481,9 @@ void Game::printSixCards() {
         cout << setw(17) << card->getName();
     }
     cout << "\n" << endl;
-    for (auto & card : hand->getHandCards()) {
-        cout << *card << endl;
+    for (int i = 0; i < hand->getHandCards().size(); ++i) {
+        cout << i + 1 << ". " << *hand->getHandCards()[i] << endl;
     }
-    cout << "\n" << endl;
 }
 
 bool Game::criteriaA(int regionId) {
