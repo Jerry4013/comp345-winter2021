@@ -119,7 +119,7 @@ int Player::MoveArmies(int numberOfArmies, Territory *from, Territory *to, int m
 
 int Player::MoveOverLand(int numberOfArmies, int movingPoints) {
     if (numberOfArmies > movingPoints) {
-        cout << "ERROR! You don't have enough moving points. Please try again.";
+        cout << "ERROR! You don't have enough moving points. Please try again." << endl;
         return movingPoints;
     }
     return movingPoints - numberOfArmies;
@@ -128,10 +128,10 @@ int Player::MoveOverLand(int numberOfArmies, int movingPoints) {
 int Player::MoveOverWater(int numberOfArmies, int movingPoints) {
     int cost = 3;
     if (abilities[flying] == 1) {
-        cout << "Flying level 1! The cost to move over water is 2 per army." << endl;
+        cout << "\nFlying level 1! The cost to move over water is 2 per army." << endl;
         cost = 2;
     } else if (abilities[flying] >= 2) {
-        cout << "Flying level 2! The cost to move over water is 1 per army." << endl;
+        cout << "\nFlying level 2! The cost to move over water is 1 per army." << endl;
         cost = 1;
     }
     if (numberOfArmies * cost > movingPoints) {
@@ -194,11 +194,11 @@ bool Player::AndOrAction(Card *card) {
 
 bool Player::takeAction(Action action) {
     if (action.actionType == ActionType::placeArmy && abilities[AbilityType::army] > 0) {
-        cout << "Using ability! you can place extra " << abilities[AbilityType::army] << " armies!\n" << endl;
+        cout << "\nUsing ability! you can place extra " << abilities[AbilityType::army] << " armies!\n" << endl;
         action.amount += abilities[AbilityType::army];
     }
     if (action.actionType == ActionType::moveArmy && abilities[AbilityType::moving] > 0) {
-        cout << "Using ability! you can move extra " << abilities[AbilityType::moving] << " armies!\n" << endl;
+        cout << "\nUsing ability! you can move extra " << abilities[AbilityType::moving] << " armies!\n" << endl;
         action.amount += abilities[AbilityType::moving];
     }
     while (action.amount > 0) {
@@ -214,31 +214,20 @@ bool Player::takeAction(Action action) {
         if (option == 2) {
             break;
         }
+        int remainingPoints = action.amount;
         if (action.actionType == placeArmy) {
-            int remainingPoints = placeNewArmiesPrompt(action.amount);
-            if (remainingPoints == action.amount) {
-                continue;
-            }
-            action.amount = remainingPoints;
+            remainingPoints = placeNewArmiesPrompt(action.amount);
         } else if (action.actionType == moveArmy) {
-            int remainingPoints = moveArmiesPrompt(action.amount);
-            if (remainingPoints == action.amount) {
-                continue;
-            }
-            action.amount = remainingPoints;
+            remainingPoints = moveArmiesPrompt(action.amount);
         } else if (action.actionType == buildCity) {
-            int remainingPoints = buildCityPrompt(action.amount);
-            if (remainingPoints == action.amount) {
-                continue;
-            }
-            action.amount = remainingPoints;
+            remainingPoints = buildCityPrompt(action.amount);
         } else if (action.actionType == destroyArmy) {
-            int remainingPoints = destroyArmyPrompt(action.amount);
-            if (remainingPoints == action.amount) {
-                continue;
-            }
-            action.amount = remainingPoints;
+            remainingPoints = destroyArmyPrompt(action.amount);
         }
+        if (remainingPoints == action.amount) {
+            continue;
+        }
+        action.amount = remainingPoints;
     }
     return true;
 }
@@ -435,6 +424,70 @@ void Player::addScore(int newScore) {
     score += newScore;
 }
 
+void Player::printMyAbilities() {
+    cout << "\nMy abilities: ";
+    for (const auto &[k, v] : abilities) {
+        switch (k) {
+            case AbilityType::moving:
+                cout << v << " moving, ";
+                break;
+            case AbilityType::army:
+                cout << v << " armies, ";
+                break;
+            case AbilityType::flying:
+                cout << v << " flying, ";
+                break;
+            case AbilityType::elixir:
+                cout << v << " elixir, ";
+                break;
+            case AbilityType::immuneAttack:
+                cout << v << " immune attack, ";
+                break;
+        }
+    }
+    cout << "\n\n";
+}
+
+
+void Player::printMyTerritoriesWithArmies() {
+    cout << "My Territories With Armies:" << endl;
+    for (auto & territory : territories) {
+        if (territory->getArmies()[id] > 0) {
+            cout << "Territory" << territory->getId() << " (" << territory->getArmies()[id] << " armies), ";
+        }
+    }
+    cout << endl;
+}
+
+void Player::printNeighborsOfTerritoriesWithArmies() {
+    cout << "Neighbors of these territories: " << endl;
+    for (auto & territory : territories) {
+        int numOfArmies = territory->getArmies()[id];
+        if (numOfArmies > 0) {
+            cout << "Territory" << territory->getId() << " (" << numOfArmies << " armies) -> ";
+            vector<int> neighbors = territoryAdjacencyList[territory->getId()];
+            for (int neighbor : neighbors) {
+                int distance = 1;
+                if (territory->getContinentId() != getTerritoryById(neighbor)->getContinentId()) {
+                    distance = 3;
+                }
+                cout << "Territory" << neighbor << " (distance " << distance << "), ";
+            }
+            cout << endl;
+        }
+    }
+}
+
+void Player::printTerritoriesForNewArmies() {
+    cout << "You may place new armies in these territories: ";
+    for (auto & territory : territories) {
+        if (territory->getIsStartingRegion() || territory->getCities()[id] > 0) {
+            cout << territory->getId() << ", ";
+        }
+    }
+    cout << endl;
+}
+
 Player &Player::operator=(const Player &player) {
     firstName = player.firstName;
     bidding = player.bidding;
@@ -601,45 +654,6 @@ void Player::setPlayers(vector<Player*> newPlayers) {
 
 void Player::setTerritoryAdjacencyList(map<int, vector<int>> territoryAdjacencyList) {
     this->territoryAdjacencyList = territoryAdjacencyList;
-}
-
-void Player::printMyTerritoriesWithArmies() {
-    cout << "My Territories With Armies:" << endl;
-    for (auto & territory : territories) {
-        if (territory->getArmies()[id] > 0) {
-            cout << "Territory" << territory->getId() << " (" << territory->getArmies()[id] << " armies), ";
-        }
-    }
-    cout << endl;
-}
-
-void Player::printNeighborsOfTerritoriesWithArmies() {
-    cout << "Neighbors of these territories: " << endl;
-    for (auto & territory : territories) {
-        int numOfArmies = territory->getArmies()[id];
-        if (numOfArmies > 0) {
-            cout << "Territory" << territory->getId() << " (" << numOfArmies << " armies) -> ";
-            vector<int> neighbors = territoryAdjacencyList[territory->getId()];
-            for (int neighbor : neighbors) {
-                int distance = 1;
-                if (territory->getContinentId() != getTerritoryById(neighbor)->getContinentId()) {
-                    distance = 3;
-                }
-                cout << "Territory" << neighbor << " (distance " << distance << "), ";
-            }
-            cout << endl;
-        }
-    }
-}
-
-void Player::printTerritoriesForNewArmies() {
-    cout << "You may place new armies in these territories: ";
-    for (auto & territory : territories) {
-        if (territory->getIsStartingRegion() || territory->getCities()[id] > 0) {
-            cout << territory->getId() << ", ";
-        }
-    }
-    cout << endl;
 }
 
 vector<CardType> Player::getCardTypeVp() {

@@ -93,6 +93,7 @@ void Game::play() {
             cout << "It's player " << i << "'s turn:\n" << endl;
             Player* currentPlayer = getPlayerById(i);
             printSixCards();
+            currentPlayer->printMyAbilities();
             Card* card = selectCard(currentPlayer);
             if (card->getAnd() || card->getOr()) {
                 currentPlayer->AndOrAction(card);

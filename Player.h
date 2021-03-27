@@ -30,6 +30,7 @@ public:
     bool AndOrAction(Card* card);
     bool takeAction(Action action);
     void addScore(int newScore);
+    void printMyAbilities();
 
     // Getters and Setters
     int getId() const;

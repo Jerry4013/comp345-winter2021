@@ -128,9 +128,6 @@ int Territory::getControllingPlayerId() {
     int playerId = -1;
     int max = 0;
     for (const auto &[k, v] : armies) {
-        if (k <= 0) {
-            continue;
-        }
         int armyAnyCity = v;
         if (cities[k] > 0) {
             armyAnyCity += cities[k];
@@ -272,16 +269,13 @@ int Continent::getControllingPlayerId() const {
     }
     for (auto & territory : territories) {
         int controllingPlayerId = territory->getControllingPlayerId();
-        if (controllingPlayerId > 0) {
+        if (controllingPlayerId >= 0) {
             numberOfRegionControlled[controllingPlayerId]++;
         }
     }
     int playerId = -1;
     int max = 0;
     for (const auto &[k, v] : numberOfRegionControlled) {
-        if (k <= 0) {
-            continue;
-        }
         if (v > max) {
             max = v;
             playerId = k;
