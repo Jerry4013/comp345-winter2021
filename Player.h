@@ -21,8 +21,10 @@ public:
     // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
     int MoveArmies(int numberOfArmies, Territory* from, Territory* to, int movingPoints);
     // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
-    int MoveOverLand(int numberOfArmies, Territory* from, Territory* to, int movingPoints);
-    void BuildCity(Territory* territory);
+    int MoveOverLand(int numberOfArmies, int movingPoints);
+    // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
+    int MoveOverWater(int numberOfArmies, int movingPoints);
+    int BuildCity(Territory* territory, int buildPoints);
     // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
     int DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* territory, int destroyPoints);
     bool AndOrAction(Card* card);
@@ -88,6 +90,7 @@ private:
     int placeNewArmiesPrompt(int movingPoints);
     int moveArmiesPrompt(int movingPoints);
     int destroyArmyPrompt(int destroyPoints);
+    int buildCityPrompt(int buildPoints);
     void printMyTerritoriesWithArmies();
     void printNeighborsOfTerritoriesWithArmies();
     void printTerritoriesForNewArmies();

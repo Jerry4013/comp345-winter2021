@@ -16,7 +16,7 @@ int main() {
         cout << "Game start failed!" << endl;
         return 0;
     }
-    cout << "Game start phase competed! Press Enter to continue..." << endl;
+    cout << "Game start phase completed! Press Enter to continue..." << endl;
     cin.ignore(10, '\n');
     cin.get();
 
@@ -24,6 +24,9 @@ int main() {
         cout << "Game startup failed!" << endl;
         return 0;
     }
+    cout << "Game startup phase completed! Press Enter to continue..." << endl;
+    cin.ignore(10, '\n');
+    cin.get();
 
     game->play();
     game->computeScore();

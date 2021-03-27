@@ -100,6 +100,10 @@ void Game::play() {
                 currentPlayer->takeAction(card->getActions()[0]);
             }
             map->printForce(numOfPlayer);
+            cout << "Player " << currentPlayer->getId()
+                << ", your turn is completed! Press Enter to pass to other players..." << endl;
+            cin.ignore(10, '\n');
+            cin.get();
             cout << "****************************" << endl;
             cout << "****************************" << endl;
         }
@@ -111,7 +115,7 @@ void Game::play() {
 Card* Game::selectCard(Player* currentPlayer) {
     int cardIndex;
     while (true) {
-        cout << "Please select a card index (1-6):" << endl;
+        cout << "Please select a card index (1-6) (You have " << currentPlayer->getCoins() << " coins):" << endl;
         cout << ">> ";
         cin >> cardIndex;
         cardIndex--;
@@ -412,6 +416,11 @@ void Game::createPlayers() {
         cout << "(The coins will be deducted only if you win the bidding later.)" << endl;
         cout << ">> ";
         cin >> bidding;
+        while (bidding < 0 || bidding > coins) {
+            cout << "ERROR! Please enter the bidding of player " << i + 1 << ": (0-" << coins << ")" << endl;
+            cout << ">> ";
+            cin >> bidding;
+        }
         coinSupply -= coins;
         cities[color] -= 3;
         armies[color] -= 18;
@@ -482,7 +491,7 @@ void Game::printSixCards() {
     }
     cout << "\n" << endl;
     for (int i = 0; i < hand->getHandCards().size(); ++i) {
-        cout << i + 1 << ". " << *hand->getHandCards()[i] << endl;
+        cout << i + 1 << ". [cost: " << CARD_COSTS[i] << "] " << *hand->getHandCards()[i] << endl;
     }
 }
 
