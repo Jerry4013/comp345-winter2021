@@ -43,7 +43,7 @@ private:
     int continentId;
     bool isStartingRegion;
     map<int, int> armies; // playerId -> number of armies
-    map<int, int> cities; // playerId -> whether this player has built city here
+    map<int, int> cities; // playerId -> number of cities
 };
 
 
