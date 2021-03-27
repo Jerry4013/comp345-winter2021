@@ -135,7 +135,7 @@ int Player::MoveOverWater(int numberOfArmies, int movingPoints) {
         cost = 1;
     }
     if (numberOfArmies * cost > movingPoints) {
-        cout << "ERROR! You don't have enough moving points. Try again.";
+        cout << "ERROR! You don't have enough moving points. Try again." << endl;
         return movingPoints;
     }
     return movingPoints - numberOfArmies * cost;
@@ -143,7 +143,7 @@ int Player::MoveOverWater(int numberOfArmies, int movingPoints) {
 
 int Player::BuildCity(Territory* territory, int buildPoints) {
     if (remainingCity <= 0) {
-        cout << "You have no city in hand!";
+        cout << "You have no city in hand!" << endl;
         return buildPoints;
     }
     remainingCity--;
@@ -154,7 +154,7 @@ int Player::BuildCity(Territory* territory, int buildPoints) {
 int Player::DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* territory, int destroyPoints) {
     int currTroops = territory->getArmiesOfPlayer(otherPlayer->getId());
     if (currTroops < numberOfArmies) {
-        cout << "There is not enough troop to destroy!";
+        cout << "There is not enough troop to destroy!" << endl;
         return destroyPoints;
     }
     otherPlayer->remainingCubes += numberOfArmies;
@@ -329,7 +329,7 @@ int Player::destroyArmyPrompt(int destroyPoints) {
     cout << ">>";
     cin >> playerId;
     if (getPlayerById(playerId)->abilities[immuneAttack] > 0) {
-        cout << "This player is immune to attack!";
+        cout << "This player is immune to attack!" << endl;
         return destroyPoints;
     }
     cout << "This player has armies in the following regions:" << endl;
