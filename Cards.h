@@ -102,12 +102,12 @@ public:
     Hand(const Hand& obj);
     Hand& operator= (const Hand& obj);
     friend ostream& operator<<(ostream& output, const Hand& hand);
-    vector<Card*> getHandCards();
+    vector<Card*> getHandCards() const;
     Card* exchange(int cardNumber, Deck* deck);
-private:
-    vector<Card*> handCards;
     static const int CARD_COSTS[6];
     static const int CARD_COSTS_SIZE;
+private:
+    vector<Card*> handCards;
 };
 
 

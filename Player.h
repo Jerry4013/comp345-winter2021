@@ -31,6 +31,7 @@ public:
     bool takeAction(Action action);
     void addScore(int newScore);
     void printMyAbilities();
+    Card* selectCard(Hand* hand, Deck* deck);
 
     // Getters and Setters
     int getId() const;

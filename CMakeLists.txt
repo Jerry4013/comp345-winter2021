@@ -27,4 +27,4 @@ add_executable(comp345_winter2021
         Game.cpp
         Game.h
         MainDriver.cpp
-        )
+        PlayerStrategies.cpp PlayerStrategies.h)

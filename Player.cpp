@@ -396,6 +396,32 @@ void Player::exchange(Card *card) {
     }
 }
 
+Card *Player::selectCard(Hand *hand, Deck* deck) {
+    int cardIndex;
+    while (true) {
+        cout << "Please select a card index (1-6) (You have " << coins << " coins):" << endl;
+        cout << ">> ";
+        cin >> cardIndex;
+        cardIndex--;
+        if (cardIndex < 0 || cardIndex >= Hand::CARD_COSTS_SIZE) {
+            cout << "ERROR! Please enter a number from range 1-6!" << endl;
+            cout << "Try again." << endl;
+            continue;
+        }
+        if (coins < Hand::CARD_COSTS[cardIndex]) {
+            cout << "ERROR! You don't have enough coin to buy this card!" << endl;
+            cout << "Try again." << endl;
+            continue;
+        }
+        break;
+    }
+    PayCoin(Hand::CARD_COSTS[cardIndex]);
+    Card* card = hand->getHandCards()[cardIndex];
+    exchange(card);
+    hand->exchange(cardIndex + 1, deck);
+    return card;
+}
+
 Territory *Player::getTerritoryById(int territoryId) {
     for (auto & territory : territories) {
         if (territory->getId() == territoryId) {

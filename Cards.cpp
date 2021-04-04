@@ -443,20 +443,27 @@ Hand &Hand::operator=(const Hand &hand) {
 
 std::ostream &operator<<(ostream &output, const Hand &hand) {
     output << "The six cards:" << endl;
-    output << "Cost:";
+    output << "Index:";
+    for (int i = 1; i <= 6; ++i) {
+        output << setw(17) <<  to_string(i) + "        ";
+    }
+    output << "\nCost: ";
     for (int i = 0; i < Hand::CARD_COSTS_SIZE; i++) {
         output << setw(17) <<  to_string(Hand::CARD_COSTS[i]) + "        ";
     }
     output << endl;
-    output << "Card:";
-    for (auto & card : hand.handCards) {
+    output << "Card: ";
+    for (auto & card : hand.getHandCards()) {
         output << setw(17) << card->getName();
     }
     output << "\n" << endl;
+    for (int i = 0; i < hand.getHandCards().size(); ++i) {
+        output << i + 1 << ". [cost: " << Hand::CARD_COSTS[i] << "] " << *hand.getHandCards()[i] << endl;
+    }
     return output;
 }
 
-vector<Card*> Hand::getHandCards() {
+vector<Card*> Hand::getHandCards() const {
     return handCards;
 }
 

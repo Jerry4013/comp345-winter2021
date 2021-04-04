@@ -1,0 +1,14 @@
+//
+// Created by jerry on 4/3/2021.
+//
+
+#ifndef COMP345_WINTER2021_PLAYERSTRATEGIES_H
+#define COMP345_WINTER2021_PLAYERSTRATEGIES_H
+
+
+class PlayerStrategies {
+
+};
+
+
+#endif //COMP345_WINTER2021_PLAYERSTRATEGIES_H

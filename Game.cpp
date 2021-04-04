@@ -7,16 +7,12 @@
 #include <filesystem>
 #include <algorithm>
 #include <string>
-#include <iomanip>
 #include <stdexcept>
 #include "Game.h"
 #include "MapLoader.h"
 #include "BidingFacility.h"
 
 using namespace std;
-
-const int Game::CARD_COSTS[] = {0, 1, 1, 2, 2, 3};
-const int Game::CARD_COSTS_SIZE = 6;
 
 Game::Game() {
     COLORS = {"purple", "white", "green", "grey"};
@@ -69,7 +65,7 @@ bool Game::startup() {
     cout << "There are " << deck->getCards().size() << " cards in the deck." << endl;
     cout << "\nDrawing six cards..." << endl;
     hand = new Hand(deck); // draw six cards
-    printSixCards();
+    cout << *hand;
     cout << "There are " << deck->getCards().size() << " cards in the deck." << endl;
     cout << "\nSelecting starting region..." << endl;
     if (!selectStartingRegion()) {
@@ -92,9 +88,9 @@ void Game::play() {
         for (int i : order) {
             cout << "It's player " << i << "'s turn:\n" << endl;
             Player* currentPlayer = getPlayerById(i);
-            printSixCards();
+            cout << *hand;
             currentPlayer->printMyAbilities();
-            Card* card = selectCard(currentPlayer);
+            Card* card = currentPlayer->selectCard(hand, deck);
             if (card->getAnd() || card->getOr()) {
                 currentPlayer->AndOrAction(card);
             } else {
@@ -108,35 +104,9 @@ void Game::play() {
             cout << "****************************" << endl;
             cout << "****************************" << endl;
         }
-        // TODO 为测试改为3回合结束游戏，将来要改回13。
+        // TODO change back to 13
         gameEnd = players[0]->getCards().size() == 3;
     }
-}
-
-Card* Game::selectCard(Player* currentPlayer) {
-    int cardIndex;
-    while (true) {
-        cout << "Please select a card index (1-6) (You have " << currentPlayer->getCoins() << " coins):" << endl;
-        cout << ">> ";
-        cin >> cardIndex;
-        cardIndex--;
-        if (cardIndex < 0 || cardIndex >= CARD_COSTS_SIZE) {
-            cout << "ERROR! Please enter a number from range 1-6!" << endl;
-            cout << "Try again." << endl;
-            continue;
-        }
-        if (currentPlayer->getCoins() < CARD_COSTS[cardIndex]) {
-            cout << "ERROR! You don't have enough coin to buy this card!" << endl;
-            cout << "Try again." << endl;
-            continue;
-        }
-        break;
-    }
-    currentPlayer->PayCoin(CARD_COSTS[cardIndex]);
-    Card* card = hand->getHandCards()[cardIndex];
-    currentPlayer->exchange(card);
-    hand->exchange(cardIndex + 1, deck);
-    return card;
 }
 
 void Game::computeScore() {
@@ -472,27 +442,6 @@ void Game::createArmiesAndCities() {
     }
     for (auto player : players) {
         cout << *player;
-    }
-}
-
-void Game::printSixCards() {
-    cout << "The six cards:" << endl;
-    cout << "Index:";
-    for (int i = 1; i <= 6; ++i) {
-        cout << setw(17) <<  to_string(i) + "        ";
-    }
-    cout << "\nCost: ";
-    for (int i = 0; i < CARD_COSTS_SIZE; i++) {
-        cout << setw(17) <<  to_string(CARD_COSTS[i]) + "        ";
-    }
-    cout << endl;
-    cout << "Card: ";
-    for (auto & card : hand->getHandCards()) {
-        cout << setw(17) << card->getName();
-    }
-    cout << "\n" << endl;
-    for (int i = 0; i < hand->getHandCards().size(); ++i) {
-        cout << i + 1 << ". [cost: " << CARD_COSTS[i] << "] " << *hand->getHandCards()[i] << endl;
     }
 }
 
