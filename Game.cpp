@@ -75,7 +75,7 @@ bool Game::startup() {
     createArmiesAndCities();
     map->printForce(numOfPlayer);
     cout << "\nPlayers bidding..." << endl;
-    bid();
+    bidAndDecideMovingOrder();
     return true;
 }
 
@@ -345,58 +345,25 @@ void Game::selectNumberOfPlayers() {
 }
 
 void Game::createPlayers() {
-    int coins;
-    if (numOfPlayer == 4) {
-        coins = 9;
-    } else if (numOfPlayer == 3) {
-        coins = 11;
-    } else if (numOfPlayer == 2) {
-        coins = 14;
-    }
-    string name;
-    string firstName;
-    string lastName;
-    string color;
-    int bidding;
+    int coins = initCoinsForEachPlayer();
     vector<string> remainingColors = COLORS;
     for (int i = 0; i < numOfPlayer; ++i) {
+        string firstName;
+        string lastName;
         cout << "Please enter the full name of player " << i + 1 << ": (separate by space)" << endl;
         cout << ">> ";
         cin >> firstName;
         cin >> lastName;
-        while (true) {
-            cout << "Please enter the color of player " << i + 1 << ": (";
-            for (int j = 0; j < remainingColors.size(); ++j) {
-                cout << remainingColors[j];
-                if (j != remainingColors.size() - 1) {
-                    cout << ", ";
-                } else {
-                    cout << ")\n>> ";
-                }
-            }
-            cin >> color;
-            auto itr = find(remainingColors.begin(), remainingColors.end(), color);
-            if (itr != remainingColors.end()) {
-                remainingColors.erase(itr);
-                break;
-            } else {
-                cout << "ERROR! Please type a correct color name." << endl;
-            }
-        }
-        cout << "Please enter the bidding of player " << i + 1 << ": (0-" << coins << ")" << endl;
-        cout << "(The coins will be deducted only if you win the bidding later.)" << endl;
-        cout << ">> ";
-        cin >> bidding;
-        while (bidding < 0 || bidding > coins) {
-            cout << "ERROR! Please enter the bidding of player " << i + 1 << ": (0-" << coins << ")" << endl;
-            cout << ">> ";
-            cin >> bidding;
-        }
+        string color = selectColor(i + 1, remainingColors);
+        auto itr = find(remainingColors.begin(), remainingColors.end(), color);
+        remainingColors.erase(itr);
+        int bidding = selectBidding(i + 1, coins);
+        PlayerStrategy *initPlayerStrategy = selectStrategy();
         coinSupply -= coins;
         cities[color] -= 3;
         armies[color] -= 18;
         players.emplace_back(new Player(i + 1, firstName, lastName, color, bidding, coins,
-                                        map->getTerritories()));
+                                        map->getTerritories(), initPlayerStrategy));
         cout << *players[i];
         cout << "Player " << i + 1 << " is created successfully!\n" << endl;
     }
@@ -492,11 +459,12 @@ bool Game::selectStartingRegion() {
     return false;
 }
 
-void Game::bid() {
+void Game::bidAndDecideMovingOrder() {
     int winnerID = BidingFacility::bid(players);
     cout << "The bidding winner is player " << winnerID << "!\n" << endl;
     Player* winner = getPlayerById(winnerID);
     winner->PayCoin(winner->getBiding());
+    coinSupply += winner->getBiding();
     order.emplace_back(winnerID);
     vector<int> otherPlayerIDs;
     for (auto & player : players) {
@@ -545,6 +513,83 @@ void Game::printComponents() {
         }
     }
     cout << "\n\n";
+}
+
+PlayerStrategy* Game::selectStrategy() {
+    int strategy;
+    cout << "Please select a strategy:" << endl;
+    cout << "1. Human player" << endl;
+    cout << "2. Greedy computer" << endl;
+    cout << "3. Moderate computer" << endl;
+    cout << ">>";
+    cin >> strategy;
+    while (strategy < 1 || strategy > 3) {
+        cout << "ERROR! Please select a number from 1 to 3!" << endl;
+        cin >> strategy;
+    }
+    PlayerStrategy *initPlayerStrategy;
+    switch (strategy) {
+        case 1:
+            initPlayerStrategy = new HumanStrategy();
+            break;
+        case 2:
+            initPlayerStrategy = new GreedyComputerStrategy();
+            break;
+        case 3:
+            initPlayerStrategy = new ModerateComputerStrategy();
+            break;
+        default:
+            initPlayerStrategy = new HumanStrategy();
+    }
+    return initPlayerStrategy;
+}
+
+int Game::selectBidding(int playerId, int coins) {
+    int bidding;
+    cout << "Please enter the bidding of player " << playerId << ": (0-" << coins << ")" << endl;
+    cout << "(The coins will be deducted only if you win the bidding later.)" << endl;
+    cout << ">> ";
+    cin >> bidding;
+    while (bidding < 0 || bidding > coins) {
+        cout << "ERROR! Please enter the bidding of player " << playerId << ": (0-" << coins << ")" << endl;
+        cout << ">> ";
+        cin >> bidding;
+    }
+    return bidding;
+}
+
+int Game::initCoinsForEachPlayer() {
+    if (numOfPlayer == 4) {
+        return 9;
+    } else if (numOfPlayer == 3) {
+        return 11;
+    } else if (numOfPlayer == 2) {
+        return 14;
+    }
+    return 0;
+}
+
+string Game::selectColor(int playerId, vector<string> remainingColors) {
+    string color;
+    while (true) {
+        cout << "Please enter the color of player " << playerId << ": (";
+        for (int j = 0; j < remainingColors.size(); ++j) {
+            cout << remainingColors[j];
+            if (j != remainingColors.size() - 1) {
+                cout << ", ";
+            } else {
+                cout << ")\n>> ";
+            }
+        }
+        cin >> color;
+        auto itr = find(remainingColors.begin(), remainingColors.end(), color);
+        if (itr != remainingColors.end()) {
+            break;
+        } else {
+            cout << "ERROR! Please type a correct color name." << endl;
+        }
+    }
+    return color;
 }
 
 

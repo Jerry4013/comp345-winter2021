@@ -17,7 +17,7 @@ Player::Player() {
 }
 
 Player::Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins,
-               vector<Territory *> territories) {
+               vector<Territory *> territories, PlayerStrategy *initPlayerStrategy) {
     this->id = id;
     this->firstName = firstName;
     this->lastName = lastName;
@@ -29,6 +29,7 @@ Player::Player(int id, const string& firstName, const string& lastName, const st
     remainingCubes = 18;
     this->territories = territories;
     initializeDefaultValues();
+    playerStrategy = initPlayerStrategy;
 }
 
 Player::Player(const Player& player) {
@@ -52,6 +53,7 @@ Player::Player(const Player& player) {
     numberOfCardsOfEachType = player.numberOfCardsOfEachType;
     oneVpPer3Coins = player.oneVpPer3Coins;
     oneVpPerFlying = player.oneVpPerFlying;
+    playerStrategy = player.playerStrategy;
 }
 
 void Player::initializeDefaultValues() {
@@ -397,24 +399,7 @@ void Player::exchange(Card *card) {
 }
 
 Card *Player::selectCard(Hand *hand, Deck* deck) {
-    int cardIndex;
-    while (true) {
-        cout << "Please select a card index (1-6) (You have " << coins << " coins):" << endl;
-        cout << ">> ";
-        cin >> cardIndex;
-        cardIndex--;
-        if (cardIndex < 0 || cardIndex >= Hand::CARD_COSTS_SIZE) {
-            cout << "ERROR! Please enter a number from range 1-6!" << endl;
-            cout << "Try again." << endl;
-            continue;
-        }
-        if (coins < Hand::CARD_COSTS[cardIndex]) {
-            cout << "ERROR! You don't have enough coin to buy this card!" << endl;
-            cout << "Try again." << endl;
-            continue;
-        }
-        break;
-    }
+    int cardIndex = playerStrategy->selectCard(hand, coins);
     PayCoin(Hand::CARD_COSTS[cardIndex]);
     Card* card = hand->getHandCards()[cardIndex];
     exchange(card);
@@ -561,6 +546,7 @@ ostream &operator<<(ostream &out, const Player &player) {
     out << "score: " << player.score << "; \n";
     out << "remainingCity: " << player.remainingCity << "; ";
     out << "remainingCubes: " << player.remainingCubes << "; \n";
+    out << "Strategy: " << player.playerStrategy->toString() << endl;
     out << "territories=[";
     vector<int> hasForceInTerritory;
     for (int i = 0; i < player.territories.size(); i++) {
@@ -700,6 +686,10 @@ bool Player::hasOneVpPer3Coins() {
 
 bool Player::hasOneVpPerFlying() {
     return oneVpPerFlying;
+}
+
+void Player::setStrategy(PlayerStrategy* newPlayerStrategy) {
+    playerStrategy = newPlayerStrategy;
 }
 
 

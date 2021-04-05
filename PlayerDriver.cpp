@@ -12,9 +12,9 @@ int player::main() {
     Map* map = MapLoader::loadMap("../Maps/Rectangular.map");
 
     auto* player1 = new Player(1, "Jenny", "Smith", "white", 1, 18,
-                               map->getTerritories());
+                               map->getTerritories(), new HumanStrategy());
     auto* player2 = new Player(1, "Ben", "Williams", "green", 1, 18,
-                               map->getTerritories());
+                               map->getTerritories(), new HumanStrategy());
     cout << *player1 << endl;
     cout << *player2 << endl;
     vector<Player*> players;

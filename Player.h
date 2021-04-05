@@ -3,18 +3,20 @@
 #include <string>
 #include "Map.h"
 #include "Cards.h"
+#include "PlayerStrategies.h"
 
 class Player {
 public:
     Player();
     Player(int id, const string& firstName, const string& lastName, const string& color, int bidding, int coins,
-           vector<Territory *> territories);
+           vector<Territory *> territories, PlayerStrategy *initPlayerStrategy);
     Player(const Player&);
     Player& operator=(const Player& secondPlayer);
     friend ostream& operator<<(ostream& out, const Player& player);
     string toString() const;
     ~Player();
 
+    // Add the card pointer to this player's own cards, and obtain the abilities on this card
     void exchange(Card* card);
     void PayCoin(int costOfCard);
     void PlaceNewArmies(int numberOfNewArmies, Territory* territory);
@@ -64,6 +66,7 @@ public:
     unordered_map<CardType, int> getNumberOfCardsOfEachType();
     bool hasOneVpPer3Coins();
     bool hasOneVpPerFlying();
+    void setStrategy(PlayerStrategy* newPlayerStrategy);
 
 private:
     int id;
@@ -85,6 +88,7 @@ private:
     bool oneVpPerFlying;
     map<int, vector<int>> territoryAdjacencyList;
     unordered_map<CardType, int> numberOfCardsOfEachType;
+    PlayerStrategy* playerStrategy;
 
     Territory* getTerritoryById(int territoryId);
     void initializeDefaultValues();

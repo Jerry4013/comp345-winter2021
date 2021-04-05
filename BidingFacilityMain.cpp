@@ -16,7 +16,8 @@ int biding::main () {
     players.reserve(3);
     vector<Territory *> territories;
     for (int i = 0; i < 3; ++i) {
-        players.emplace_back(new Player(i + 1, firstNames[i], lastNames[i], COLORS[i], 0, 14, territories));
+        players.emplace_back(new Player(i + 1, firstNames[i], lastNames[i], COLORS[i], 0, 14,
+                                        territories, new HumanStrategy()));
     }
     players[0]->setBidding(2);
     players[1]->setBidding(1);

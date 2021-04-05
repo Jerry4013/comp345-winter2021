@@ -38,7 +38,7 @@ private:
     void createDeck();
     void createArmiesAndCities();
     bool selectStartingRegion();
-    void bid();
+    void bidAndDecideMovingOrder();
     Player* getPlayerById(int id);
     bool criteriaA(int regionId);
     bool criteriaB(int regionId);
@@ -47,6 +47,10 @@ private:
     void computeElixirScore();
     void displayWinner(Player* player);
     void printComponents();
+    PlayerStrategy* selectStrategy();
+    int selectBidding(int playerId, int coins);
+    int initCoinsForEachPlayer();
+    string selectColor(int playerId, vector<string> remainingColors);
 };
 
 
