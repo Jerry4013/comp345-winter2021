@@ -67,6 +67,7 @@ public:
     bool hasOneVpPer3Coins();
     bool hasOneVpPerFlying();
     void setStrategy(PlayerStrategy* newPlayerStrategy);
+    string getStrategy();
 
 private:
     int id;

@@ -692,4 +692,8 @@ void Player::setStrategy(PlayerStrategy* newPlayerStrategy) {
     playerStrategy = newPlayerStrategy;
 }
 
+string Player::getStrategy() {
+    return playerStrategy->toString();
+}
+
 

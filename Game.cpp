@@ -88,6 +88,7 @@ void Game::play() {
         for (int i : order) {
             cout << "It's player " << i << "'s turn:\n" << endl;
             Player* currentPlayer = getPlayerById(i);
+            changeStrategyPrompt(currentPlayer);
             cout << *hand;
             currentPlayer->printMyAbilities();
             Card* card = currentPlayer->selectCard(hand, deck);
@@ -590,6 +591,22 @@ string Game::selectColor(int playerId, vector<string> remainingColors) {
         }
     }
     return color;
+}
+
+void Game::changeStrategyPrompt(Player *currentPlayer) {
+    cout << "The current strategy of this player is " << currentPlayer->getStrategy() << endl;
+    cout << "Do you want to change strategy? (Yes or No)" << endl;
+    string ans;
+    cin >> ans;
+    while (ans != "Yes" && ans != "No") {
+        cout << R"(Please type "Yes" or "No".)" << endl;
+        cin >> ans;
+    }
+    if (ans == "No") {
+        return;
+    }
+    PlayerStrategy* newStrategy = selectStrategy();
+    currentPlayer->setStrategy(newStrategy);
 }
 
 

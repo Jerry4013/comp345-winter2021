@@ -51,6 +51,7 @@ private:
     int selectBidding(int playerId, int coins);
     int initCoinsForEachPlayer();
     string selectColor(int playerId, vector<string> remainingColors);
+    void changeStrategyPrompt(Player* currentPlayer);
 };
 
 
