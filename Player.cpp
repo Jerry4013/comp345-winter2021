@@ -165,36 +165,26 @@ int Player::DestroyArmy(int numberOfArmies, Player* otherPlayer, Territory* terr
     return destroyPoints - numberOfArmies;
 }
 
-bool Player::AndOrAction(Card *card) {
+void Player::AndOrAction(Card *card) {
     if (!card->getAnd() && !card->getOr()) {
         cout << "ERROR! This is neither an And card nor an Or card." << endl;
-        return false;
+        return;
     }
     if (card->getAnd() && card->getOr()) {
         cout << "ERROR! A card cannot be both And card and Or card." << endl;
-        return false;
+        return;
     }
     if (card->getAnd()) {
-        bool result1 = takeAction(card->getActions()[0]);
-        bool result2 = takeAction(card->getActions()[1]);
-        return result1 && result2;
+        takeAction(card->getActions()[0]);
+        takeAction(card->getActions()[1]);
+        return;
     }
     // It must be an "Or card" now.
-    int option;
-    cout << "You may choose one action below: " << endl;
-    cout << "1. " << card->getActions()[0] << endl;
-    cout << "2. " << card->getActions()[1] << endl;
-    cout << ">>";
-    cin >> option;
-    while (option < 1 || option > 2) {
-        cout << "Invalid number! Please try again." << endl;
-        cout << ">>";
-        cin >> option;
-    }
-    return takeAction(card->getActions()[option - 1]);
+    int option = playerStrategy->selectOrCard(card);
+    takeAction(card->getActions()[option - 1]);
 }
 
-bool Player::takeAction(Action action) {
+void Player::takeAction(Action action) {
     if (action.actionType == ActionType::placeArmy && abilities[AbilityType::army] > 0) {
         cout << "\nUsing ability! you can place extra " << abilities[AbilityType::army] << " armies!\n" << endl;
         action.amount += abilities[AbilityType::army];
@@ -203,174 +193,17 @@ bool Player::takeAction(Action action) {
         cout << "\nUsing ability! you can move extra " << abilities[AbilityType::moving] << " armies!\n" << endl;
         action.amount += abilities[AbilityType::moving];
     }
-    while (action.amount > 0) {
-        int option;
-        cout << "--------------------------------------" << endl;
-        cout << "You can " << action << ". (You are player " << id << ")" << endl;
-        cout << "--------------------------------------" << endl;
-        cout << "Please choose one option:" << endl;
-        cout << "1. Take action." << endl;
-        cout << "2. Done." << endl;
-        cout << ">>";
-        cin >> option;
-        if (option == 2) {
-            break;
-        }
-        int remainingPoints = action.amount;
-        if (action.actionType == placeArmy) {
-            remainingPoints = placeNewArmiesPrompt(action.amount);
-        } else if (action.actionType == moveArmy) {
-            remainingPoints = moveArmiesPrompt(action.amount);
-        } else if (action.actionType == buildCity) {
-            remainingPoints = buildCityPrompt(action.amount);
-        } else if (action.actionType == destroyArmy) {
-            remainingPoints = destroyArmyPrompt(action.amount);
-        }
-        if (remainingPoints == action.amount) {
-            continue;
-        }
-        action.amount = remainingPoints;
+    map<int, int*> remainingCubesMap;
+    for (auto & player : players) {
+        remainingCubesMap[player->id] = &player->remainingCubes;
     }
-    return true;
-}
-
-int Player::placeNewArmiesPrompt(int movingPoints) {
-    cout << "Game rule: You may place new armies only on the starting region or on a region where you have a city."
-        << endl;
-    printTerritoriesForNewArmies();
-    int territoryId, numberOfArmies;
-    cout << "Please choose a territory ID to place the new armies: " << endl;
-    cout << ">>";
-    cin >> territoryId;
-
-    // You may place new armies only on the starting region or on a region where you have a city.
-    Territory* territory = getTerritoryById(territoryId);
-    if (!territory->getIsStartingRegion() && territory->getCities()[id] == 0) {
-        cout << "ERROR! You may place new armies only on the starting region or on a region where"
-                " you have a city." << endl;
-        return movingPoints;
+    map<int, int> immuneAttackMap;
+    for (auto & player : players) {
+        immuneAttackMap[player->id] = player->abilities[AbilityType::immuneAttack];
     }
-
-    cout << "Please enter the number of armies to place: " << endl;
-    cout << ">>";
-    cin >> numberOfArmies;
-    if (numberOfArmies > movingPoints) {
-        cout << "ERROR! You can place " << movingPoints << " new armies at most." << endl;
-    } else if (numberOfArmies < 1) {
-        cout << "ERROR! Please select a valid number." << endl;
-    } else if (remainingCubes < numberOfArmies) {
-        cout << "ERROR! You don't have enough cubes in hand!" << endl;
-    } else {
-        PlaceNewArmies(numberOfArmies, territory);
-        movingPoints -= numberOfArmies;
-    }
-    return movingPoints;
-}
-
-int Player::moveArmiesPrompt(int movingPoints) {
-    printMyTerritoriesWithArmies();
-    printNeighborsOfTerritoriesWithArmies();
-    vector<int> myTerritoriesWithArmies;
-    for (auto & territory : territories) {
-        if (territory->getArmies()[id] > 0) {
-            myTerritoriesWithArmies.emplace_back(territory->getId());
-        }
-    }
-    vector<int> territoryIdList;
-    for (auto & territory : territories) {
-        territoryIdList.emplace_back(territory->getId());
-    }
-    int fromTerritoryId, toTerritoryId, numberOfArmies;
-    cout << "Please choose a territory ID as starting point: " << endl;
-    cout << ">>";
-    cin >> fromTerritoryId;
-    while (find(myTerritoriesWithArmies.begin(), myTerritoriesWithArmies.end(), fromTerritoryId) ==
-            myTerritoriesWithArmies.end()) {
-        cout << "ERROR! You don't have army at this territory. Please try again!" << endl;
-        cout << ">>";
-        cin >> fromTerritoryId;
-    }
-    cout << "Please choose a territory ID as target: " << endl;
-    cout << ">>";
-    cin >> toTerritoryId;
-    while (find(territoryIdList.begin(), territoryIdList.end(), toTerritoryId) == territoryIdList.end()) {
-        cout << "ERROR! There is no territory with this ID. Please try again." << endl;
-        cout << ">>";
-        cin >> toTerritoryId;
-    }
-    Territory* fromTerritory = getTerritoryById(fromTerritoryId);
-    Territory* toTerritory = getTerritoryById(toTerritoryId);
-    vector<int> neighbors = territoryAdjacencyList[fromTerritoryId];
-    while (find(neighbors.begin(), neighbors.end(), toTerritoryId) == neighbors.end()) {
-        cout << "ERROR! These two territories are not connected. Please try again." << endl;
-        cout << "Please choose a territory ID as starting point: " << endl;
-        cout << ">>";
-        cin >> fromTerritoryId;
-        cout << "Please choose a territory ID as target: " << endl;
-        cout << ">>";
-        cin >> toTerritoryId;
-        fromTerritory = getTerritoryById(fromTerritoryId);
-        toTerritory = getTerritoryById(toTerritoryId);
-    }
-    cout << "Please choose the number of armies you want to move: " << endl;
-    cout << ">>";
-    cin >> numberOfArmies;
-    while (numberOfArmies > fromTerritory->getArmiesOfPlayer(id)) {
-        cout << "ERROR! You can move at most " << fromTerritory->getArmiesOfPlayer(id) << " armies. Please try again."
-        << endl;
-        cout << ">>";
-        cin >> numberOfArmies;
-    }
-    int remainingMovingPoints = MoveArmies(numberOfArmies, fromTerritory, toTerritory, movingPoints);
-    return remainingMovingPoints;
-}
-
-int Player::destroyArmyPrompt(int destroyPoints) {
-    int playerId, territoryId;
-    cout << "Please choose a player ID to destroy army: " << endl;
-    cout << ">>";
-    cin >> playerId;
-    if (getPlayerById(playerId)->abilities[immuneAttack] > 0) {
-        cout << "This player is immune to attack!" << endl;
-        return destroyPoints;
-    }
-    cout << "This player has armies in the following regions:" << endl;
-    for (auto & territory : territories) {
-        int numOfArmies = territory->getArmiesOfPlayer(playerId);
-        if (numOfArmies > 0) {
-            cout << "TerritoryId " << territory->getId() << ": " << numOfArmies << " armies; ";
-        }
-    }
-    cout << endl;
-    cout << "Please choose a territory ID to destroy the army: " << endl;
-    cout << ">>";
-    cin >> territoryId;
-    Player* otherPlayer = getPlayerById(playerId);
-    Territory* territory = getTerritoryById(territoryId);
-    int remainingMovingPoints = DestroyArmy(1, otherPlayer, territory, destroyPoints);
-    return remainingMovingPoints;
-}
-
-int Player::buildCityPrompt(int buildPoints) {
-    cout << "Game rule: You may place a city anywhere on the board where you have an army." << endl;
-    printMyTerritoriesWithArmies();
-    vector<int> myTerritoriesWithArmies;
-    for (auto & territory : territories) {
-        if (territory->getArmies()[id] > 0) {
-            myTerritoriesWithArmies.emplace_back(territory->getId());
-        }
-    }
-    int territoryId;
-    cout << "Please choose a territory ID to build a city: " << endl;
-    cout << ">>";
-    cin >> territoryId;
-    while (find(myTerritoriesWithArmies.begin(), myTerritoriesWithArmies.end(), territoryId) == myTerritoriesWithArmies.end()) {
-        cout << "ERROR! You may place a city where you have an army. Please try again!" << endl;
-        cout << ">>";
-        cin >> territoryId;
-    }
-    Territory* territory = getTerritoryById(territoryId);
-    return BuildCity(territory, buildPoints);
+    playerStrategy->takeAction(action, id, territories, remainingCubes,territoryAdjacencyList,
+                               abilities[AbilityType::flying], remainingCity,
+                               remainingCubesMap, immuneAttackMap);
 }
 
 void Player::exchange(Card *card) {
