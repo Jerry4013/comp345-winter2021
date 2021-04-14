@@ -32,21 +32,20 @@ private:
     static int buildCityPrompt(int id, int movingPoints, vector<Territory *> &territories, int &remainingCity);
     static int destroyArmyPrompt(int destroyPoints, vector<Territory*>& territories,
                           map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap);
-
-    static void printTerritoriesForNewArmies(int id, vector<Territory*>& territories);
-    static Territory* getTerritoryById(int territoryId, vector<Territory*>& territories);
     static void PlaceNewArmies(int id, int numberOfNewArmies, Territory* territory, int &remainingCubesRef);
-    static int buildCity(int id, Territory* territory, int buildPoints, int &remainingCity);
-    static void printMyTerritoriesWithArmies(int id, vector<Territory*>& territories);
-    static void printNeighborsOfTerritoriesWithArmies(int id, vector<Territory*>& territories,
-                                               map<int, vector<int>>& territoryAdjacencyList);
     static int MoveArmies(int id, int numberOfArmies, Territory* from, Territory* to, int movingPoints, int flyAbility);
     // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
     static int MoveOverLand(int numberOfArmies, int movingPoints);
     // return remaining movingPoints. If the return value equals the parameter movingPoints, then this move failed.
     static int MoveOverWater(int numberOfArmies, int movingPoints, int flyAbility);
+    static int buildCity(int id, Territory* territory, int buildPoints, int &remainingCity);
     static int DestroyArmy(int otherPlayerId, int numberOfArmies, Territory* territory, map<int, int*>& remainingCubesMap,
-                    int destroyPoints);
+                           int destroyPoints);
+    static void printTerritoriesForNewArmies(int id, vector<Territory*>& territories);
+    static Territory* getTerritoryById(int territoryId, vector<Territory*>& territories);
+    static void printMyTerritoriesWithArmies(int id, vector<Territory*>& territories);
+    static void printNeighborsOfTerritoriesWithArmies(int id, vector<Territory*>& territories,
+                                                      map<int, vector<int>>& territoryAdjacencyList);
 };
 
 class GreedyComputerStrategy : public PlayerStrategy {
@@ -59,6 +58,16 @@ public:
                     map<int, vector<int>> territoryAdjacencyList, int flyAbility, int &remainingCity,
                     map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap) override;
     int selectOrCard(Card *card) override;
+
+private:
+    // Evenly place armies to all the valid territories
+    static void greedyPlaceNewArmies(int id, int movingPoints, vector<Territory*>& territories, int &remainingCubesRef);
+    static int greedyMoveArmies(int id, int movingPoints, vector<Territory*>& territories,
+                                map<int, vector<int>>& territoryAdjacencyList, int flyAbility);
+    static void greedyBuildCity(int id, vector<Territory *> &territories, int &remainingCity);
+    // select a player (not himself and not immune attack) and destroy 1 army from his territory.
+    static void greedyDestroyArmy(int id, vector<Territory*>& territories,
+                                 map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap);
 };
 
 class ModerateComputerStrategy : public PlayerStrategy {

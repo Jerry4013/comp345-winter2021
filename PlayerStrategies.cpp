@@ -184,7 +184,6 @@ int HumanStrategy::moveArmiesPrompt(int id, int movingPoints, vector<Territory *
     }
     int remainingMovingPoints = MoveArmies(id, numberOfArmies, fromTerritory, toTerritory, movingPoints, flyAbility);
     return remainingMovingPoints;
-    return 0;
 }
 
 int HumanStrategy::destroyArmyPrompt(int destroyPoints, vector<Territory*>& territories,
@@ -378,11 +377,121 @@ string GreedyComputerStrategy::toString() {
 void GreedyComputerStrategy::takeAction(Action action, int id, vector<Territory *> &territories, int &remainingCubesRef,
                                         map<int, vector<int>> territoryAdjacencyList, int flyAbility, int &remainingCity,
                                         map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap) {
-
+    cout << "--------------------------------------" << endl;
+    cout << "You can " << action << ". (You are player " << id << ")" << endl;
+    cout << "--------------------------------------" << endl;
+    if (action.actionType == ActionType::placeArmy) {
+        greedyPlaceNewArmies(id, action.amount, territories, remainingCubesRef);
+    } else if (action.actionType == ActionType::moveArmy) {
+        greedyMoveArmies(id, action.amount, territories, territoryAdjacencyList, flyAbility);
+    } else if (action.actionType == ActionType::buildCity) {
+        greedyBuildCity(id, territories, remainingCity);
+    } else if (action.actionType == ActionType::destroyArmy) {
+        greedyDestroyArmy(id, territories, remainingCubesMap, immuneAttackMap);
+    }
 }
 
 int GreedyComputerStrategy::selectOrCard(Card *card) {
+    for (int i = 0; i < card->getActions().size(); ++i) {
+        ActionType actionType = card->getActions()[i].actionType;
+        if (actionType == ActionType::buildCity || actionType == ActionType::destroyArmy) {
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "The greedy computer selected action " << i + 1 << endl;
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "Press Enter to continue..." << endl;
+            cin.ignore(10, '\n');
+            cin.get();
+            return i + 1;
+        }
+    }
     return 1;
+}
+
+void GreedyComputerStrategy::greedyPlaceNewArmies(int id, int movingPoints, vector<Territory*>& territories,
+                                                 int &remainingCubesRef) {
+    cout << "Game rule: You may place new armies only on the starting region or on a region where you have a city."
+         << endl;
+    cout << "You may place new armies in these territories: ";
+    map<int, int> validTerritories; // territoryId -> the number of armies placed
+    for (auto & territory : territories) {
+        if (territory->getIsStartingRegion() || territory->getCities()[id] > 0) {
+            cout << territory->getId() << ", ";
+            validTerritories[territory->getId()] = 0;
+        }
+    }
+    while (movingPoints > 0) {
+        for (auto &[k, v] : validTerritories) {
+            validTerritories[k] = v + 1;
+            movingPoints--;
+        }
+    }
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    cout << "The greedy computer " << id << " places ";
+    for (auto &[k, v] : validTerritories) {
+        cout << v << " armies at Territory " << k << "; ";
+    }
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+}
+
+int GreedyComputerStrategy::greedyMoveArmies(int id, int movingPoints, vector<Territory *> &territories,
+                                             map<int, vector<int>> &territoryAdjacencyList, int flyAbility) {
+
+    return 0;
+}
+
+void GreedyComputerStrategy::greedyBuildCity(int id, vector<Territory *> &territories, int &remainingCity) {
+    if (remainingCity <= 0) {
+        cout << "You have no city in hand!" << endl;
+        return;
+    }
+    cout << "Game rule: You may place a city anywhere on the board where you have an army." << endl;
+    vector<Territory*> myTerritoriesWithArmies;
+    cout << "My Territories With Armies:" << endl;
+    for (auto & territory : territories) {
+        if (territory->getArmies()[id] > 0) {
+            myTerritoriesWithArmies.emplace_back(territory);
+            cout << "Territory" << territory->getId() << " (" << territory->getArmies()[id] << " armies), ";
+        }
+    }
+    cout << endl;
+    if (myTerritoriesWithArmies.empty()) {
+        cout << "You don't have any army, so you can't build a city." << endl;
+        return;
+    }
+    remainingCity--;
+    for (auto & territory : myTerritoriesWithArmies) {
+        if (!territory->getIsStartingRegion()) {
+            territory->buildCity(id);
+            cout << "Player " << id << " builds a city at territory " << territory->getId() << endl;
+            return;
+        }
+    }
+    myTerritoriesWithArmies[0]->buildCity(id);
+    cout << "Player " << id << " builds a city at territory " << myTerritoriesWithArmies[0]->getId() << endl;
+}
+
+void GreedyComputerStrategy::greedyDestroyArmy(int id, vector<Territory *> &territories,
+                                              map<int, int *> &remainingCubesMap, map<int, int> &immuneAttackMap) {
+    int playerIdToDestroy = -1;
+    for (int i = 1; i <= 4; ++i) {
+        if (i != id && immuneAttackMap[i] == 0) {
+            for (auto & territory : territories) {
+                int numOfArmies = territory->getArmiesOfPlayer(i);
+                if (numOfArmies > 0) {
+                    playerIdToDestroy = i;
+                    *remainingCubesMap[playerIdToDestroy] += 1;
+                    territory->removeArmiesOfPlayer(playerIdToDestroy, 1);
+                    cout << "You destroyed 1 army of player " << playerIdToDestroy << " at territory "
+                        << territory->getId() << endl;
+                    return;
+                }
+            }
+        }
+    }
+    if (playerIdToDestroy == -1) {
+        cout << "Other players are all immune attack or have no army to destroy. Do nothing." << endl;
+        return;
+    }
 }
 
 int ModerateComputerStrategy::selectCard(Hand *hand, int coins) {
@@ -422,5 +531,17 @@ void ModerateComputerStrategy::takeAction(Action action, int id, vector<Territor
 }
 
 int ModerateComputerStrategy::selectOrCard(Card *card) {
+    for (int i = 0; i < card->getActions().size(); ++i) {
+        ActionType actionType = card->getActions()[i].actionType;
+        if (actionType == ActionType::moveArmy || actionType == ActionType::placeArmy) {
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "The moderate computer selected action " << i + 1 << endl;
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "Press Enter to continue..." << endl;
+            cin.ignore(10, '\n');
+            cin.get();
+            return i + 1;
+        }
+    }
     return 1;
 }
