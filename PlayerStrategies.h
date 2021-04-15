@@ -15,6 +15,9 @@ public:
                             map<int, vector<int>> territoryAdjacencyList, int flyAbility, int &remainingCity,
                             map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap) = 0;
     virtual int selectOrCard(Card *card) = 0;
+    static Territory* getTerritoryById(int territoryId, vector<Territory*>& territories);
+    static void printNeighborsOfTerritoriesWithArmies(int id, vector<Territory*>& territories,
+                                                      map<int, vector<int>>& territoryAdjacencyList);
 };
 
 class HumanStrategy : public PlayerStrategy {
@@ -42,10 +45,7 @@ private:
     static int DestroyArmy(int otherPlayerId, int numberOfArmies, Territory* territory, map<int, int*>& remainingCubesMap,
                            int destroyPoints);
     static void printTerritoriesForNewArmies(int id, vector<Territory*>& territories);
-    static Territory* getTerritoryById(int territoryId, vector<Territory*>& territories);
     static void printMyTerritoriesWithArmies(int id, vector<Territory*>& territories);
-    static void printNeighborsOfTerritoriesWithArmies(int id, vector<Territory*>& territories,
-                                                      map<int, vector<int>>& territoryAdjacencyList);
 };
 
 class GreedyComputerStrategy : public PlayerStrategy {
@@ -62,10 +62,13 @@ public:
 private:
     // Evenly place armies to all the valid territories
     static void greedyPlaceNewArmies(int id, int movingPoints, vector<Territory*>& territories, int &remainingCubesRef);
-    static int greedyMoveArmies(int id, int movingPoints, vector<Territory*>& territories,
+    // Keep moving 1 army to its neighbor who has less armies than this territory
+    static void greedyMoveArmies(int id, int movingPoints, vector<Territory*>& territories,
                                 map<int, vector<int>>& territoryAdjacencyList, int flyAbility);
+    // Search all the territories with armies. If there is one territory which is not the starting region, build a city
+    // If all the armies are in the starting region, build a city in starting region.
     static void greedyBuildCity(int id, vector<Territory *> &territories, int &remainingCity);
-    // select a player (not himself and not immune attack) and destroy 1 army from his territory.
+    // select a player (not himself and not immune attack) and destroy 1 army from any of his territory.
     static void greedyDestroyArmy(int id, vector<Territory*>& territories,
                                  map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap);
 };
@@ -78,6 +81,18 @@ public:
                     map<int, vector<int>> territoryAdjacencyList, int flyAbility, int &remainingCity,
                     map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap) override;
     int selectOrCard(Card *card) override;
+private:
+    // Evenly place armies to all the valid territories
+    static void moderatePlaceNewArmies(int id, int movingPoints, vector<Territory*>& territories, int &remainingCubesRef);
+    // Keep moving 1 army to its neighbor who has less armies than this territory
+    static void moderateMoveArmies(int id, int movingPoints, vector<Territory*>& territories,
+                                 map<int, vector<int>>& territoryAdjacencyList, int flyAbility);
+    // Search all the territories with armies. If there is one territory which is not the starting region, build a city
+    // If all the armies are in the starting region, build a city in starting region.
+    static void moderateBuildCity(int id, vector<Territory *> &territories, int &remainingCity);
+    // select a player (not himself and not immune attack) and destroy 1 army from any of his territory.
+    static void moderateDestroyArmy(int id, vector<Territory*>& territories,
+                                  map<int, int*>& remainingCubesMap, map<int, int>& immuneAttackMap);
 };
 
 #endif //COMP345_WINTER2021_PLAYERSTRATEGIES_H
