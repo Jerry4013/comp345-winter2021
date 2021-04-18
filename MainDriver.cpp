@@ -8,7 +8,7 @@
 //#endif
 
 #include <iostream>
-#include "Game.h"
+#include "GameEngine.h"
 #include "GameObservers.h"
 
 using namespace std;
@@ -17,7 +17,7 @@ int main() {
 //#ifdef _DEBUG
 //    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 //#endif
-    Game* game = new Game();
+    GameEngine* game = new GameEngine();
     PhaseObserver* phaseObserver = new PhaseObserver(game);
     StatisticsObserver* statisticsObserver = new StatisticsObserver(game);
 

@@ -7,17 +7,17 @@
 #include <algorithm>
 #include <string>
 #include <stdexcept>
-#include "Game.h"
+#include "GameEngine.h"
 #include "MapLoader.h"
 #include "BidingFacility.h"
 
 using namespace std;
 
-Game::Game() {
+GameEngine::GameEngine() {
     COLORS = {"purple", "white", "green", "grey"};
 }
 
-Game::~Game() {
+GameEngine::~GameEngine() {
     delete hand;
     hand = nullptr;
     delete deck;
@@ -30,7 +30,7 @@ Game::~Game() {
     }
 }
 
-bool Game::start() {
+bool GameEngine::start() {
     cout << "****************************" << endl;
     cout << "Eight-Minute_Empire_Legends." << endl;
     cout << "****************************" << endl;
@@ -56,7 +56,7 @@ bool Game::start() {
     return true;
 }
 
-bool Game::startup() {
+bool GameEngine::startup() {
     cout << "****************************" << endl;
     cout << "     Startup phase:" << endl;
     cout << "****************************" << endl;
@@ -79,7 +79,7 @@ bool Game::startup() {
     return true;
 }
 
-void Game::play() {
+void GameEngine::play() {
     cout << "****************************" << endl;
     cout << "     Main Game starts!" << endl;
     cout << "****************************" << endl;
@@ -118,13 +118,13 @@ void Game::play() {
     }
 }
 
-void Game::computeScore() {
+void GameEngine::computeScore() {
     computeMapScore();
     computeAbilityScore();
     computeElixirScore();
 }
 
-void Game::computeMapScore() {
+void GameEngine::computeMapScore() {
     // Territory
     cout << "Computing Territory scores..." << endl;
     for (auto & territory : map->getTerritories()) {
@@ -148,7 +148,7 @@ void Game::computeMapScore() {
     cout << endl;
 }
 
-void Game::computeAbilityScore() {
+void GameEngine::computeAbilityScore() {
     cout << "Computing Ability scores..." << endl;
     for (auto & player : players) {
         for (auto type : player->getCardTypeVp()) {
@@ -176,7 +176,7 @@ void Game::computeAbilityScore() {
     }
 }
 
-void Game::computeElixirScore() {
+void GameEngine::computeElixirScore() {
     vector<Player*> hasMostElixirs;
     int highest = -1;
     for (auto & player : players) {
@@ -200,7 +200,7 @@ void Game::computeElixirScore() {
     }
 }
 
-void Game::claimWinner() {
+void GameEngine::claimWinner() {
     cout << endl;
     for (auto & player : players) {
         int armiesOnBoard = 0;
@@ -285,7 +285,7 @@ void Game::claimWinner() {
     displayWinner(playerWithMostControlledRegions);
 }
 
-void Game::displayWinner(Player *player) {
+void GameEngine::displayWinner(Player *player) {
     cout << "********************************************"  << endl;
     cout << "     WINNER is player " << player->getId() << ": " << player->getFirstName() << " " << player->getLastName()
             << "!" << endl;
@@ -293,7 +293,7 @@ void Game::displayWinner(Player *player) {
     cout << "********************************************"  << endl;
 }
 
-bool Game::selectMap() {
+bool GameEngine::selectMap() {
     string filePath;
     string path = "Maps/";
     vector<string> mapFiles = {"Disconnected.map", "GAME1_invalid.map", "Lshape.map", "Rectangular.map"};
@@ -336,7 +336,7 @@ bool Game::selectMap() {
     return true;
 }
 
-void Game::selectNumberOfPlayers() {
+void GameEngine::selectNumberOfPlayers() {
     int numberOfPlayers;
     while (true) {
         cout << "Please select the number of players: (2, 3, 4)" << endl;
@@ -362,7 +362,7 @@ void Game::selectNumberOfPlayers() {
     }
 }
 
-void Game::createPlayers() {
+void GameEngine::createPlayers() {
     int coins = initCoinsForEachPlayer();
     vector<string> remainingColors = COLORS;
     for (int i = 0; i < numOfPlayer; ++i) {
@@ -391,11 +391,11 @@ void Game::createPlayers() {
     }
 }
 
-void Game::createDeck() {
+void GameEngine::createDeck() {
     deck = new Deck(numOfPlayer);
 }
 
-void Game::createArmiesAndCities() {
+void GameEngine::createArmiesAndCities() {
     Territory* startingTerritory = map->getTerritoryById(startRegionId);
     for (auto player : players) {
         player->PlaceNewArmies(4, startingTerritory);
@@ -431,7 +431,7 @@ void Game::createArmiesAndCities() {
     }
 }
 
-bool Game::criteriaA(int regionId) {
+bool GameEngine::criteriaA(int regionId) {
     vector<int> neighbors = map->getTerritoryNeighborsById(regionId);
     for (int neighbor : neighbors) {
         if (map->getDistance(regionId, neighbor) == 3) {
@@ -441,7 +441,7 @@ bool Game::criteriaA(int regionId) {
     return false;
 }
 
-bool Game::criteriaB(int regionId) {
+bool GameEngine::criteriaB(int regionId) {
     vector<int> neighbors = map->getTerritoryNeighborsById(regionId);
     int waterConnectionCount = 0;
     for (int neighbor : neighbors) {
@@ -458,7 +458,7 @@ bool Game::criteriaB(int regionId) {
     return false;
 }
 
-bool Game::selectStartingRegion() {
+bool GameEngine::selectStartingRegion() {
     vector<Territory*> tempRegions = map->getTerritories();
     shuffle(tempRegions.begin(), tempRegions.end(), std::mt19937(std::random_device()()));
     cout << "Shuffling region IDs..." << endl;
@@ -478,7 +478,7 @@ bool Game::selectStartingRegion() {
     return false;
 }
 
-void Game::bidAndDecideMovingOrder() {
+void GameEngine::bidAndDecideMovingOrder() {
     int winnerID = BidingFacility::bid(players);
     cout << "The bidding winner is player " << winnerID << "!\n" << endl;
     Player* winner = getPlayerById(winnerID);
@@ -504,7 +504,7 @@ void Game::bidAndDecideMovingOrder() {
     cout << "\n\n";
 }
 
-Player* Game::getPlayerById(int id) {
+Player* GameEngine::getPlayerById(int id) {
     for (auto & player : players) {
         if (player->getId() == id) {
             return player;
@@ -514,7 +514,7 @@ Player* Game::getPlayerById(int id) {
     return nullptr;
 }
 
-void Game::printComponents() {
+void GameEngine::printComponents() {
     cout << "Game components..." << endl;
     cout << "Coins: " << coinSupply << endl;
     cout << "Armies: ";
@@ -534,7 +534,7 @@ void Game::printComponents() {
     cout << "\n\n";
 }
 
-PlayerStrategy* Game::selectStrategy() {
+PlayerStrategy* GameEngine::selectStrategy() {
     int strategy;
     cout << "Please select a strategy:" << endl;
     if (tournamentMode) {
@@ -585,7 +585,7 @@ PlayerStrategy* Game::selectStrategy() {
     return initPlayerStrategy;
 }
 
-int Game::selectBidding(int playerId, int coins) {
+int GameEngine::selectBidding(int playerId, int coins) {
     int bidding;
     cout << "Please enter the bidding of player " << playerId << ": (0-" << coins << ")" << endl;
     cout << "(The coins will be deducted only if you win the bidding later.)" << endl;
@@ -599,7 +599,7 @@ int Game::selectBidding(int playerId, int coins) {
     return bidding;
 }
 
-int Game::initCoinsForEachPlayer() {
+int GameEngine::initCoinsForEachPlayer() {
     if (numOfPlayer == 4) {
         return 9;
     } else if (numOfPlayer == 3) {
@@ -610,7 +610,7 @@ int Game::initCoinsForEachPlayer() {
     return 0;
 }
 
-string Game::selectColor(int playerId, vector<string> remainingColors) {
+string GameEngine::selectColor(int playerId, vector<string> remainingColors) {
     string color;
     while (true) {
         cout << "Please enter the color of player " << playerId << ": (";
@@ -633,7 +633,7 @@ string Game::selectColor(int playerId, vector<string> remainingColors) {
     return color;
 }
 
-void Game::changeStrategyPrompt(Player *currentPlayer) {
+void GameEngine::changeStrategyPrompt(Player *currentPlayer) {
     cout << "The current strategy of this player is " << currentPlayer->getStrategy() << endl;
     cout << "Do you want to change strategy? (Yes or No)" << endl;
     string ans;
@@ -649,27 +649,27 @@ void Game::changeStrategyPrompt(Player *currentPlayer) {
     currentPlayer->setStrategy(newStrategy);
 }
 
-Player *Game::getCurrentPlayer() {
+Player *GameEngine::getCurrentPlayer() {
     return currentPlayer;
 }
 
-int Game::getCardIndex() {
+int GameEngine::getCardIndex() {
     return cardIndex;
 }
 
-Map *Game::getMap() {
+Map *GameEngine::getMap() {
     return map;
 }
 
-int Game::getNumOfPlayers() {
+int GameEngine::getNumOfPlayers() {
     return numOfPlayer;
 }
 
-bool Game::isGameEnd() {
+bool GameEngine::isGameEnd() {
     return gameEnd;
 }
 
-void Game::selectMode() {
+void GameEngine::selectMode() {
     int option;
     cout << "Please choose one game mode: " << endl;
     cout << "1. Single game mode" << endl;

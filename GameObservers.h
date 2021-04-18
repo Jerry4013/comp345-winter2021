@@ -6,29 +6,29 @@
 #define COMP345_WINTER2021_GAMEOBSERVERS_H
 
 #include "Observer.h"
-#include "Game.h"
+#include "GameEngine.h"
 
 using namespace std;
 
 class PhaseObserver : public Observer {
 public:
     PhaseObserver();
-    PhaseObserver(Game* game);
+    PhaseObserver(GameEngine* game);
     ~PhaseObserver();
     void Update();
 private:
-    Game *_subject;
+    GameEngine *_subject;
 };
 
 class StatisticsObserver : public Observer {
 public:
     StatisticsObserver();
-    StatisticsObserver(Game* game);
+    StatisticsObserver(GameEngine* game);
     ~StatisticsObserver();
     void Update();
 
 private:
-    Game *_subject;
+    GameEngine *_subject;
 };
 
 #endif //COMP345_WINTER2021_GAMEOBSERVERS_H

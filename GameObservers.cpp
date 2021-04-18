@@ -6,7 +6,7 @@
 
 using namespace std;
 
-PhaseObserver::PhaseObserver(Game *pGame) {
+PhaseObserver::PhaseObserver(GameEngine *pGame) {
     _subject = pGame;
     _subject->Attach(this);
 }
@@ -29,7 +29,7 @@ PhaseObserver::PhaseObserver() {
 
 }
 
-StatisticsObserver::StatisticsObserver(Game *game) {
+StatisticsObserver::StatisticsObserver(GameEngine *game) {
     _subject = game;
     _subject->Attach(this);
 }

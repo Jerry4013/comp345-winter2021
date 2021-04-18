@@ -2,8 +2,8 @@
 // Created by Jingchao Zhang on 2/26/2021.
 //
 
-#ifndef COMP345_WINTER2021_GAME_H
-#define COMP345_WINTER2021_GAME_H
+#ifndef COMP345_WINTER2021_GAMEENGINE_H
+#define COMP345_WINTER2021_GAMEENGINE_H
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
@@ -11,10 +11,10 @@
 #include <string>
 #include "Subject.h"
 
-class Game : public Subject {
+class GameEngine : public Subject {
 public:
-    Game();
-    ~Game();
+    GameEngine();
+    ~GameEngine();
     bool start();
     bool startup();
     void play();
@@ -68,4 +68,4 @@ private:
 };
 
 
-#endif //COMP345_WINTER2021_GAME_H
+#endif //COMP345_WINTER2021_GAMEENGINE_H
