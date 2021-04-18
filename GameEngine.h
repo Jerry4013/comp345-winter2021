@@ -39,7 +39,7 @@ private:
     vector<string> COLORS;
     vector<int> order;   // [2, 3, 1] means player with id 2 move first, then player with id 3, then id 1;
     Player* currentPlayer;
-    int cardIndex;
+    int cardIndex; // 0 - 5
     bool gameEnd;
     int maxRound;
     bool tournamentMode;

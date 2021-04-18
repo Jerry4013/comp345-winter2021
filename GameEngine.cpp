@@ -15,6 +15,7 @@ using namespace std;
 
 GameEngine::GameEngine() {
     COLORS = {"purple", "white", "green", "grey"};
+    gameEnd = false;
 }
 
 GameEngine::~GameEngine() {
@@ -274,7 +275,7 @@ void GameEngine::claimWinner() {
         return;
     }
 
-    Player* playerWithMostControlledRegions;
+    vector<Player*> playersWithMostControlledRegions;
     int mostControlledRegions = -1;
     for (auto & player : playersWithMostArmies) {
         int numOfControlledRegions = 0;
@@ -285,10 +286,19 @@ void GameEngine::claimWinner() {
         }
         if (numOfControlledRegions > mostControlledRegions) {
             mostControlledRegions = numOfControlledRegions;
-            playerWithMostControlledRegions = player;
+            playersWithMostControlledRegions.clear();
+            playersWithMostControlledRegions.emplace_back(player);
+        } else if (numOfControlledRegions == mostControlledRegions) {
+            playersWithMostControlledRegions.emplace_back(player);
         }
     }
-    displayWinner(playerWithMostControlledRegions);
+    if (playersWithMostControlledRegions.size() == 1) {
+        displayWinner(playersWithMostControlledRegions[0]);
+        return;
+    }
+    cout << "********************************************"  << endl;
+    cout << "                Draw! " << endl;
+    cout << "********************************************"  << endl;
 }
 
 void GameEngine::displayWinner(Player *player) {

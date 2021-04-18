@@ -20,7 +20,7 @@ void PhaseObserver::Update() {
     int cardIndex = _subject->getCardIndex();
     cout << "Phase Observer: " << endl;
     cout << "It's player " << currentPlayer->getId() << "'s turn. " << endl;
-    cout << "Player " << currentPlayer->getId() << " selected card " << cardIndex << endl;
+    cout << "Player " << currentPlayer->getId() << " selected card " << cardIndex + 1<< endl;
     cout << "He paid " << Hand::CARD_COSTS[cardIndex] << " coins." << endl;
     cout << *currentPlayer << endl;
 }

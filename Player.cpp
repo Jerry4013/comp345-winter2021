@@ -375,8 +375,7 @@ ostream &operator<<(ostream &out, const Player &player) {
         << " (" << player.color << ")" << endl;
     out << "------------------------------------------" << endl;
     out << "bidding: " << player.bidding << "; ";
-    out << "coins: " << player.coins << "; ";
-    out << "score: " << player.score << "; \n";
+    out << "coins: " << player.coins << "; \n";
     out << "remainingCity: " << player.remainingCity << "; ";
     out << "remainingCubes: " << player.remainingCubes << "; \n";
     out << "Strategy: " << player.playerStrategy->toString() << endl;

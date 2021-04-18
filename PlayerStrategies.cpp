@@ -400,6 +400,10 @@ int GreedyComputerStrategy::selectOrCard(Card *card) {
 
 void GreedyComputerStrategy::greedyPlaceNewArmies(int id, int movingPoints, vector<Territory*>& territories,
                                                  int &remainingCubesRef) {
+    if (remainingCubesRef <= 0) {
+        cout << "You don't have remaining cubes in hand. Do nothing." << endl;
+        return;
+    }
     cout << "Game rule: You may place new armies only on the starting region or on a region where you have a city."
          << endl;
     cout << "You may place new armies in these territories: ";
@@ -411,12 +415,17 @@ void GreedyComputerStrategy::greedyPlaceNewArmies(int id, int movingPoints, vect
         }
     }
     cout << endl;
-    while (movingPoints > 0) {
+    while (movingPoints > 0 && remainingCubesRef > 0) {
         for (auto &[k, v] : validTerritories) {
             Territory* territory = getTerritoryById(k, territories);
             territory->placeNewArmiesOfPlayer(id, 1);
             validTerritories[k]++;
             movingPoints--;
+            remainingCubesRef--;
+            if (remainingCubesRef <= 0) {
+                cout << "You don't have remaining cubes in hand. Action completed." << endl;
+                break;
+            }
         }
     }
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
@@ -434,33 +443,42 @@ void GreedyComputerStrategy::greedyMoveArmies(int id, int movingPoints, vector<T
     int lastMovingPoint = movingPoints;
     while (movingPoints > 0) {
         for (auto & territory : territories) {
-            int numOfArmies = territory->getArmies()[id];
-            if (numOfArmies > 0) {
+            if (territory->getArmies()[id] > 1) {
                 vector<int> neighbors = territoryAdjacencyList[territory->getId()];
                 for (int neighbor : neighbors) {
-                    int distance = 1;
+                    if (territory->getArmies()[id] <= 1) {
+                        break;
+                    }
                     Territory* neighborTerritory = getTerritoryById(neighbor, territories);
-                    if (territory->getContinentId() != neighborTerritory->getContinentId()) {
-                        distance = 3;
-                    }
-                    int cost = distance;
-                    if (distance == 3) {
-                        if (flyAbility == 1) {
-                            cout << "\nFlying level 1! The cost to move over water is 2 per army." << endl;
-                            cost = 2;
-                        } else if (flyAbility >= 2) {
-                            cout << "\nFlying level 2! The cost to move over water is 1 per army." << endl;
-                            cost = 1;
+                    if (territory->getArmies()[id] > 1 &&
+                        territory->getArmies()[id] - neighborTerritory->getArmies()[id] > 1) {
+                        int distance = 1;
+                        if (territory->getContinentId() != neighborTerritory->getContinentId()) {
+                            distance = 3;
                         }
-                    }
-                    if (numOfArmies > 1 && neighborTerritory->getArmies()[id] < numOfArmies && movingPoints >= cost) {
-                        territory->removeArmiesOfPlayer(id, 1);
-                        neighborTerritory->placeNewArmiesOfPlayer(id, 1);
-                        movingPoints -= cost;
-                        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-                        cout << "The greedy computer " << id << " moved 1 army from " << territory->getId()
-                         << " to " << neighborTerritory->getId() << endl;
-                        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+                        int cost = distance;
+                        if (distance == 3) {
+                            if (flyAbility == 1) {
+                                cost = 2;
+                                if (movingPoints >= cost) {
+                                    cout << "\nFlying level 1! The cost to move over water is 2 per army." << endl;
+                                }
+                            } else if (flyAbility >= 2) {
+                                cost = 1;
+                                if (movingPoints >= cost) {
+                                    cout << "\nFlying level 2! The cost to move over water is 1 per army." << endl;
+                                }
+                            }
+                        }
+                        if (movingPoints >= cost) {
+                            territory->removeArmiesOfPlayer(id, 1);
+                            neighborTerritory->placeNewArmiesOfPlayer(id, 1);
+                            movingPoints -= cost;
+                            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+                            cout << "The Greedy computer " << id << " moved 1 army from " << territory->getId()
+                                 << " to " << neighborTerritory->getId() << endl;
+                            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+                        }
                     }
                 }
                 cout << endl;
@@ -589,6 +607,10 @@ int ModerateComputerStrategy::selectOrCard(Card *card) {
 
 void ModerateComputerStrategy::moderatePlaceNewArmies(int id, int movingPoints, vector<Territory*>& territories,
                                                   int &remainingCubesRef) {
+    if (remainingCubesRef <= 0) {
+        cout << "You don't have remaining cubes in hand. Do nothing." << endl;
+        return;
+    }
     cout << "Game rule: You may place new armies only on the starting region or on a region where you have a city."
          << endl;
     cout << "You may place new armies in these territories: ";
@@ -600,12 +622,17 @@ void ModerateComputerStrategy::moderatePlaceNewArmies(int id, int movingPoints, 
         }
     }
     cout << endl;
-    while (movingPoints > 0) {
+    while (movingPoints > 0 && remainingCubesRef > 0) {
         for (auto &[k, v] : validTerritories) {
             Territory* territory = getTerritoryById(k, territories);
             territory->placeNewArmiesOfPlayer(id, 1);
             validTerritories[k]++;
             movingPoints--;
+            remainingCubesRef--;
+            if (remainingCubesRef <= 0) {
+                cout << "You don't have remaining cubes in hand. Action completed." << endl;
+                break;
+            }
         }
     }
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
@@ -623,33 +650,42 @@ void ModerateComputerStrategy::moderateMoveArmies(int id, int movingPoints, vect
     int lastMovingPoint = movingPoints;
     while (movingPoints > 0) {
         for (auto & territory : territories) {
-            int numOfArmies = territory->getArmies()[id];
-            if (numOfArmies > 0) {
+            if (territory->getArmies()[id] > 1) {
                 vector<int> neighbors = territoryAdjacencyList[territory->getId()];
                 for (int neighbor : neighbors) {
-                    int distance = 1;
+                    if (territory->getArmies()[id] <= 1) {
+                        break;
+                    }
                     Territory* neighborTerritory = getTerritoryById(neighbor, territories);
-                    if (territory->getContinentId() != neighborTerritory->getContinentId()) {
-                        distance = 3;
-                    }
-                    int cost = distance;
-                    if (distance == 3) {
-                        if (flyAbility == 1) {
-                            cout << "\nFlying level 1! The cost to move over water is 2 per army." << endl;
-                            cost = 2;
-                        } else if (flyAbility >= 2) {
-                            cout << "\nFlying level 2! The cost to move over water is 1 per army." << endl;
-                            cost = 1;
+                    if (territory->getArmies()[id] > 1 &&
+                        territory->getArmies()[id] - neighborTerritory->getArmies()[id] > 1) {
+                        int distance = 1;
+                        if (territory->getContinentId() != neighborTerritory->getContinentId()) {
+                            distance = 3;
                         }
-                    }
-                    if (numOfArmies > 1 && neighborTerritory->getArmies()[id] < numOfArmies && movingPoints >= cost) {
-                        territory->removeArmiesOfPlayer(id, 1);
-                        neighborTerritory->placeNewArmiesOfPlayer(id, 1);
-                        movingPoints -= cost;
-                        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-                        cout << "The Moderate computer " << id << " moved 1 army from " << territory->getId()
-                             << " to " << neighborTerritory->getId() << endl;
-                        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+                        int cost = distance;
+                        if (distance == 3) {
+                            if (flyAbility == 1) {
+                                cost = 2;
+                                if (movingPoints >= cost) {
+                                    cout << "\nFlying level 1! The cost to move over water is 2 per army." << endl;
+                                }
+                            } else if (flyAbility >= 2) {
+                                cost = 1;
+                                if (movingPoints >= cost) {
+                                    cout << "\nFlying level 2! The cost to move over water is 1 per army." << endl;
+                                }
+                            }
+                        }
+                        if (movingPoints >= cost) {
+                            territory->removeArmiesOfPlayer(id, 1);
+                            neighborTerritory->placeNewArmiesOfPlayer(id, 1);
+                            movingPoints -= cost;
+                            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+                            cout << "The Moderate computer " << id << " moved 1 army from " << territory->getId()
+                                 << " to " << neighborTerritory->getId() << endl;
+                            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+                        }
                     }
                 }
                 cout << endl;
