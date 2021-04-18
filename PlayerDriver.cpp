@@ -9,7 +9,7 @@ using namespace std;
 
 int player::main() {
 
-    Map* map = MapLoader::loadMap("../Maps/Rectangular.map");
+    Map* map = MapLoader::loadMap("Maps/Rectangular.map");
 
     auto* player1 = new Player(1, "Jenny", "Smith", "white", 1, 18,
                                map->getTerritories(), new HumanStrategy());
@@ -24,7 +24,7 @@ int player::main() {
         player->setPlayers(players);
         player->setTerritoryAdjacencyList(map->getTerritoryAdjacencyList());
     }
-    Deck* deck = new Deck(players.size());
+    Deck* deck = new Deck(2);
     Hand* hand = new Hand(deck);
 
     // PayCoin()

@@ -396,7 +396,7 @@ Deck &Deck::operator=(const Deck &deck) {
 
 
 ostream &operator<<(std::ostream &output, const Deck &deck) {
-    int size = deck.cards.size();
+    size_t size = deck.cards.size();
     output << "The top 3 cards on the deck is:" << endl;
     for (int i = 0; i < 3; ++i) {
         output << deck.cards[size - 1 - i]->getName() << ", ";

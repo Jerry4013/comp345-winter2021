@@ -263,7 +263,7 @@ Map* MapLoader::loadMap(string filePath){
     cout << endl;
 
     //Map's nodes connecting outside map is also chosen randomly
-    std::uniform_int_distribution<int> dist_out(0,out_nodes.size()-1);
+    std::uniform_int_distribution<int> dist_out(0, static_cast<int>(out_nodes.size()) - 1);
     for(int i = 0,map1,map2,temp,temp2;i<maporder.size()-1;i++){
         map1=maporder.at(i);
         map2=maporder.at(i+1);

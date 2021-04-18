@@ -13,7 +13,7 @@ int mapLoader::main() {
     try {
         cout << "Loading valid map"<<endl;
         mapLoader = new MapLoader();
-        [[maybe_unused]] Map *mapptr = mapLoader->loadMap("..\\Maps\\Lsahpe.map");
+        [[maybe_unused]] Map *mapptr = mapLoader->loadMap("Maps/Lsahpe.map");
         mapptr->printContinentAdjacencyList();
         mapptr->printTerritoryAdjacencyList();
         mapptr->validate();

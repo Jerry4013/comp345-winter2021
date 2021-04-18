@@ -18,12 +18,18 @@ GameEngine::GameEngine() {
 }
 
 GameEngine::~GameEngine() {
-    delete hand;
-    hand = nullptr;
-    delete deck;
-    deck = nullptr;
-    delete map;
-    map = nullptr;
+    if (hand != nullptr) {
+        delete hand;
+        hand = nullptr;
+    }
+    if (deck != nullptr) {
+        delete deck;
+        deck = nullptr;
+    }
+    if (map != nullptr) {
+        delete map;
+        map = nullptr;
+    }
     for (auto & player : players) {
         delete player;
         player = nullptr;
@@ -407,7 +413,6 @@ void GameEngine::createArmiesAndCities() {
             remainingColors.erase(itr);
         }
         string nonPlayerColor = remainingColors[0];
-        // TODO
         int numOfTerritories = map->getTerritories().size();
         int territoryId = -1;
         for (int i = 0; i < 10; i++) {
