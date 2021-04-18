@@ -9,7 +9,7 @@
 
 class PlayerStrategy {
 public:
-    virtual int selectCard(Hand *hand, int coins) = 0;
+    virtual int selectCard(Hand *hand, int coins) = 0; // return a card index 0-5
     virtual string toString() = 0;
     virtual void takeAction(Action action, int id, vector<Territory*>& territories, int &remainingCubesRef,
                             map<int, vector<int>> territoryAdjacencyList, int flyAbility, int &remainingCity,

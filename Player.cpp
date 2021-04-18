@@ -232,7 +232,7 @@ void Player::exchange(Card *card) {
 }
 
 Card *Player::selectCard(Hand *hand, Deck* deck) {
-    int cardIndex = playerStrategy->selectCard(hand, coins);
+    cardIndex = playerStrategy->selectCard(hand, coins);
     PayCoin(Hand::CARD_COSTS[cardIndex]);
     Card* card = hand->getHandCards()[cardIndex];
     exchange(card);

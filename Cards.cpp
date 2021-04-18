@@ -204,7 +204,7 @@ Deck::Deck() {
 }
 
 void Deck::initializeDeckOfTwoPlayers() {
-    //27 for two players:
+    //32 for two players:
     //ancient
     cards.emplace_back(new Card(ancient, "Ancient Phoenix",
                                 {{flying, 1, nullVpType, emptyKind}},
@@ -310,6 +310,23 @@ void Deck::initializeDeckOfTwoPlayers() {
                                 {{VP, 1, cardType, night}},
                                 {{placeArmy, 3}, {destroyArmy, 1}},
                                 true, false));
+
+    // supplementary
+    cards.emplace_back(new Card(emptyKind, "Random Card1",
+                                {{army, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 3}}, false, false));
+    cards.emplace_back(new Card(emptyKind, "Random Card2",
+                                {{moving, 1, nullVpType, emptyKind}},
+                                {{buildCity, 1}}, false, false));
+    cards.emplace_back(new Card(emptyKind, "Random Card3",
+                                {{elixir, 1, nullVpType, emptyKind}},
+                                {{moveArmy, 3}}, false, false));
+    cards.emplace_back(new Card(emptyKind, "Random Card4",
+                                {{army, 1, nullVpType, emptyKind}},
+                                {{buildCity, 1}}, false, false));
+    cards.emplace_back(new Card(emptyKind, "Random Card5",
+                                {{flying, 1, nullVpType, emptyKind}},
+                                {{destroyArmy, 1}}, false, false));
 }
 
 Deck::Deck(int numberOfPlayers) {
@@ -317,7 +334,7 @@ Deck::Deck(int numberOfPlayers) {
         initializeDeckOfTwoPlayers();
     }
     if (numberOfPlayers >= 3) {
-        //32 for two players, 5 more for three players
+        //37 for two players, 5 more for three players
         // arcane
         cards.emplace_back(new Card(arcane, "Arcane Sphinx",
                                     {{flying, 1, nullVpType, emptyKind}},
@@ -343,7 +360,7 @@ Deck::Deck(int numberOfPlayers) {
                                     false, false));
     }
     if (numberOfPlayers == 4) {
-        //34 for two players, 2 more for 4 players:
+        //39 for two players, 2 more for 4 players:
         cards.emplace_back(new Card(emptyKind, "Castle 1",
                                     {{elixir, 1, nullVpType, emptyKind}},
                                     {{placeArmy, 3}, {buildCity, 1}},

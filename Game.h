@@ -9,8 +9,9 @@
 #include "Cards.h"
 #include <vector>
 #include <string>
+#include "Subject.h"
 
-class Game {
+class Game : public Subject {
 public:
     Game();
     ~Game();
@@ -19,6 +20,11 @@ public:
     void play();
     void computeScore();
     void claimWinner();
+    Player* getCurrentPlayer();
+    int getCardIndex();
+    Map* getMap();
+    int getNumOfPlayers();
+    bool isGameEnd();
 
 private:
     int numOfPlayer;
@@ -32,6 +38,11 @@ private:
     unordered_map<string, int> cities; // color -> the number of cities supplied on the table
     vector<string> COLORS;
     vector<int> order;   // [2, 3, 1] means player with id 2 move first, then player with id 3, then id 1;
+    Player* currentPlayer;
+    int cardIndex;
+    bool gameEnd;
+    int maxRound;
+
     void createPlayers();
     bool selectMap();
     void selectNumberOfPlayers();

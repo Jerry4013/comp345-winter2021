@@ -4,7 +4,6 @@
 
 #include <random>
 #include <sstream>
-#include <filesystem>
 #include <algorithm>
 #include <string>
 #include <stdexcept>
@@ -83,30 +82,36 @@ void Game::play() {
     cout << "****************************" << endl;
     cout << "     Main Game starts!" << endl;
     cout << "****************************" << endl;
-    bool gameEnd = players[0]->getCards().size() == 13;
-    while (!gameEnd) {
-        for (int i : order) {
-            cout << "It's player " << i << "'s turn:\n" << endl;
-            Player* currentPlayer = getPlayerById(i);
+    int roundNumber = 1;
+    while (roundNumber <= maxRound) {
+        for (int i = 0; i < order.size(); ++i) {
+            int currentPlayerId = order[i];
+            cout << "It's player " << currentPlayerId << "'s turn:\n" << endl;
+            currentPlayer = getPlayerById(currentPlayerId);
             changeStrategyPrompt(currentPlayer);
             cout << *hand;
             currentPlayer->printMyAbilities();
             Card* card = currentPlayer->selectCard(hand, deck);
+            cardIndex = currentPlayer->cardIndex;
             if (card->getAnd() || card->getOr()) {
                 currentPlayer->AndOrAction(card);
             } else {
                 currentPlayer->takeAction(card->getActions()[0]);
             }
-            map->printForce(numOfPlayer);
-            cout << "Player " << currentPlayer->getId()
-                << ", your turn is completed! Press Enter to pass to other players..." << endl;
-            cin.ignore(10, '\n');
-            cin.get();
-            cout << "****************************" << endl;
-            cout << "****************************" << endl;
+            if (roundNumber == maxRound && i == order.size() - 1) {
+                gameEnd = true;
+            }
+            Notify();
+            if (!gameEnd) {
+                cout << "Player " << currentPlayer->getId()
+                     << ", your turn is completed! Press Enter to pass to other players..." << endl;
+                cin.ignore(10, '\n');
+                cin.get();
+                cout << "********************************************" << endl;
+                cout << "********************************************" << endl;
+            }
         }
-        // TODO change back to 13
-        gameEnd = players[0]->getCards().size() == 3;
+        roundNumber++;
     }
 }
 
@@ -287,11 +292,9 @@ void Game::displayWinner(Player *player) {
 
 bool Game::selectMap() {
     string filePath;
-    string path = "../Maps/";
-    vector<string> mapFiles;
-    for (const auto & entry : std::filesystem::directory_iterator(path)){
-        mapFiles.push_back(entry.path().string().erase(entry.path().string().find(path), path.size()));
-    }
+    string path = "Maps/";
+    vector<string> mapFiles = {"Disconnected.map", "GAME1_invalid.map", "Lshape.map", "Rectangular.map"};
+
     int filePathOption = -1;
     //Map selection
     while (true) {
@@ -343,6 +346,17 @@ void Game::selectNumberOfPlayers() {
         }
     }
     this->numOfPlayer = numberOfPlayers;
+    switch (numOfPlayer) {
+        case 2:
+            maxRound = 2;
+            break;
+        case 3:
+            maxRound = 10;
+            break;
+        case 4:
+            maxRound = 8;
+            break;
+    }
 }
 
 void Game::createPlayers() {
@@ -607,6 +621,26 @@ void Game::changeStrategyPrompt(Player *currentPlayer) {
     }
     PlayerStrategy* newStrategy = selectStrategy();
     currentPlayer->setStrategy(newStrategy);
+}
+
+Player *Game::getCurrentPlayer() {
+    return currentPlayer;
+}
+
+int Game::getCardIndex() {
+    return cardIndex;
+}
+
+Map *Game::getMap() {
+    return map;
+}
+
+int Game::getNumOfPlayers() {
+    return numOfPlayer;
+}
+
+bool Game::isGameEnd() {
+    return gameEnd;
 }
 
 

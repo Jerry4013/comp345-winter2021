@@ -346,7 +346,7 @@ int HumanStrategy::selectOrCard(Card *card) {
 }
 
 int GreedyComputerStrategy::selectCard(Hand *hand, int coins) {
-    for (int cardIndex = 0; cardIndex < hand->getHandCards().size(); ++cardIndex) {
+    for (int cardIndex = 0; cardIndex < hand->getHandCards().size() && coins >= Hand::CARD_COSTS[cardIndex]; ++cardIndex) {
         for (int j = 0; j < hand->getHandCards()[cardIndex]->getActions().size(); ++j) {
             ActionType actionType = hand->getHandCards()[cardIndex]->getActions()[j].actionType;
             if (actionType == ActionType::buildCity || actionType == ActionType::destroyArmy) {
@@ -361,7 +361,7 @@ int GreedyComputerStrategy::selectCard(Hand *hand, int coins) {
         }
     }
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    cout << "No card can build a city or destroy an army. " << endl;
+    cout << "No card can build a city or destroy an army with your coins. " << endl;
     cout << "The greedy computer selected card 1 by default." << endl;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "Press Enter to continue..." << endl;
@@ -543,7 +543,7 @@ void GreedyComputerStrategy::greedyDestroyArmy(int id, vector<Territory *> &terr
 }
 
 int ModerateComputerStrategy::selectCard(Hand *hand, int coins) {
-    for (int cardIndex = 0; cardIndex < hand->getHandCards().size(); ++cardIndex) {
+    for (int cardIndex = 0; cardIndex < hand->getHandCards().size() && coins >= Hand::CARD_COSTS[cardIndex]; ++cardIndex) {
         for (int j = 0; j < hand->getHandCards()[cardIndex]->getActions().size(); ++j) {
             ActionType actionType = hand->getHandCards()[cardIndex]->getActions()[j].actionType;
             if (actionType == ActionType::moveArmy || actionType == ActionType::placeArmy) {
@@ -558,7 +558,7 @@ int ModerateComputerStrategy::selectCard(Hand *hand, int coins) {
         }
     }
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    cout << "No card can move an army or place an army. " << endl;
+    cout << "No card can move an army or place an army with your coins. " << endl;
     cout << "The moderate computer selected card 1 by default." << endl;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "Press Enter to continue..." << endl;

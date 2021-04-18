@@ -68,6 +68,7 @@ public:
     bool hasOneVpPerFlying();
     void setStrategy(PlayerStrategy* newPlayerStrategy);
     string getStrategy();
+    int cardIndex;
 
 private:
     int id;

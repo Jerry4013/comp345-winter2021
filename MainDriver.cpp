@@ -1,16 +1,25 @@
+//#define _DEBUG
+//
+//#ifdef _DEBUG
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
+//
+//#endif
 
 #include <iostream>
 #include "Game.h"
-#include "MapDriver.h"
-#include "MapLoaderMain.h"
-#include "PlayerDriver.h"
-#include "CardsMain.h"
-#include "BidingFacilityMain.h"
+#include "GameObservers.h"
 
 using namespace std;
 
 int main() {
+//#ifdef _DEBUG
+//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//#endif
     Game* game = new Game();
+    PhaseObserver* phaseObserver = new PhaseObserver(game);
+    StatisticsObserver* statisticsObserver = new StatisticsObserver(game);
 
     if (!game->start()) {
         cout << "Game start failed!" << endl;
@@ -29,14 +38,10 @@ int main() {
     cin.get();
 
     game->play();
-    game->computeScore();
-    game->claimWinner();
 
-//    mapDriver::main();
-//    mapLoader::main();
-//    player::main();
-//    cards::main();
-//    biding::main();
+    delete phaseObserver;
+    delete statisticsObserver;
+    delete game;
 }
 
 
