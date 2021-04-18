@@ -46,6 +46,7 @@ bool Game::start() {
     if (!selectMapSucceed) {
         return false;
     }
+    selectMode();
     selectNumberOfPlayers();
     createPlayers();
     cout << "Creating a deck of cards..." << endl;
@@ -88,7 +89,9 @@ void Game::play() {
             int currentPlayerId = order[i];
             cout << "It's player " << currentPlayerId << "'s turn:\n" << endl;
             currentPlayer = getPlayerById(currentPlayerId);
-            changeStrategyPrompt(currentPlayer);
+            if (!tournamentMode) {
+                changeStrategyPrompt(currentPlayer);
+            }
             cout << *hand;
             currentPlayer->printMyAbilities();
             Card* card = currentPlayer->selectCard(hand, deck);
@@ -102,7 +105,7 @@ void Game::play() {
                 gameEnd = true;
             }
             Notify();
-            if (!gameEnd) {
+            if (!gameEnd && !tournamentMode) {
                 cout << "Player " << currentPlayer->getId()
                      << ", your turn is completed! Press Enter to pass to other players..." << endl;
                 cin.ignore(10, '\n');
@@ -348,7 +351,7 @@ void Game::selectNumberOfPlayers() {
     this->numOfPlayer = numberOfPlayers;
     switch (numOfPlayer) {
         case 2:
-            maxRound = 2;
+            maxRound = 13;
             break;
         case 3:
             maxRound = 10;
@@ -404,6 +407,7 @@ void Game::createArmiesAndCities() {
             remainingColors.erase(itr);
         }
         string nonPlayerColor = remainingColors[0];
+        // TODO
         int numOfTerritories = map->getTerritories().size();
         int territoryId = -1;
         for (int i = 0; i < 10; i++) {
@@ -533,6 +537,28 @@ void Game::printComponents() {
 PlayerStrategy* Game::selectStrategy() {
     int strategy;
     cout << "Please select a strategy:" << endl;
+    if (tournamentMode) {
+        cout << "1. Greedy computer" << endl;
+        cout << "2. Moderate computer" << endl;
+        cout << ">>";
+        cin >> strategy;
+        while (strategy < 1 || strategy > 2) {
+            cout << "ERROR! Please select a number from 1 to 2. Try again." << endl;
+            cin >> strategy;
+        }
+        PlayerStrategy *initPlayerStrategy;
+        switch (strategy) {
+            case 1:
+                initPlayerStrategy = new GreedyComputerStrategy();
+                break;
+            case 2:
+                initPlayerStrategy = new ModerateComputerStrategy();
+                break;
+            default:
+                initPlayerStrategy = new GreedyComputerStrategy();
+        }
+        return initPlayerStrategy;
+    }
     cout << "1. Human player" << endl;
     cout << "2. Greedy computer" << endl;
     cout << "3. Moderate computer" << endl;
@@ -641,6 +667,25 @@ int Game::getNumOfPlayers() {
 
 bool Game::isGameEnd() {
     return gameEnd;
+}
+
+void Game::selectMode() {
+    int option;
+    cout << "Please choose one game mode: " << endl;
+    cout << "1. Single game mode" << endl;
+    cout << "2. Tournament mode" << endl;
+    cout << ">>";
+    cin >> option;
+    while (option < 1 || option > 2) {
+        cout << "Invalid number! Please enter 1 or 2." << endl;
+        cout << ">>";
+        cin >> option;
+    }
+    if (option == 2) {
+        tournamentMode = true;
+    } else {
+        tournamentMode = false;
+    }
 }
 
 

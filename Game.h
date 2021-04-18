@@ -42,7 +42,9 @@ private:
     int cardIndex;
     bool gameEnd;
     int maxRound;
+    bool tournamentMode;
 
+    void selectMode();
     void createPlayers();
     bool selectMap();
     void selectNumberOfPlayers();

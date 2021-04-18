@@ -353,9 +353,6 @@ int GreedyComputerStrategy::selectCard(Hand *hand, int coins) {
                 cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
                 cout << "The greedy computer selected card " << cardIndex + 1 << endl;
                 cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-                cout << "Press Enter to continue..." << endl;
-                cin.ignore(10, '\n');
-                cin.get();
                 return cardIndex;
             }
         }
@@ -364,9 +361,6 @@ int GreedyComputerStrategy::selectCard(Hand *hand, int coins) {
     cout << "No card can build a city or destroy an army with your coins. " << endl;
     cout << "The greedy computer selected card 1 by default." << endl;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    cout << "Press Enter to continue..." << endl;
-    cin.ignore(10, '\n');
-    cin.get();
     return 0;
 }
 
@@ -398,9 +392,6 @@ int GreedyComputerStrategy::selectOrCard(Card *card) {
             cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
             cout << "The greedy computer selected action " << i + 1 << endl;
             cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-            cout << "Press Enter to continue..." << endl;
-            cin.ignore(10, '\n');
-            cin.get();
             return i + 1;
         }
     }
@@ -550,9 +541,6 @@ int ModerateComputerStrategy::selectCard(Hand *hand, int coins) {
                 cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
                 cout << "The moderate computer selected card " << cardIndex + 1 << endl;
                 cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-                cout << "Press Enter to continue..." << endl;
-                cin.ignore(10, '\n');
-                cin.get();
                 return cardIndex;
             }
         }
@@ -561,9 +549,6 @@ int ModerateComputerStrategy::selectCard(Hand *hand, int coins) {
     cout << "No card can move an army or place an army with your coins. " << endl;
     cout << "The moderate computer selected card 1 by default." << endl;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    cout << "Press Enter to continue..." << endl;
-    cin.ignore(10, '\n');
-    cin.get();
     return 0;
 }
 
@@ -596,9 +581,6 @@ int ModerateComputerStrategy::selectOrCard(Card *card) {
             cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
             cout << "The moderate computer selected action " << i + 1 << endl;
             cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-            cout << "Press Enter to continue..." << endl;
-            cin.ignore(10, '\n');
-            cin.get();
             return i + 1;
         }
     }
